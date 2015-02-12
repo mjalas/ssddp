@@ -6,9 +6,9 @@ class Service(object):
     """
 
     """
-    def __init__(self, name, type, description):
+    def __init__(self, name, service_type, description):
         self.name = name
-        self.type = type
+        self.type = service_type
         self.description = description
 
 
