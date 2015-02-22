@@ -1,10 +1,14 @@
+import json
+
 from service.service_list import ServiceList
+from node.node_address import Address
 
 
 class Message(object):
     """
 
     """
+
     def __init__(self, node_name, address, timestamp):
         self.node_name = node_name
         self.address = address
