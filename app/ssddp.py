@@ -3,11 +3,11 @@ import sys
 from node.peer_node_list import PeerNodeList
 from networking.socket import Socket
 from message.description_request_list import DescriptionRequestList
+from manager.description_message_handler import DescriptionMessageHandler
+from manager.discovery_message_manager import DiscoveryMessageManager
+from manager.discovery_broadcast_loop import DiscoveryBroadcastLoop
+from manager.discovery_listener import DiscoveryListener
 from manager.description_manager import DescriptionManager
-from manager.discovery_manager import DiscoveryManager
-from manager.broadcast_manager import BroadcastManager
-from manager.discovery_receive_manager import DiscoveryReceiveManager
-from manager.description_handler import DescriptionHandler
 
 # UDP socket & TCP socket
 udp_socket = Socket("UDP")
@@ -20,11 +20,11 @@ peer_list = PeerNodeList()
 description_request_list = DescriptionRequestList()
 
 # Initialize Managers
-discovery_manager = DiscoveryManager()
-description_manager = DescriptionManager()
-broadcast_manager = BroadcastManager(discovery_manager, peer_list, udp_socket)
-discovery_handler = DiscoveryReceiveManager()
-description_handler = DescriptionHandler(description_manager)
+discovery_manager = DiscoveryMessageManager()
+description_manager = DescriptionMessageHandler()
+broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list, udp_socket)
+discovery_handler = DiscoveryListener()
+description_handler = DescriptionManager(description_manager)
 input_manager = None    # Todo
 
 # Start Discovery Loop

@@ -10,3 +10,6 @@ class Socket(object):
     def __init__(self, sock_type):
         self.socket = socket.socket(socket.AF_INET, SOCKET_TYPE[sock_type])
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+    def read(self):
+        return self.socket.recv()

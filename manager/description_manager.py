@@ -1,18 +1,34 @@
-from manager.manager import MessageManager
+from manager.description_message_handler import DescriptionMessageHandler
+from message.description_request_list import DescriptionRequestList
+from networking.socket import Socket
+from app.globals import BUFFER_SIZE
 
-from message.message import Message, Address, ServiceList
-
-
-class DescriptionManager(MessageManager):
+class DescriptionManager(object):
     """
-    Subclass of Manager. Handles all description messages connected to a node.
+        Manages descriptions.
+        Handles incoming
     """
-    def __init__(self, node_name):
-        self.node_name = node_name;
-        self.sent_descriptions = []
+    def __init__(self, description_manager):
+        if not isinstance(description_manager, DescriptionMessageHandler):
+            raise RuntimeError
+        self.description_manager = description_manager
 
-    def parse_message(self, message):
-        pass
+    def respond_to_description_request(self, tcp_socket, description_request_list):
+        """
 
-    def create_message(self, address):
-        pass
+        :return:
+        """
+        if not isinstance(description_request_list, DescriptionRequestList):
+            raise RuntimeError
+        if not isinstance(tcp_socket, Socket):
+            raise RuntimeError
+
+        tcp_socket.socket.recv(BUFFER_SIZE)
+        # TODO: Continue implementing method!!
+
+    def send_description_request(self, tcp_socket):
+        """
+
+        :param tcp_socket:
+        :return:
+        """
