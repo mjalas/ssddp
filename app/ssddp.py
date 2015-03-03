@@ -3,6 +3,8 @@ import sys
 from node.peer_node_list import PeerNodeList
 from networking.socket import Socket
 from message.description_request_list import DescriptionRequestList
+from manager.description_manager import DescriptionManager
+from manager.discovery_manager import DiscoveryManager
 
 # UDP socket & TCP socket
 udp_socket = Socket("UDP")
@@ -13,6 +15,11 @@ peer_list = PeerNodeList()
 
 # List of pending outgoing TCP Description requests
 description_request_list = DescriptionRequestList()
+
+# Initialize Managers
+discovery_manager = DiscoveryManager()
+description_manager = DescriptionManager()
+input_manager = None    # Todo
 
 # Start Discovery Loop
 Start_Discovery_Loop(peer_list, udp_socket)    # Todo
@@ -30,16 +37,16 @@ while True:
         if x == udp_socket:
             # UDP -> Discovery Manager
             # (Receiving a UDP Discovery packet)
-            discovery_manager(udp_socket)    # Todo
+            discovery_manager.handle_message(udp_socket)
 
         elif x == tcp_socket:
             # TCP -> Description Manager
             # (Receiving a TCP Description Request or Response)
-            description_manager(tcp_socket, description_request_list)    # Todo
+            description_manager.handle_message(tcp_socket, description_request_list)
 
         elif x == sys.stdin:
             # STDIN -> Input Manager
-            input_manager(sys.stdin)    # Todo
+            input_manager.handle_message(sys.stdin)    # Todo
 
     for x in output_ready:
 
