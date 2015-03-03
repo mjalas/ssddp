@@ -11,8 +11,9 @@ class PeerNodeManager(threading.Thread):
     def __init__(self, message_queue, node_list):
         self.message_queue = message_queue
         self.node_list = node_list
-        threading.Thread.__init__(self)
         self.keep_alive = True
+        threading.Thread.__init__(self)
+
 
     def run(self):
         while self.keep_alive:
