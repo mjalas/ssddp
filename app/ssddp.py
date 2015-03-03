@@ -41,11 +41,11 @@ def main():
 
     # Listening UDP and TCP socket setup
     listening_udp_socket = Socket("UDP")
-    listening_udp_socket.socket.bind(('', UDP_LISTENING_PORT))
+    listening_udp_socket.bind(UDP_LISTENING_PORT)
 
     listening_tcp_socket = Socket("TCP")
-    listening_tcp_socket.socket.bind(('', TCP_LISTENING_PORT))
-    listening_tcp_socket.socket.listen(5)
+    listening_tcp_socket.bind(TCP_LISTENING_PORT)
+    listening_tcp_socket.listen(5)
 
     message_queue = Queue()
 
