@@ -18,11 +18,12 @@ description_request_list = DescriptionRequestList()
 
 # Initialize Managers
 discovery_manager = DiscoveryManager()
+broadcast_manager = DiscoveryManager()
 description_manager = DescriptionManager()
 input_manager = None    # Todo
 
 # Start Discovery Loop
-Start_Discovery_Loop(peer_list, udp_socket)    # Todo
+broadcast_manager.start_broadcast(peer_list, udp_socket)    # Todo
 
 input_list = [udp_socket, tcp_socket, sys.stdin]
 output_list = [tcp_socket]
