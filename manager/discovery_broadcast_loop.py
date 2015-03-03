@@ -8,11 +8,12 @@ class DiscoveryBroadcastLoop(object):
     """
         Broadcasts discovery messages to all peers via the hub.
     """
-    def __init__(self, discovery_message_manager, peer_list, ):
+    def __init__(self, discovery_message_manager, peer_list, self_node):
         if not isinstance(discovery_message_manager, DiscoveryMessageManager):
             raise RuntimeError
         self.discovery_message_manager = discovery_message_manager
         self.previous_message = None
+        self.self_node = self_node
         self.peer_list = peer_list
         self.udp_socket = Socket("UDP")
 
@@ -38,8 +39,8 @@ class DiscoveryBroadcastLoop(object):
         New service found
         :return:
         """
-        
-        return True
+
+        return self_node.has_new_services()
 
     def send_message(self, message):  # TODO: Implement method
         """

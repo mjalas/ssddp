@@ -1,5 +1,7 @@
 import select
 import sys
+from node import peer_node
+from node.peer_node import PeerNode
 from node.peer_node_list import PeerNodeList
 from networking.socket import Socket
 from message.description_request_list import DescriptionRequestList
@@ -13,6 +15,9 @@ from manager.description_manager import DescriptionManager
 listening_udp_socket = Socket("UDP")
 listening_tcp_socket = Socket("TCP")
 
+# Self node
+self_node = PeerNode()
+
 # Peer list
 peer_list = PeerNodeList()
 
@@ -22,7 +27,7 @@ description_request_list = DescriptionRequestList()
 # Initialize Managers
 discovery_manager = DiscoveryMessageManager()
 description_manager = DescriptionMessageHandler()
-broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list)
+broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list, self_node)
 discovery_handler = DiscoveryListener()
 description_handler = DescriptionManager(description_manager)
 input_manager = None    # Todo
