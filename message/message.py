@@ -10,6 +10,8 @@ class Message(object):
     """
 
     def __init__(self, node_name, address, timestamp, services=None):
+        if not isinstance(address, Address):
+            raise RuntimeError
         self.node_name = node_name
         self.address = address
         self.timestamp = timestamp
