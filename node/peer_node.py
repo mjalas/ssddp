@@ -20,3 +20,6 @@ class PeerNode(object):
     def create_node_from_message(message):
         node = PeerNode(message.node_name, message.address, message.timestamp, message.services)
         return node
+
+    def update_node(self, message):
+        pass
