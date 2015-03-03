@@ -1,4 +1,4 @@
-from manager.message_handler import MessageManager
+from manager.message_handler import MessageHandler
 
 
 class DiscoveryMessageHandler(MessageHandler):
