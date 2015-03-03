@@ -1,9 +1,9 @@
-from manager.manager import Manager
+from manager.manager import MessageManager
 
 from message.message import Message, Address, ServiceList
 
 
-class DescriptionManager(Manager):
+class DescriptionManager(MessageManager):
     """
     Subclass of Manager. Handles all description messages connected to a node.
     """

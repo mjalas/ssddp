@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class Manager(metaclass=ABCMeta):
+class MessageManager(metaclass=ABCMeta):
     """
 
     """
