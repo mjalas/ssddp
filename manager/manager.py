@@ -9,7 +9,7 @@ class Manager(metaclass=ABCMeta):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def handle_message(self, message):
+    def parse_message(self, message):
         """
         Handle input message.
         :return:
@@ -17,7 +17,7 @@ class Manager(metaclass=ABCMeta):
         return
 
     @abstractmethod
-    def send_message(self, address):
+    def create_message(self, address):
         """
         Send message to given address.
         :return:

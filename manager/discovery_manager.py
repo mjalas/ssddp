@@ -5,8 +5,8 @@ class DiscoveryManager(Manager):
     """
     Subclass of Manager. Handles all discovery messages connected to a node.
     """
-    def handle_message(self, message):
+    def parse_message(self, message):
         pass
 
-    def send_message(self, address):
+    def create_message(self, address):
         pass

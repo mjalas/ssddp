@@ -11,10 +11,8 @@ class DescriptionManager(Manager):
         self.node_name = node_name;
         self.sent_descriptions = []
 
-    def handle_message(self, message):
-        if isinstance(message, Message):
-            pass
+    def parse_message(self, message):
+        pass
 
-    def send_message(self, address):
-        if isinstance(address, Address):
-            message = Message(self.node_name)
+    def create_message(self, address):
+        pass
