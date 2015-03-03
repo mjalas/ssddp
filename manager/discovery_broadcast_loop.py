@@ -2,7 +2,7 @@
 from time import sleep
 from app.globals import BROADCAST_INTERVAL
 
-from manager.discovery_message_handler import DiscoveryMessageManager
+from manager.discovery_message_handler import DiscoveryMessageHandler
 
 from networking.socket import Socket
 
@@ -12,7 +12,7 @@ class DiscoveryBroadcastLoop(object):
         Broadcasts discovery messages to all peers via the hub.
     """
     def __init__(self, discovery_message_manager, peer_list, self_node):
-        if not isinstance(discovery_message_manager, DiscoveryMessageManager):
+        if not isinstance(discovery_message_manager, DiscoveryMessageHandler):
             raise RuntimeError
         self.discovery_message_manager = discovery_message_manager
         self.previous_message = None

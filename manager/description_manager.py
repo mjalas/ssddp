@@ -3,6 +3,7 @@ from message.description_request_list import DescriptionRequestList
 from networking.socket import Socket
 from app.globals import BUFFER_SIZE
 
+
 class DescriptionManager(object):
     """
         Manages descriptions.
