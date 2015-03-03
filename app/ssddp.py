@@ -12,7 +12,7 @@ from manager.description_message_handler import DescriptionMessageHandler
 from manager.discovery_message_handler import DiscoveryMessageHandler
 from manager.discovery_broadcast_loop import DiscoveryBroadcastLoop
 from manager.discovery_listener import DiscoveryListener
-from manager.description_manager import DescriptionManager
+from manager.description_listener import DescriptionListener
 from app.globals import TCP_LISTENING_PORT
 from app.globals import UDP_LISTENING_PORT
 from app.globals import BUFFER_SIZE
@@ -26,15 +26,13 @@ def main():
     self_node = PeerNode()
 
     # Peer list
-    peer_list = PeerNodeList()  # Initialize Managers
+    peer_list = PeerNodeList()
+
+    # Initialize Managers
     discovery_manager = DiscoveryMessageHandler()
-    description_message_handler = DescriptionMessageHandler()
     broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list)
 
     input_manager = None  # Todo
-
-    # List of pending outgoing TCP Description requests
-    description_request_list = DescriptionRequestList()
 
     # Start Discovery Loop
     broadcast_manager.start_broadcast()  # Todo
@@ -47,8 +45,10 @@ def main():
     listening_tcp_socket.bind(TCP_LISTENING_PORT)
     listening_tcp_socket.listen(5)
 
+    # Initialize message queue
     message_queue = Queue()
 
+    # Initialize manager that updates peer node data
     peer_node_manager = PeerNodeManager(message_queue, peer_list)
     peer_node_manager.run()
 
@@ -62,17 +62,13 @@ def main():
         for x in input_ready:
 
             if x == listening_udp_socket.socket:
-                # TODO: Handle incoming discovery message
                 # UDP -> Discovery Manager
                 # (Receiving a UDP Discovery packet)
-                # discovery_handler.handle_discovery(udp_socket)
                 data, address = listening_udp_socket.socket.recv(BUFFER_SIZE)
                 discovery_handler = DiscoveryListener(data, address, message_queue)
                 discovery_handler.run()
 
             elif x == listening_tcp_socket.socket:
-                # TODO: Create new TCP socket for client to handle the incoming request
-                # TODO: -> handle request and send response in own thread/child process
                 # TCP -> Description Manager
                 # (Receiving a TCP Description Request)
                 connection, client_address = listening_tcp_socket.socket.accept()

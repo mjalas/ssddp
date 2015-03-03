@@ -11,10 +11,10 @@ class DiscoveryBroadcastLoop(object):
     """
         Broadcasts discovery messages to all peers via the hub.
     """
-    def __init__(self, discovery_message_manager, peer_list, self_node):
-        if not isinstance(discovery_message_manager, DiscoveryMessageHandler):
+    def __init__(self, discovery_message_handler, peer_list, self_node):
+        if not isinstance(discovery_message_handler, DiscoveryMessageHandler):
             raise RuntimeError
-        self.discovery_message_manager = discovery_message_manager
+        self.discovery_message_manager = discovery_message_handler
         self.previous_message = None
         self.self_node = self_node
         self.peer_list = peer_list
