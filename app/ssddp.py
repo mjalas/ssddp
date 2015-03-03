@@ -6,7 +6,7 @@ from node.peer_node_list import PeerNodeList
 from networking.socket import Socket
 from message.description_request_list import DescriptionRequestList
 from manager.description_message_handler import DescriptionMessageHandler
-from manager.discovery_message_handler import DiscoveryMessageManager
+from manager.discovery_message_handler import DiscoveryMessageHandler
 from manager.discovery_broadcast_loop import DiscoveryBroadcastLoop
 from manager.discovery_listener import DiscoveryListener
 from manager.description_manager import DescriptionManager
@@ -24,7 +24,7 @@ peer_list = PeerNodeList()
 description_request_list = DescriptionRequestList()
 
 # Initialize Managers
-discovery_manager = DiscoveryMessageManager()
+discovery_manager = DiscoveryMessageHandler()
 description_message_handler = DescriptionMessageHandler()
 broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list)
 discovery_handler = DiscoveryListener()
