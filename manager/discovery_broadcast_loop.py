@@ -1,4 +1,5 @@
 from manager.discovery_message_manager import DiscoveryMessageManager
+from networking.socket import Socket
 
 
 class DiscoveryBroadcastLoop(object):
@@ -11,7 +12,7 @@ class DiscoveryBroadcastLoop(object):
         self.discovery_message_manager = discovery_message_manager
         self.previous_message = None
         self.peer_list = peer_list
-        # self.udp_socket = udp_socket # TODO: create new udp socket for sending messages
+        self.udp_socket = Socket("UDP")
 
     def start_broadcast(self):
         """
