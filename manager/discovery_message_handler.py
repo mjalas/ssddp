@@ -1,7 +1,7 @@
-from manager.manager import MessageManager
+from manager.message_handler import MessageManager
 
 
-class DiscoveryMessageManager(MessageManager):
+class DiscoveryMessageHandler(MessageHandler):
     """
         Subclass of Manager.
         Handles parsing and creating discovery messages connected to a node.

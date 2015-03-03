@@ -1,4 +1,4 @@
-from manager.discovery_message_manager import DiscoveryMessageManager
+from manager.discovery_message_handler import DiscoveryMessageManager
 from app.globals import BUFFER_SIZE
 
 

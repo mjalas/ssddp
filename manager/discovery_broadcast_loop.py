@@ -1,6 +1,9 @@
+
 from time import sleep
 from app.globals import BROADCAST_INTERVAL
-from manager.discovery_message_manager import DiscoveryMessageManager
+
+from manager.discovery_message_handler import DiscoveryMessageManager
+
 from networking.socket import Socket
 
 
