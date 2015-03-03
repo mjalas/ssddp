@@ -1,10 +1,12 @@
+from time import sleep
+from app.globals import BROADCAST_INTERVAL
 from manager.discovery_message_manager import DiscoveryMessageManager
 from networking.socket import Socket
 
 
 class DiscoveryBroadcastLoop(object):
     """
-
+        Broadcasts discovery messages to all peers via the hub.
     """
     def __init__(self, discovery_message_manager, peer_list, ):
         if not isinstance(discovery_message_manager, DiscoveryMessageManager):
@@ -16,7 +18,7 @@ class DiscoveryBroadcastLoop(object):
 
     def start_broadcast(self):
         """
-
+        Runs the broadcast loop
         :return:
         """
         # preliminary logic - CAN BE CHANGED
@@ -28,11 +30,15 @@ class DiscoveryBroadcastLoop(object):
         self.send_message(message)
         self.previous_message = message
 
+        sleep(BROADCAST_INTERVAL)
+        self.start_broadcast()
+
     def found_new_services(self):  # TODO: Implement real logic
         """
-
+        New service found
         :return:
         """
+        
         return True
 
     def send_message(self, message):  # TODO: Implement method
