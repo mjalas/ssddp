@@ -19,8 +19,11 @@ class DiscoveryBroadcastLoop(object):
         :return:
         """
         # preliminary logic - CAN BE CHANGED
-        if self.found_new_services():
-            message = self.discovery_manager.create_message()
+
+        if self.found_new_services() or self.previous_message is None:
+            message = self.discovery_message_manager.create_message()
+        else:
+            message = self.previous_message
         self.send_message(message)
         self.previous_message = message
 
