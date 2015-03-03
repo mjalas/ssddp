@@ -76,8 +76,9 @@ def main():
                 # TCP -> Description Manager
                 # (Receiving a TCP Description Request)
                 connection, client_address = listening_tcp_socket.socket.accept()
-                description_handler = DescriptionManager()
-                description_handler.handle_description(connection, description_request_list)
+                description_handler = DescriptionListener(connection, client_address)
+                description_handler.run()
+                # TODO: output response to user inside thread!!
 
             elif x == sys.stdin:  # TODO: handle user command (create new socket for sending messages and free it if required)
                 # STDIN -> Input Manager
