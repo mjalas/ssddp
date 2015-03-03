@@ -8,10 +8,10 @@ class DescriptionManager(object):
         Manages descriptions.
         Handles incoming
     """
-    def __init__(self, description_manager):
-        if not isinstance(description_manager, DescriptionMessageHandler):
+    def __init__(self, description_message_handler):
+        if not isinstance(description_message_handler, DescriptionMessageHandler):
             raise RuntimeError
-        self.description_manager = description_manager
+        self.description_message_handler = description_message_handler
 
     def respond_to_description_request(self, tcp_socket, description_request_list):
         """
