@@ -43,7 +43,7 @@ class DiscoveryBroadcastLoop(object):
         :return:
         """
 
-        return self_node.has_new_services()
+        return self.self_node.has_new_services()
 
     def send_message(self, message):  # TODO: Implement method
         """
