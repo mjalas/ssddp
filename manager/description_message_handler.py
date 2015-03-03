@@ -1,4 +1,4 @@
-from manager.manager import MessageManager
+from manager.message_handler import MessageManager
 
 from message.message import Message, Address, ServiceList
 
