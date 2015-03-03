@@ -5,13 +5,13 @@ class DiscoveryBroadcastLoop(object):
     """
 
     """
-    def __init__(self, discovery_message_manager, peer_list, udp_socket):
+    def __init__(self, discovery_message_manager, peer_list, ):
         if not isinstance(discovery_message_manager, DiscoveryMessageManager):
             raise RuntimeError
         self.discovery_message_manager = discovery_message_manager
         self.previous_message = None
         self.peer_list = peer_list
-        self.udp_socket = udp_socket
+        # self.udp_socket = udp_socket # TODO: create new udp socket for sending messages
 
     def start_broadcast(self):
         """
