@@ -10,8 +10,8 @@ from manager.discovery_listener import DiscoveryListener
 from manager.description_manager import DescriptionManager
 
 # UDP socket & TCP socket
-udp_socket = Socket("UDP")
-tcp_socket = Socket("TCP")
+listening_udp_socket = Socket("UDP")
+listening_tcp_socket = Socket("TCP")
 
 # Peer list
 peer_list = PeerNodeList()
@@ -22,7 +22,7 @@ description_request_list = DescriptionRequestList()
 # Initialize Managers
 discovery_manager = DiscoveryMessageManager()
 description_manager = DescriptionMessageHandler()
-broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list, udp_socket)
+broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list)
 discovery_handler = DiscoveryListener()
 description_handler = DescriptionManager(description_manager)
 input_manager = None    # Todo
@@ -30,33 +30,32 @@ input_manager = None    # Todo
 # Start Discovery Loop
 broadcast_manager.start_broadcast()    # Todo
 
-input_list = [udp_socket, tcp_socket, sys.stdin]
-output_list = [tcp_socket]
+input_list = [listening_udp_socket, listening_tcp_socket, sys.stdin]
+
 
 while True:
 
     # listen (select UDP, TCP, STDIN)
-    input_ready, output_ready, except_ready = select.select(input_list, output_list, [])
+    input_ready, output_ready, except_ready = select.select(input_list, [], [])
 
     for x in input_ready:
 
-        if x == udp_socket:
+        if x == listening_udp_socket:
+            # TODO: Handle incoming discovery message
             # UDP -> Discovery Manager
             # (Receiving a UDP Discovery packet)
-            discovery_handler.handle_discovery(udp_socket)
+            # discovery_handler.handle_discovery(udp_socket)
+            pass
 
-        elif x == tcp_socket:
+        elif x == listening_tcp_socket:
+            # TODO: Create new TCP socket for client to handle the incoming request
+            # TODO: -> handle request and send response in own thread/child process
             # TCP -> Description Manager
-            # (Receiving a TCP Description Request or Response)
-            description_handler.handle_description(tcp_socket, description_request_list)
+            # (Receiving a TCP Description Request)
+            # description_handler.handle_description(tcp_socket, description_request_list)
+            pass
 
         elif x == sys.stdin:
+            # TODO: handle user command (create new socket for sending messages and free it if required)
             # STDIN -> Input Manager
             input_manager.handle_message(sys.stdin)    # Todo
-
-    for x in output_ready:
-
-        if x == tcp_socket:
-            # Outgoing Description Request
-            # (Append to Desc)
-            description_request_list.append()   # Todo: append message to list
