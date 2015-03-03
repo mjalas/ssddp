@@ -5,10 +5,20 @@ class Manager(metaclass=ABCMeta):
     """
 
     """
-    @abstractmethod
-    def handle_message(self):
-        pass
+
+    __metaclass__ = ABCMeta
 
     @abstractmethod
-    def send_message(self):
-        pass
+    def handle_message(self, message):
+        """
+        Handle input message.
+        :return:
+        """
+        return
+
+    @abstractmethod
+    def send_message(self, address):
+        """
+        Send message to given address.
+        :return:
+        """
