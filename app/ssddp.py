@@ -1,5 +1,7 @@
 import select
 import sys
+from node import peer_node
+from node.peer_node import PeerNode
 from node.peer_node_list import PeerNodeList
 from networking.socket import Socket
 from message.description_request_list import DescriptionRequestList
@@ -11,6 +13,9 @@ from manager.description_manager import DescriptionManager
 from app.globals import TCP_LISTENING_PORT
 from app.globals import UDP_LISTENING_PORT
 
+
+# Self node
+self_node = PeerNode()
 
 # Peer list
 peer_list = PeerNodeList()
