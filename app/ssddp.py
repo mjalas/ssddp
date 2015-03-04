@@ -75,7 +75,6 @@ class SSDDP(object):
 
             for x in input_ready:
 
-
                 if x == listening_udp_socket.socket:
                     # UDP -> Discovery Manager
                     # (Receiving a UDP Discovery packet)
