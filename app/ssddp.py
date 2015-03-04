@@ -70,7 +70,6 @@ class SSDDP(object):
 
         while True:
 
-
             # listen (select UDP, TCP, STDIN)
             input_ready, output_ready, except_ready = select.select(input_list, [], [])
 
