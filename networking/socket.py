@@ -9,6 +9,7 @@ SOCKET_TYPE = {
 
 class Socket(object):
     def __init__(self, sock_type):
+        self.type = sock_type
         self.socket = socket.socket(socket.AF_INET, SOCKET_TYPE[sock_type])
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
@@ -20,6 +21,15 @@ class Socket(object):
 
     def accept(self):
         self.socket.accept()
+
+    def send(self, message):
+        if self.type == "TCP":
+            self.socket.sendall(message)
+        elif self.type == "UDP":
+            self.socket.send(message)
+
+    def sendto(self, message, address):
+        self.socket.sendto(message, address)
 
     def read(self):
         return self.socket.recv(BUFFER_SIZE)
