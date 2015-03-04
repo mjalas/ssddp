@@ -2,6 +2,7 @@ import select
 import sys
 from app.argument_handler import ArgumentHandler
 from queue import Queue
+from app.logfile import Logfile
 from node import peer_node
 from node.peer_node import PeerNode
 from node.peer_node_list import PeerNodeList
@@ -17,6 +18,7 @@ from manager.command_listener import CommandListener
 from app.globals import TCP_LISTENING_PORT
 from app.globals import UDP_LISTENING_PORT
 from app.globals import BUFFER_SIZE
+import logging; log = logging.getLogger(__name__)
 
 
 class SSDDP(object):
@@ -26,8 +28,13 @@ class SSDDP(object):
 
     @staticmethod
     def start():
+
         # Handle program arguments
         ArgumentHandler()
+
+        # Logging and logs
+        logfile = Logfile("logfile.log")
+        log.info("SSDDP started")
 
         # Self node
         self_node = PeerNode()
