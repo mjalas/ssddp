@@ -64,14 +64,14 @@ def main():
             if x == listening_udp_socket.socket:
                 # UDP -> Discovery Manager
                 # (Receiving a UDP Discovery packet)
-                data, address = listening_udp_socket.socket.recv(BUFFER_SIZE)
+                data, address = listening_udp_socket.recv(BUFFER_SIZE)
                 discovery_handler = DiscoveryListener(data, address, message_queue)
                 discovery_handler.run()
 
             elif x == listening_tcp_socket.socket:
                 # TCP -> Description Manager
                 # (Receiving a TCP Description Request)
-                connection, client_address = listening_tcp_socket.socket.accept()
+                connection, client_address = listening_tcp_socket.accept()
                 description_handler = DescriptionListener(connection, client_address)
                 description_handler.run()
 

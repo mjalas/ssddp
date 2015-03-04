@@ -18,5 +18,8 @@ class Socket(object):
     def listen(self, backlog):
         self.socket.listen(backlog)
 
+    def accept(self):
+        self.socket.accept()
+
     def read(self):
         return self.socket.recv(BUFFER_SIZE)
