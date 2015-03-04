@@ -74,11 +74,12 @@ def main():
                 connection, client_address = listening_tcp_socket.socket.accept()
                 description_handler = DescriptionListener(connection, client_address)
                 description_handler.run()
-                # TODO: output response to user inside thread!!
+
 
             elif x == sys.stdin:  # TODO: handle user command (create new socket for sending messages and free it if required)
                 # STDIN -> Input Manager
                 input_manager.handle_message(sys.stdin)  # Todo
+                # TODO: output response to user inside thread!!
 
 if __name__ == "__main__":
     main()
