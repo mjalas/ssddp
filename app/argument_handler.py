@@ -18,7 +18,7 @@ class ArgumentHandler(object):
 
         for opt, arg in opts:
             if opt in ("-h", "--help"):
-                usage()
+                self.usage()
                 exit()
             elif opt in ("-p", "--port"):
                 port = arg
