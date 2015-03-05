@@ -9,7 +9,8 @@ from networking.socket import Socket
 
 class DiscoveryBroadcastLoop(object):
     """
-        Broadcasts discovery messages to all peers via the hub.
+    Broadcasts discovery messages to all peers via the hub.
+    In the absence of hub, sends the messages to all available ports
     """
     def __init__(self, discovery_message_handler, peer_list, self_node):
         if not isinstance(discovery_message_handler, DiscoveryMessageHandler):
