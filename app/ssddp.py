@@ -42,12 +42,9 @@ class SSDDP(object):
         # Peer list
         peer_list = PeerNodeList()
 
-        # Hub address ( todo: get from arguments or something)
-        hub_address = ("127.0.0.1", 5678)
-
         # Initialize Managers
         discovery_manager = DiscoveryMessageHandler()
-        broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list, hub_address)
+        broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list)
 
         input_manager = None  # Todo
 

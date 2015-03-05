@@ -1,6 +1,6 @@
 
 from time import sleep
-from app.globals import BROADCAST_INTERVAL
+from app.globals import BROADCAST_INTERVAL, HUB_ADDRESS
 
 from manager.discovery_message_handler import DiscoveryMessageHandler
 
@@ -11,7 +11,7 @@ class DiscoveryBroadcastLoop(object):
     """
         Broadcasts discovery messages to all peers via the hub.
     """
-    def __init__(self, discovery_message_handler, peer_list, self_node, hub_address):
+    def __init__(self, discovery_message_handler, peer_list, self_node):
         if not isinstance(discovery_message_handler, DiscoveryMessageHandler):
             raise RuntimeError
         self.discovery_message_manager = discovery_message_handler
@@ -19,6 +19,7 @@ class DiscoveryBroadcastLoop(object):
         self.self_node = self_node
         self.peer_list = peer_list
         self.udp_socket = Socket("UDP")
+        self.hub_available = True
 
     def start_broadcast(self):
         """
@@ -50,8 +51,16 @@ class DiscoveryBroadcastLoop(object):
 
         :return:
         """
-        if self.hub_address:
-            self.udp_socket.sendto(message, self.hub_address)
+        if self.hub_available:
+            self.udp_socket.sendto(message, HUB_ADDRESS)
         else:
             # TODO: Phase 2 port scanning
             pass
+
+    def hub_status(self, hub_availability):
+        """
+        Used to notify the loop whether or not hub can be used
+        :param hub_availability:
+        :return:
+        """
+        self.hub_available = hub_availability
