@@ -32,3 +32,8 @@ might be tedious to implement in the select loop.
 Decided to keep the select loop and implement the message handling parts in
 the background. First version of the implementation utilizes threads for
 the background work, and queues for messaging between threads.
+
+5.3.2015
+We realized that our Discovery Broadcast Loop has no way of knowing whether or not 
+the Hub exists. Discovery Listener will have to determine whether or not the Hub is 
+available and then communicate that info to the Broadcast Loop.
