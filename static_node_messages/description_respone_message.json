@@ -1,0 +1,24 @@
+{
+  "protocol" : "ssddp",
+  "type" : "description",
+  "node_name" : "test node",
+  "address" : "localhost:8880:8890",
+  "services" : {
+      "service1" : {
+      "name" : "temperature service",
+      "service_type" : "sensor",
+      "description" : "This is a temperature sensor service that collects temperature data."
+    },
+    "service2" : {
+      "name" : "movie library",
+      "service_type" : "media",
+      "description" : "This is a movie library service that provides movie browsing and streaming."
+    },
+    "service3" : {
+      "name" : "music streamer",
+      "service_type" : "media",
+      "description" : "This is a music streaming service."
+    }
+  },
+  "timestamp" : ""
+}
