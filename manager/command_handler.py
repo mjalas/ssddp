@@ -1,7 +1,7 @@
 import threading
 
 
-class CommandListener(threading.Thread):
+class CommandHandler(threading.Thread):
     """
 
     """
