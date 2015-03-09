@@ -2,7 +2,11 @@
   "protocol" : "ssddp",
   "type" : "discovery",
   "node_name" : "test node",
-  "address" : "localhost:8880:8890",
+  "address" : {
+     "ip" : "localhost",
+      "udp_port" : 8880,
+      "tcp_port" : 8890
+  },
   "services" : {},
   "timestamp" : "2015-03-09 11:24:59.565004"
 }
