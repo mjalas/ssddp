@@ -1,24 +1,25 @@
 import select
 import sys
-from app.argument_handler import ArgumentHandler
 from queue import Queue
+import logging
+
+from app.argument_handler import ArgumentHandler
 from app.logfile import Logfile
-from node import peer_node
 from node.peer_node import PeerNode
 from node.peer_node_list import PeerNodeList
 from node.peer_node_manager import PeerNodeManager
 from networking.socket import Socket
-from message.description_request_list import DescriptionRequestList
-from manager.description_message_handler import DescriptionMessageHandler
-from manager.discovery_message_handler import DiscoveryMessageHandler
+from message.discovery_message_handler import DiscoveryMessageHandler
 from manager.discovery_broadcast_loop import DiscoveryBroadcastLoop
 from manager.discovery_listener import DiscoveryListener
 from manager.description_listener import DescriptionListener
-from manager.command_listener import CommandListener
+from manager.command_handler import CommandHandler
 from app.globals import TCP_LISTENING_PORT
 from app.globals import UDP_LISTENING_PORT
 from app.globals import BUFFER_SIZE
-import logging; log = logging.getLogger(__name__)
+
+
+log = logging.getLogger(__name__)
 
 
 class SSDDP(object):
@@ -86,13 +87,16 @@ class SSDDP(object):
                     # TCP -> Description Manager
                     # (Receiving a TCP Description Request)
                     connection, client_address = listening_tcp_socket.socket.accept()
-                    description_handler = DescriptionListener(connection, client_address)
-                    description_handler.run()
+                    try:
+                        description_handler = DescriptionListener(connection, client_address, self_node)
+                        description_handler.run()
+                    except IOError as e:
+                        log.error(e.args[0])
 
                 elif x == sys.stdin:  # TODO: handle user command (create new socket for sending messages and free it if required)
                     # STDIN -> Input Manager
                     command = sys.stdin.read(1024)
-                    input_listener = CommandListener(command)
+                    input_listener = CommandHandler(command)
                     input_listener.run()
                     # TODO: output response to user inside thread!!
 
