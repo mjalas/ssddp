@@ -9,12 +9,14 @@ class Message(object):
 
     """
 
-    def __init__(self, node_name, address, timestamp, services=None):
+    def __init__(self, message_type, node_name, address, timestamp, services=None, protocol='ssddp'):
         if not isinstance(address, Address):
             raise RuntimeError
+        self.message_type = message_type
         self.node_name = node_name
         self.address = address
         self.timestamp = timestamp
+        self.protocol = protocol
         if services:
             self.services = services
         else:
@@ -38,6 +40,25 @@ class Message(object):
     @staticmethod
     def to_object(json_string):
         data = json.loads(json_string)
+        if 'protocol' not in data:
+            raise ValueError("Protocol key not present in data!")
+        elif data['protocol'] is not 'ssddp':
+            raise ValueError("Not the correct protocol!")
+        if 'message_type' not in data:
+            raise ValueError("Message type missing!")
+        if 'type' not in data:
+            raise ValueError("Type missing")
+        if 'node_name' not in data:
+            raise ValueError("Node name key not present in data!")
+        if 'address' not in data:
+            raise ValueError("Address key not present in data!")
+        if 'services' not in data:
+            raise ValueError("Services key not present in data")
+
         address = Address(data['address']['ip'], data['address']['udp_port'], data['address']['tcp_port'])
-        message = Message(data['name'], address, data['timestamp'])
+        if data['services']:
+            message = Message(data['name'], address, data['timestamp'], data['services'])
+        else:
+            message = Message(data['name'], address, data['timestamp'])
+
         return message
