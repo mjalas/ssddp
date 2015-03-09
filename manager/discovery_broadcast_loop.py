@@ -1,9 +1,7 @@
-
 from time import sleep
+
 from app.globals import BROADCAST_INTERVAL, HUB_ADDRESS
-
-from manager.discovery_message_handler import DiscoveryMessageHandler
-
+from message.discovery_message_handler import DiscoveryMessageHandler
 from networking.socket import Socket
 
 
