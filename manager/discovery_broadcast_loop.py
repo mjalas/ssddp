@@ -19,7 +19,7 @@ class DiscoveryBroadcastLoop(object):
         self.self_node = self_node
         self.peer_list = peer_list
         self.udp_socket = Socket("UDP")
-        self.timestamp = Timestamp.create_timestamp()
+        self.hub_timestamp = Timestamp.create_timestamp()
 
     def start_broadcast(self):
         """
@@ -64,10 +64,10 @@ class DiscoveryBroadcastLoop(object):
         self.udp_socket.sendto(message, HUB_ADDRESS)
 
     def update_timestamp(self):
-        self.timestamp = Timestamp.create_timestamp()
+        self.hub_timestamp = Timestamp.create_timestamp()
 
     def hub_timestamp_expired(self):
         current_time = Timestamp.create_timestamp()
-        if (current_time - self.timestamp) > HUB_TIMEOUT:
+        if (current_time - self.hub_timestamp) > HUB_TIMEOUT:
             return True
         return False
