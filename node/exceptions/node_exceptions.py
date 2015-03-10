@@ -1,0 +1,4 @@
+
+
+class PeerNodeNotFoundException(Exception):
+    pass
