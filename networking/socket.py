@@ -12,12 +12,9 @@ class Socket(object):
         self.type = sock_type
         self.socket = socket.socket(socket.AF_INET, SOCKET_TYPE[sock_type])
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.bind()
-        if self.type == "TCP":
-            self.listen()
 
-    def bind(self):
-        self.socket.bind(LISTENING_PORT)
+    def bind(self, port):
+        self.socket.bind(port)
 
     def listen(self):
         self.socket.listen(TCP_BACKLOG)
@@ -39,3 +36,7 @@ class Socket(object):
             return self.socket.recv(BUFFER_SIZE)
         elif self.type == "UDP":
             return self.socket.recvfrom(BUFFER_SIZE)
+
+    def terminate(self):
+        self.socket.shutdown(socket.SHUT_RDWR)
+        self.socket.close()
