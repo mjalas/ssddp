@@ -80,7 +80,7 @@ class SSDDP(object):
                     # UDP -> Discovery Manager
                     # (Receiving a UDP Discovery packet)
                     data, address = listening_udp_socket.socket.recv(BUFFER_SIZE)
-                    discovery_handler = DiscoveryListener(data, address, message_queue)
+                    discovery_handler = DiscoveryListener(data, address, message_queue, broadcast_manager)
                     discovery_handler.run()
 
                 elif x == listening_tcp_socket.socket:

@@ -1,4 +1,5 @@
 import threading
+from app.globals import HUB_ADDRESS
 
 from networking.socket import Socket
 from message.message import Message
@@ -8,11 +9,12 @@ class DiscoveryListener(threading.Thread):
     """
         Listens to incoming discovery messages and handles them
     """
-    def __init__(self, data, address, message_queue):
+    def __init__(self, data, address, message_queue, broadcast_manager):
         self._target = self.handle_discovery
         self.data = data
         self.address = address
         self.message_queue = message_queue
+        self.broadcast_manager = broadcast_manager
         threading.Thread.__init__(self)
 
     def handle_discovery(self):  # TODO: Implement method
@@ -21,6 +23,7 @@ class DiscoveryListener(threading.Thread):
         Creates a message object from the data
         :return:
         """
+        self.update_broadcast_timestamp()
         message = self.handle_data()
         if message:
             self.message_queue.put(message)
@@ -30,6 +33,10 @@ class DiscoveryListener(threading.Thread):
         if self.data:
             message = Message.to_object(self.data)
         return message
+
+    def update_broadcast_timestamp(self):
+        if self.address == HUB_ADDRESS:
+            self.broadcast_manager.update_timestamp()
 
     def run(self):
         self._target()
