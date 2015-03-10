@@ -14,9 +14,6 @@ from manager.discovery_broadcast_loop import DiscoveryBroadcastLoop
 from manager.discovery_listener import DiscoveryListener
 from manager.description_listener import DescriptionListener
 from manager.command_handler import CommandHandler
-from app.globals import TCP_LISTENING_PORT
-from app.globals import UDP_LISTENING_PORT
-from app.globals import BUFFER_SIZE
 
 
 log = logging.getLogger(__name__)
@@ -54,11 +51,7 @@ class SSDDP(object):
 
         # Listening UDP and TCP socket setup
         listening_udp_socket = Socket("UDP")
-        listening_udp_socket.bind(UDP_LISTENING_PORT)
-
         listening_tcp_socket = Socket("TCP")
-        listening_tcp_socket.bind(TCP_LISTENING_PORT)
-        listening_tcp_socket.listen(5)
 
         # Initialize message queue
         message_queue = Queue()
@@ -79,7 +72,7 @@ class SSDDP(object):
                 if x == listening_udp_socket.socket:
                     # UDP -> Discovery Manager
                     # (Receiving a UDP Discovery packet)
-                    data, address = listening_udp_socket.socket.recv(BUFFER_SIZE)
+                    data, address = listening_udp_socket.read()
                     discovery_handler = DiscoveryListener(data, address, message_queue, broadcast_manager)
                     discovery_handler.run()
 
