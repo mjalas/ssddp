@@ -52,3 +52,14 @@ class TestPeerNodeList(unittest.TestCase):
         peer_list.add(node1)
         peer_list.add(node2)
         self.assertEqual(2, peer_list.count())
+
+    def test_node_in_list(self):
+        node1 = mock.create_autospec(PeerNode)
+        node2 = mock.create_autospec(PeerNode)
+        node3 = mock.create_autospec(PeerNode)
+        peer_list = PeerNodeList()
+
+        peer_list.add(node1)
+        peer_list.add(node2)
+        self.assertTrue(peer_list.node_in_list(node1))
+        self.assertFalse(peer_list.node_in_list(node3))

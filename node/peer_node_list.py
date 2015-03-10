@@ -21,3 +21,9 @@ class PeerNodeList(object):
             if node.name is node_name:
                 return node
         raise PeerNodeNotFoundException("Peer node not found in list")
+
+    def node_in_list(self, node):
+        for peer in self.peers:
+            if peer is node:
+                return True
+        return False
