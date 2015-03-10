@@ -47,3 +47,6 @@ all available ports.
 The discovery message is sent to the hub even when the hub has timed out.
 This allows the program to recover from a scenario where the hub is temporarily 
 unavailable.
+We also have plans for implementing separate smaller messages to be used for the p2p 
+messaging in case our regular discovery packets were to cause congestion or other 
+problems due to their size.  
