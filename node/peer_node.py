@@ -18,6 +18,8 @@ class PeerNode(object):
 
     @staticmethod
     def create_node_from_message(message):
+        if not isinstance(message, Message):
+            raise ValueError("Message not of type Message")
         node = PeerNode(message.node_name, message.address, message.timestamp, message.services)
         return node
 
