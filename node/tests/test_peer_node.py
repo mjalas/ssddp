@@ -61,3 +61,4 @@ class TestPeerNode(unittest.TestCase):
         self.assertEqual(hello, node.name)
         node.update_node(message)
         self.assertEqual(test_name, node.name)
+        # TODO: add more test to change the other values of the node!
