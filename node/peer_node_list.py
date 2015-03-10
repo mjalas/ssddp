@@ -18,7 +18,7 @@ class PeerNodeList(object):
 
     def get(self, node_name):
         for node in self.peers:
-            if node.name is node_name:
+            if node.name == node_name:
                 return node
         raise PeerNodeNotFoundException("Peer node not found in list")
 
