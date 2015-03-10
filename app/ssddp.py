@@ -66,7 +66,7 @@ class SSDDP(object):
                 listening_tcp_socket.listen()
 
             except socket.error as error:
-                log.error('Failed binding to port %d, (%s)', port, error)
+                log.error('Failed binding to port %d, (%d: %s)', port, error.errno, error.strerror)
                 listening_tcp_socket.terminate()
                 listening_udp_socket.terminate()
                 continue
