@@ -48,3 +48,16 @@ class TestPeerNode(unittest.TestCase):
         self.assertEqual(test_name, node.name)
         self.assertEqual(test_address, node.address)
         self.assertEqual(test_timestamp, node.timestamp)
+
+    def test_update(self):
+        test_name = "test name"
+        hello = "hello"
+        test_ip = "127.0.0.1"
+        test_port = 8880
+        test_address = Address(test_ip, test_port)
+        test_timestamp = Timestamp.create_timestamp()
+        node = PeerNode(hello, test_address, test_timestamp)
+        message = Message(MessageType.description_response, test_name, test_address, test_timestamp)
+        self.assertEqual(hello, node.name)
+        node.update_node(message)
+        self.assertEqual(test_name, node.name)
