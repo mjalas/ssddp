@@ -1,6 +1,6 @@
 import getopt
 from sys import argv, exit
-from app.globals import TCP_LISTENING_PORT
+from app.globals import LISTENING_PORT
 
 
 class ArgumentHandler(object):
@@ -14,7 +14,7 @@ class ArgumentHandler(object):
             exit(2)
 
         # Default values
-        port = TCP_LISTENING_PORT
+        port = LISTENING_PORT
 
         for opt, arg in opts:
             if opt in ("-h", "--help"):

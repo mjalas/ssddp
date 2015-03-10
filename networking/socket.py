@@ -1,5 +1,5 @@
 import socket
-from app.globals import BUFFER_SIZE, UDP_LISTENING_PORT, TCP_LISTENING_PORT, TCP_BACKLOG
+from app.globals import BUFFER_SIZE, UDP_LISTENING_PORT, LISTENING_PORT, TCP_BACKLOG
 
 SOCKET_TYPE = {
     "UDP": socket.SOCK_DGRAM,
@@ -12,17 +12,15 @@ class Socket(object):
         self.type = sock_type
         self.socket = socket.socket(socket.AF_INET, SOCKET_TYPE[sock_type])
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.bind()
         if self.type == "TCP":
-            self.socket.bind(TCP_LISTENING_PORT)
-            self.socket.listen(TCP_BACKLOG)
-        elif self.type == "UDP":
-            self.socket.bind(UDP_LISTENING_PORT)
+            self.listen()
 
-    def bind(self, port):
-        self.socket.bind(('', port))
+    def bind(self):
+        self.socket.bind(LISTENING_PORT)
 
-    def listen(self, backlog):
-        self.socket.listen(backlog)
+    def listen(self):
+        self.socket.listen(TCP_BACKLOG)
 
     def accept(self):
         self.socket.accept()
