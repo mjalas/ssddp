@@ -1,4 +1,4 @@
-
+from node.exceptions.node_exceptions import PeerNodeNotFoundException
 
 class PeerNodeList(object):
     """
@@ -17,4 +17,7 @@ class PeerNodeList(object):
         self.peers.append(node)
 
     def get(self, node_name):
-        return (node for node in self.peers if node.name == node_name)
+        for node in self.peers:
+            if node.name is node_name:
+                return node
+        raise PeerNodeNotFoundException("Peer node not found in list")
