@@ -8,7 +8,7 @@ class Timestamp(object):
     """
     @staticmethod
     def create_timestamp():
-        return time.time()
+        return datetime.now().timestamp()
 
     @staticmethod
     def timestamp_to_string(timestamp):

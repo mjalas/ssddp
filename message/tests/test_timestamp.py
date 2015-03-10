@@ -13,7 +13,7 @@ class TestTimestamp(unittest.TestCase):
         pass
 
     def test_create_timestamp(self):
-        self.assertAlmostEqual(time.time(), Timestamp.create_timestamp())
+        self.assertLess(datetime.now().timestamp(), Timestamp.create_timestamp())
 
     def test_timestamp_to_string(self):
         timestamp = time.time()
