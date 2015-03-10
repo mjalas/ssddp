@@ -1,5 +1,6 @@
 import unittest
 from message.message import Message
+from message.message_types import MessageType
 from message.timestamp import Timestamp
 from node.node_address import Address
 
@@ -10,20 +11,20 @@ class TestMessage(unittest.TestCase):
     """
 
     def setUp(self):
-        address = Address('192.168.0.10', 5560, 5561)
+        address = Address('192.168.0.10', 8880)
         self.timestamp = Timestamp.create_timestamp()
-        self.message = Message('test_node', address, self.timestamp)
-        self.test_data = {'name': 'test_node', 'address': {'ip': '192.168.0.10', 'udp_port': 5560,
-                                                           'tcp_port': 5561}, 'timestamp': self.timestamp}
+        self.message = Message(MessageType.description_request,'test_node', address, self.timestamp)
+        self.test_data = {'name': 'test_node', 'address': {'ip': '192.168.0.10', 'port': 8880},
+                          'timestamp': self.timestamp}
 
     def test_constructor(self):
-        address = Address('192.168.0.10', 5560, 5561)
+        address = Address('192.168.0.10', 8880)
         timestamp = Timestamp.create_timestamp()
-        message = Message('test_node', address, timestamp)
+        message = Message(MessageType.description_request, 'test_node', address, timestamp)
+        self.assertEqual(MessageType.description_request, message.message_type)
         self.assertEqual('test_node', message.node_name)
         self.assertEqual('192.168.0.10', message.address.ip)
-        self.assertEqual(5560, message.address.udp_port)
-        self.assertEqual(5561, message.address.tcp_port)
+        self.assertEqual(8880, message.address.port)
         self.assertEqual(timestamp, message.timestamp)
 
     def test_add_service(self):
