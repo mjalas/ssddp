@@ -1,7 +1,8 @@
 from time import sleep
 
-from app.globals import BROADCAST_INTERVAL, HUB_ADDRESS
+from app.globals import BROADCAST_INTERVAL, HUB_ADDRESS, HUB_TIMEOUT, AVAILABLE_PORTS
 from message.discovery_message_handler import DiscoveryMessageHandler
+from message.timestamp import Timestamp
 from networking.socket import Socket
 
 
@@ -18,7 +19,7 @@ class DiscoveryBroadcastLoop(object):
         self.self_node = self_node
         self.peer_list = peer_list
         self.udp_socket = Socket("UDP")
-        self.hub_available = True
+        self.timestamp = Timestamp.create_timestamp()
 
     def start_broadcast(self):
         """
@@ -45,21 +46,28 @@ class DiscoveryBroadcastLoop(object):
 
         return self.self_node.has_new_services()
 
-    def send_message(self, message):  # TODO: Implement method
+    def send_message(self, message):
         """
-
+        Sends the message to the hub.
+        If the hub has timed out, sends the message also to all available ports.
         :return:
         """
-        if self.hub_available:
-            self.udp_socket.sendto(message, HUB_ADDRESS)
-        else:
-            # TODO: Phase 2 port scanning
-            pass
 
-    def hub_status(self, hub_availability):
-        """
-        Used to notify the loop whether or not hub can be used
-        :param hub_availability:
-        :return:
-        """
-        self.hub_available = hub_availability
+        if self.hub_timestamp_expired():
+
+            # Hub has expired: Send message to all ports
+            for port in AVAILABLE_PORTS:
+                self.udp_socket.sendto(message, ("127.0.0.1", port))
+
+        # Send to Hub regardless of timestamp
+        # (This allows the hub to be recovered)
+        self.udp_socket.sendto(message, HUB_ADDRESS)
+
+    def update_timestamp(self):
+        self.timestamp = Timestamp.create_timestamp()
+
+    def hub_timestamp_expired(self):
+        current_time = Timestamp.create_timestamp()
+        if (current_time - self.timestamp) > HUB_TIMEOUT:
+            return True
+        return False
