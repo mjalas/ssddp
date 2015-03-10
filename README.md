@@ -37,3 +37,13 @@ the background work, and queues for messaging between threads.
 We realized that our Discovery Broadcast Loop has no way of knowing whether or not 
 the Hub exists. Discovery Listener will have to determine whether or not the Hub is 
 available and then communicate that info to the Broadcast Loop.
+
+10.3.2015
+Instead of having the Discovery Listener determining hub availability, it now 
+only tells Discovery Broadcast Loop whenever there has been a new message received 
+from the hub. The broadcast loop itself will then update a timestamp, which is used 
+to determine whether the discovery message should be sent to the hub only or also to 
+all available ports.
+The discovery message is sent to the hub even when the hub has timed out.
+This allows the program to recover from a scenario where the hub is temporarily 
+unavailable.
