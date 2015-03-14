@@ -1,5 +1,5 @@
 import socket
-from app.globals import BUFFER_SIZE, UDP_LISTENING_PORT, LISTENING_PORT, TCP_BACKLOG
+from app.globals import BUFFER_SIZE, TCP_BACKLOG
 
 SOCKET_TYPE = {
     "UDP": socket.SOCK_DGRAM,
