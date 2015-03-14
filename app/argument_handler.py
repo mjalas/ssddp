@@ -4,13 +4,17 @@ from app.globals import LISTENING_PORT
 
 
 class ArgumentHandler(object):
-    def __init__(self):
 
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def handle_arguments():
         try:
             opts, args = getopt.getopt(argv[1:], "hp:", ["help", "port="])
 
         except getopt.GetoptError:
-            self.usage()
+            ArgumentHandler.usage()
             exit(2)
 
         # Default values
@@ -18,7 +22,7 @@ class ArgumentHandler(object):
 
         for opt, arg in opts:
             if opt in ("-h", "--help"):
-                self.usage()
+                ArgumentHandler.usage()
                 exit()
             elif opt in ("-p", "--port"):
                 port = arg
@@ -26,5 +30,6 @@ class ArgumentHandler(object):
         # Return
         return port
 
-    def usage(self):
-        print("-")
+    @staticmethod
+    def usage():
+        print("Usage:\n -p <port>    to use specific port\n -h    to display help")

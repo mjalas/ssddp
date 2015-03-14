@@ -31,7 +31,7 @@ class SSDDP(object):
     def start():
 
         # Handle program arguments
-        ArgumentHandler()
+        ArgumentHandler.handle_arguments()
 
         # Logging and logs
         logfile = Logfile("logfile.log")
