@@ -9,14 +9,10 @@ class PeerNode(object):
     """
     message_type_error_string = "Message not of type Message."
 
-    def __init__(self, name, address, timestamp, services=None):
-        self.name = name
+    def __init__(self, node, address, timestamp):
+        self.node = node
         self.address = address
         self.timestamp = timestamp
-        if services is None:
-            self.service_list = ServiceList()
-        else:
-            self.service_list = services
 
     @staticmethod
     def create_node_from_message(message):

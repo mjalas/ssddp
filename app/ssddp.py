@@ -8,6 +8,7 @@ import logging
 from app.argument_handler import ArgumentHandler
 from app.globals import AVAILABLE_PORTS
 from app.logfile import Logfile
+from node.node import Node
 from node.peer_node import PeerNode
 from node.peer_node_list import PeerNodeList
 from node.peer_node_manager import PeerNodeManager
@@ -38,14 +39,14 @@ class SSDDP(object):
         log.info("SSDDP started")
 
         # Self node
-        self_node = PeerNode()
+        self_node = Node("Unnamed_Node")
 
         # Peer list
         peer_list = PeerNodeList()
 
         # Initialize Managers
         discovery_manager = DiscoveryMessageHandler()
-        broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list)
+        broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list, self_node)
 
         # Start Discovery Loop
         broadcast_manager.start_broadcast()
