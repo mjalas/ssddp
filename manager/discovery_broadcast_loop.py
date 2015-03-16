@@ -1,3 +1,4 @@
+import json
 from time import sleep
 
 from app.globals import BROADCAST_INTERVAL, HUB_ADDRESS, HUB_TIMEOUT, AVAILABLE_PORTS
@@ -15,7 +16,6 @@ class DiscoveryBroadcastLoop(object):
         if not isinstance(discovery_message_handler, DiscoveryMessageHandler):
             raise RuntimeError
         self.discovery_message_handler = discovery_message_handler
-        self.previous_message = None
         self.self_node = self_node
         self.peer_list = peer_list
         self.udp_socket = Socket("UDP")
@@ -26,11 +26,17 @@ class DiscoveryBroadcastLoop(object):
         Runs the broadcast loop
         :return:
         """
-        # preliminary logic - CAN BE CHANGED
+        # Create discovery message from node info
         message = self.discovery_message_handler.create_message(self.self_node)
-        self.send_message(message)
-        self.previous_message = message
 
+        # Convert message to json
+        json_message = json.dumps(message.to_json())
+
+        # Encode message to utf-8 for sending through socket
+        data = json_message.encode()
+        self.send_message(data)
+
+        # Sleep and restart cycle
         sleep(BROADCAST_INTERVAL)
         self.start_broadcast()
 
