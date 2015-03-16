@@ -10,8 +10,6 @@ class Message(object):
     """
 
     def __init__(self, message_type, node_name, address, timestamp, services=None, protocol='ssddp'):
-        if not isinstance(address, Address):
-            raise RuntimeError
         self.message_type = message_type
         self.node_name = node_name
         self.address = address
@@ -32,8 +30,8 @@ class Message(object):
         return service_list
 
     def to_json(self):
-        data = {'name': self.node_name, 'address': {'ip': self.address.ip, 'tcp_port': self.address.tcp_port,
-                                                    'udp_port': self.address.udp_port}, 'timestamp': self.timestamp,
+        data = {'name': self.node_name, 'address': {'ip': self.address[0], 'port': self.address[1]},
+                'timestamp': self.timestamp,
                 'services': self.services_to_list()}
         return data
 
@@ -55,7 +53,8 @@ class Message(object):
         if 'services' not in data:
             raise ValueError("Services key not present in data")
 
-        address = Address(data['address']['ip'], data['address']['udp_port'], data['address']['tcp_port'])
+        # address = Address(data['address']['ip'], data['address']['port'])
+        address = (data['address']['ip'], data['address']['port'])
         if data['services']:
             message = Message(data['name'], address, data['timestamp'], data['services'])
         else:
