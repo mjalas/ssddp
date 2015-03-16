@@ -21,7 +21,12 @@ from manager.command_handler import CommandHandler
 
 
 log = logging.getLogger(__name__)
-
+log.setLevel(logging.DEBUG)
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+log.addHandler(ch)
 
 class SSDDP(object):
 
@@ -37,6 +42,10 @@ class SSDDP(object):
         # Logging and logs
         logfile = Logfile("logfile.log")
         log.info("SSDDP started")
+        log.error("test error")
+        log.debug("test debug")
+        log.warn("test warn")
+        log.warning("test warning")
 
         # Select port and setup sockets
         while True:
