@@ -14,7 +14,7 @@ class DiscoveryBroadcastLoop(object):
     def __init__(self, discovery_message_handler, peer_list, self_node):
         if not isinstance(discovery_message_handler, DiscoveryMessageHandler):
             raise RuntimeError
-        self.discovery_message_manager = discovery_message_handler
+        self.discovery_message_handler = discovery_message_handler
         self.previous_message = None
         self.self_node = self_node
         self.peer_list = peer_list
@@ -27,24 +27,12 @@ class DiscoveryBroadcastLoop(object):
         :return:
         """
         # preliminary logic - CAN BE CHANGED
-
-        if self.found_new_services() or self.previous_message is None:
-            message = self.discovery_message_manager.create_message()
-        else:
-            message = self.previous_message
+        message = self.discovery_message_handler.create_message()
         self.send_message(message)
         self.previous_message = message
 
         sleep(BROADCAST_INTERVAL)
         self.start_broadcast()
-
-    def found_new_services(self):  # TODO: Implement real logic
-        """
-        New service found
-        :return:
-        """
-
-        return self.self_node.has_new_services()
 
     def send_message(self, message):
         """
