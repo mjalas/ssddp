@@ -27,7 +27,7 @@ class DiscoveryBroadcastLoop(object):
         :return:
         """
         # preliminary logic - CAN BE CHANGED
-        message = self.discovery_message_handler.create_message()
+        message = self.discovery_message_handler.create_message(self.self_node)
         self.send_message(message)
         self.previous_message = message
 
