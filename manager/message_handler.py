@@ -17,7 +17,7 @@ class MessageHandler(object):
         return
 
     @abstractmethod
-    def create_message(self, address):
+    def create_message(self, node):
         """
         Send message to given address.
         :return:

@@ -15,5 +15,5 @@ class DescriptionMessageHandler(MessageManager):
     def parse_message(self, message):
         pass
 
-    def create_message(self, address):
+    def create_message(self, node):
         pass
