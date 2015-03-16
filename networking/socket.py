@@ -14,7 +14,7 @@ class Socket(object):
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     def bind(self, port):
-        self.socket.bind(port)
+        self.socket.bind(('', port))
 
     def listen(self):
         self.socket.listen(TCP_BACKLOG)
