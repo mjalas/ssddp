@@ -38,26 +38,12 @@ class SSDDP(object):
         logfile = Logfile("logfile.log")
         log.info("SSDDP started")
 
-        # Self node
-        self_node = Node("Unnamed_Node")
-
-        # Peer list
-        peer_list = PeerNodeList()
-
-        # Initialize Managers
-        discovery_manager = DiscoveryMessageHandler()
-        broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list, self_node)
-
-        # Start Discovery Loop
-        broadcast_manager.start_broadcast()
-
+        # Select port and setup sockets
         while True:
 
-            # Listening UDP and TCP socket setup
             listening_tcp_socket = Socket("TCP")
             listening_udp_socket = Socket("UDP")
 
-            # Port
             port = random.choice(AVAILABLE_PORTS)
 
             try:
@@ -74,6 +60,20 @@ class SSDDP(object):
 
             log.info('Sockets bound to port %d', port)
             break
+
+        # Self node
+        self_address = ("127.0.0.1", port)
+        self_node = Node("Unnamed_Node", self_address)
+
+        # Peer list
+        peer_list = PeerNodeList()
+
+        # Initialize Managers
+        discovery_manager = DiscoveryMessageHandler()
+        broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list, self_node)
+
+        # Start Discovery Loop
+        broadcast_manager.start_broadcast()
 
         # Initialize message queue
         message_queue = Queue()
