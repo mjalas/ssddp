@@ -75,7 +75,7 @@ class SSDDP(object):
 
         # Start Discovery Loop
         self.logger.debug("Start Discovery Broadcast Loop")
-        broadcast_manager.start_broadcast()
+        broadcast_manager.run()
 
         # Initialize message queue
         self.logger.debug("Initializing Message queue")

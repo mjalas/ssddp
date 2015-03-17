@@ -1,5 +1,6 @@
 import json
 import logging
+import threading
 from time import sleep
 
 from app.globals import BROADCAST_INTERVAL, HUB_ADDRESS, HUB_TIMEOUT, AVAILABLE_PORTS
@@ -16,6 +17,7 @@ class DiscoveryBroadcastLoop(object):
     def __init__(self, discovery_message_handler, peer_list, self_node):
         if not isinstance(discovery_message_handler, DiscoveryMessageHandler):
             raise RuntimeError
+        self._target = self.start_broadcast
         self.discovery_message_handler = discovery_message_handler
         self.self_node = self_node
         self.peer_list = peer_list
@@ -23,6 +25,7 @@ class DiscoveryBroadcastLoop(object):
         self.hub_timestamp = Timestamp.create_timestamp()
         self.logger = logging.getLogger(self.self_node.name + ": " + __name__)
         self.logger.debug("Discovery Broadcast Loop initialized")
+        threading.Thread.__init__(self)
 
     def start_broadcast(self):
         """
@@ -72,3 +75,6 @@ class DiscoveryBroadcastLoop(object):
         if (current_time - self.hub_timestamp) > HUB_TIMEOUT:
             return True
         return False
+
+    def run(self):
+        self._target()
