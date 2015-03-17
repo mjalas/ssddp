@@ -8,8 +8,6 @@ from node.peer_node import PeerNode
 from message.timestamp import Timestamp
 import logging
 
-log = logging.getLogger(__name__)
-
 
 class DescriptionListener(threading.Thread):
     """
@@ -25,6 +23,8 @@ class DescriptionListener(threading.Thread):
         self.connection = connection
         self.client_address = client_address
         self._target = self.respond_to_description_request
+        self.logger = logging.getLogger(node.name + ": " + __name__)
+        self.logger.info("Description Listener initialized")
         threading.Thread.__init__(self)
 
     def respond_to_description_request(self):
@@ -32,13 +32,14 @@ class DescriptionListener(threading.Thread):
 
         :return:
         """
+        self.logger.debug("Responding to description request")
         data = self.connection.recv(BUFFER_SIZE)
         if len(data) <= 0:
             return
         try:
             message = Message.to_object(data)
         except ValueError as e:
-            log.error(e.args[0])
+            self.logger.error(e.args[0])
             return
         if message.message_type is MessageType.description_request:
             response = Message(MessageType.description_response, self.node.name, self.node.address,
