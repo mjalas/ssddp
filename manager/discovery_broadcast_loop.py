@@ -9,7 +9,7 @@ from message.timestamp import Timestamp
 from networking.socket import Socket
 
 
-class DiscoveryBroadcastLoop(object):
+class DiscoveryBroadcastLoop(threading.Thread):
     """
     Broadcasts discovery messages to all peers via the hub.
     In the absence of hub, sends the messages to all available ports
