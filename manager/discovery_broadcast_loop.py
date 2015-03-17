@@ -19,7 +19,7 @@ class DiscoveryBroadcastLoop(object):
         self.discovery_message_handler = discovery_message_handler
         self.self_node = self_node
         self.peer_list = peer_list
-        self.udp_socket = Socket("UDP")
+        self.udp_socket = Socket("UDP", self.self_node.name)
         self.hub_timestamp = Timestamp.create_timestamp()
         self.logger = logging.getLogger(self.self_node.name + ": " + __name__)
         self.logger.debug("Discovery Broadcast Loop initialized")

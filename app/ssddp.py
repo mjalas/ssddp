@@ -38,8 +38,8 @@ class SSDDP(object):
         # Select port and setup sockets
         while True:
 
-            listening_tcp_socket = Socket("TCP")
-            listening_udp_socket = Socket("UDP")
+            listening_tcp_socket = Socket("TCP", self.name)
+            listening_udp_socket = Socket("UDP", self.name)
 
             port = random.choice(AVAILABLE_PORTS)
 
