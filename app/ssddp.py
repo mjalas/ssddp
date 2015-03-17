@@ -9,7 +9,7 @@ from app.argument_handler import ArgumentHandler
 from app.globals import AVAILABLE_PORTS
 from app.logfile import Logfile
 from node.node import Node
-from node.peer_node import PeerNode
+# from node.peer_node import PeerNode
 from node.peer_node_list import PeerNodeList
 from node.peer_node_manager import PeerNodeManager
 from networking.socket import Socket
@@ -26,6 +26,7 @@ logging.basicConfig(
     style       = '{',
     level       = logging.DEBUG,
 )
+
 
 class SSDDP(object):
 
