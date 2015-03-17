@@ -74,13 +74,17 @@ class SSDDP(object):
         broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list, self_node)
 
         # Start Discovery Loop
+        self.logger.debug("Start Discovery Broadcast Loop")
         broadcast_manager.start_broadcast()
 
         # Initialize message queue
+        self.logger.debug("Initializing Message queue")
         message_queue = Queue()
 
         # Initialize manager that updates peer node data
+        self.logger.debug("Initializing Peer Node Manager")
         peer_node_manager = PeerNodeManager(message_queue, peer_list)
+        self.logger.debug("Running Peer Node Manager")
         peer_node_manager.run()
 
         input_list = [listening_udp_socket.socket, listening_tcp_socket.socket, sys.stdin]
@@ -89,8 +93,9 @@ class SSDDP(object):
         while True:
 
             # listen (select UDP, TCP, STDIN)
+            self.logger.debug("Select waiting for input...")
             input_ready, output_ready, except_ready = select.select(input_list, [], [])
-            self.logger.debug("Select detects input")
+            self.logger.debug("... Select detected input")
             for x in input_ready:
 
                 if x == listening_udp_socket.socket:
