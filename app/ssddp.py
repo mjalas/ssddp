@@ -128,5 +128,4 @@ class SSDDP(object):
                     # TODO: output response to user inside thread!!
 
 
-if __name__ == "__main__":
-    SSDDP.start()
+
