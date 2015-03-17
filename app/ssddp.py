@@ -98,7 +98,7 @@ class SSDDP(object):
                     # (Receiving a UDP Discovery packet)
                     self.logger.info("Incoming data from UDP Socket.")
                     data, address = listening_udp_socket.read()
-                    discovery_handler = DiscoveryListener(data, address, message_queue, broadcast_manager)
+                    discovery_handler = DiscoveryListener(data, address, message_queue, broadcast_manager, self_node)
                     discovery_handler.run()
 
                 elif x == listening_tcp_socket.socket:
