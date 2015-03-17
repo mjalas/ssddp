@@ -14,4 +14,5 @@ class CommandHandler(threading.Thread):
         pass
 
     def run(self):
-        self._target()
+        # self._target()
+        self.handle_command()

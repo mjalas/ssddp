@@ -49,4 +49,5 @@ class DescriptionListener(threading.Thread):
             pass
 
     def run(self):
-        self._target()
+        # self._target()
+        self.respond_to_description_request()

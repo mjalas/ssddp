@@ -46,4 +46,5 @@ class DiscoveryListener(threading.Thread):
             self.broadcast_manager.update_timestamp()
 
     def run(self):
-        self._target()
+        # self._target()
+        self.handle_discovery()

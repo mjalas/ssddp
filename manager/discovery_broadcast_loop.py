@@ -17,7 +17,7 @@ class DiscoveryBroadcastLoop(threading.Thread):
     def __init__(self, discovery_message_handler, peer_list, self_node):
         if not isinstance(discovery_message_handler, DiscoveryMessageHandler):
             raise RuntimeError
-        self._target = self.start_broadcast
+
         self.discovery_message_handler = discovery_message_handler
         self.self_node = self_node
         self.peer_list = peer_list
@@ -25,6 +25,7 @@ class DiscoveryBroadcastLoop(threading.Thread):
         self.hub_timestamp = Timestamp.create_timestamp()
         self.logger = logging.getLogger(self.self_node.name + ": " + __name__)
         self.logger.debug("Discovery Broadcast Loop initialized")
+        self._target = self.start_broadcast
         threading.Thread.__init__(self)
 
     def start_broadcast(self):
@@ -32,19 +33,20 @@ class DiscoveryBroadcastLoop(threading.Thread):
         Runs the broadcast loop
         :return:
         """
-        # Create discovery message from node info
-        message = self.discovery_message_handler.create_message(self.self_node)
+        while True:
+            # Create discovery message from node info
+            message = self.discovery_message_handler.create_message(self.self_node)
 
-        # Convert message to json
-        json_message = json.dumps(message.to_json())
+            # Convert message to json
+            json_message = json.dumps(message.to_json())
 
-        # Encode message to utf-8 for sending through socket
-        data = json_message.encode()
-        self.send_message(data)
+            # Encode message to utf-8 for sending through socket
+            data = json_message.encode()
+            self.send_message(data)
 
-        # Sleep and restart cycle
-        sleep(BROADCAST_INTERVAL)
-        self.start_broadcast()
+            # Sleep and restart cycle
+            sleep(BROADCAST_INTERVAL)
+        # self.start_broadcast()
 
     def send_message(self, message):
         """
@@ -77,4 +79,5 @@ class DiscoveryBroadcastLoop(threading.Thread):
         return False
 
     def run(self):
-        self._target()
+        # self._target()
+        self.start_broadcast()

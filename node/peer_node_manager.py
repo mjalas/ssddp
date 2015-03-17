@@ -57,8 +57,8 @@ class PeerNodeManager(threading.Thread):
             self.message_queue.task_done()
 
     def run(self):
-        self._target()
-
+        # self._target()
+        self.handle_queue()
 
 
 
