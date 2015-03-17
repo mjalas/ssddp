@@ -1,5 +1,5 @@
 import json
-import logging; logger = logging.getLogger(__name__)
+import logging
 from time import sleep
 
 from app.globals import BROADCAST_INTERVAL, HUB_ADDRESS, HUB_TIMEOUT, AVAILABLE_PORTS
@@ -21,7 +21,8 @@ class DiscoveryBroadcastLoop(object):
         self.peer_list = peer_list
         self.udp_socket = Socket("UDP")
         self.hub_timestamp = Timestamp.create_timestamp()
-        logger.debug("Discovery Broadcast Loop initialized")
+        self.logger = logging.getLogger(self.self_node.name + ": " + __name__)
+        self.logger.debug("Discovery Broadcast Loop initialized")
 
     def start_broadcast(self):
         """
@@ -51,14 +52,14 @@ class DiscoveryBroadcastLoop(object):
 
         if self.hub_timestamp_expired():
 
-            logger.info("Hub timestamp expired; Sending packet to all available ports.")
+            self.logger.info("Hub timestamp expired; Sending packet to all available ports.")
             # Hub has expired: Send message to all ports
             for port in AVAILABLE_PORTS:
                 self.udp_socket.sendto(message, ("127.0.0.1", port))
 
         # Send to Hub regardless of timestamp
         # (This allows the hub to be recovered)
-        logger.info("Sending Discovery packet to hub")
+        self.logger.info("Sending Discovery packet to hub")
         self.udp_socket.sendto(message, HUB_ADDRESS)
 
     def update_timestamp(self):
