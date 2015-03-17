@@ -23,12 +23,8 @@ from manager.command_handler import CommandHandler
 class SSDDP(object):
     def __init__(self, name):
         self.name = name
-        self.logger = logging.getLogger(self.name + ":" + __name__)
-        logging.basicConfig(
-            format="{levelname:<8} {name:>30}:{funcName:<20}: {message}",
-            style='{',
-            level=logging.DEBUG,
-        )
+        self.logger = logging.getLogger(self.name + ": " + __name__)
+
 
     def start(self):
 
@@ -65,7 +61,7 @@ class SSDDP(object):
         # Self node
         self.logger.debug("Initializing self node")
         self_address = ("127.0.0.1", port)
-        self_node = Node("Unnamed_Node", self_address)
+        self_node = Node(self.name, self_address)
 
         # Peer list
         self.logger.debug("Initializing an empty Peer Node List")
