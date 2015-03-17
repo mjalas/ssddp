@@ -91,17 +91,19 @@ class SSDDP(object):
         peer_node_manager.run()
 
         input_list = [listening_udp_socket.socket, listening_tcp_socket.socket, sys.stdin]
+        logger.info("Start listening to sockets and stdin.")
 
         while True:
 
             # listen (select UDP, TCP, STDIN)
             input_ready, output_ready, except_ready = select.select(input_list, [], [])
-
+            logger.debug("Select detects input")
             for x in input_ready:
 
                 if x == listening_udp_socket.socket:
                     # UDP -> Discovery Manager
                     # (Receiving a UDP Discovery packet)
+                    logger.info("Incoming data from UDP Socket.")
                     data, address = listening_udp_socket.read()
                     discovery_handler = DiscoveryListener(data, address, message_queue, broadcast_manager)
                     discovery_handler.run()
@@ -109,6 +111,7 @@ class SSDDP(object):
                 elif x == listening_tcp_socket.socket:
                     # TCP -> Description Manager
                     # (Receiving a TCP Description Request)
+                    logger.info("Incoming data from TCP Socket.")
                     connection, client_address = listening_tcp_socket.socket.accept()
                     try:
                         description_handler = DescriptionListener(connection, client_address, self_node)
@@ -118,6 +121,7 @@ class SSDDP(object):
 
                 elif x == sys.stdin:  # TODO: handle user command (create new socket for sending messages and free it if required)
                     # STDIN -> Input Manager
+                    logger.info("Incoming data from Standard Input.")
                     command = sys.stdin.read(1024)
                     input_listener = CommandHandler(command)
                     input_listener.run()
