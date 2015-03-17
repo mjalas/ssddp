@@ -55,7 +55,9 @@ class DiscoveryBroadcastLoop(object):
             self.logger.info("Hub timestamp expired; Sending packet to all available ports.")
             # Hub has expired: Send message to all ports
             for port in AVAILABLE_PORTS:
-                self.udp_socket.sendto(message, ("127.0.0.1", port))
+                # ...Except our own port
+                if port != self.self_node.address[1]:
+                    self.udp_socket.sendto(message, ("127.0.0.1", port))
 
         # Send to Hub regardless of timestamp
         # (This allows the hub to be recovered)
