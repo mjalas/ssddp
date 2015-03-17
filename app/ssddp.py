@@ -20,13 +20,12 @@ from manager.description_listener import DescriptionListener
 from manager.command_handler import CommandHandler
 
 
-log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-ch.setFormatter(formatter)
-log.addHandler(ch)
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    format      = "{levelname:<8} {name:>30}:{funcName:<20}: {message}",
+    style       = '{',
+    level       = logging.DEBUG,
+)
 
 class SSDDP(object):
 
@@ -41,11 +40,7 @@ class SSDDP(object):
 
         # Logging and logs
         logfile = Logfile("logfile.log")
-        log.info("SSDDP started")
-        log.error("test error")
-        log.debug("test debug")
-        log.warn("test warn")
-        log.warning("test warning")
+        logger.info("SSDDP started")
 
         # Select port and setup sockets
         while True:
@@ -56,29 +51,33 @@ class SSDDP(object):
             port = random.choice(AVAILABLE_PORTS)
 
             try:
-                log.debug('Attempting to bind sockets to port %d', port)
+                logger.debug('Attempting to bind sockets to port %d', port)
                 listening_tcp_socket.bind(port)
                 listening_udp_socket.bind(port)
                 listening_tcp_socket.listen()
 
             except socket.error as error:
-                log.error('Failed binding to port %d, (%d: %s)', port, error.errno, error.strerror)
+                logger.error('Failed binding to port %d, (%d: %s)', port, error.errno, error.strerror)
                 listening_tcp_socket.terminate()
                 listening_udp_socket.terminate()
                 continue
 
-            log.info('Sockets bound to port %d', port)
+            logger.info('Sockets bound to port %d', port)
             break
 
         # Self node
+        logger.debug("Initializing self node")
         self_address = ("127.0.0.1", port)
         self_node = Node("Unnamed_Node", self_address)
 
         # Peer list
+        logger.debug("Initializing an empty Peer Node List")
         peer_list = PeerNodeList()
 
         # Initialize Managers
+        logger.debug("Initializing Discovery message handler")
         discovery_manager = DiscoveryMessageHandler()
+        logger.debug("Initializing Discovery broadcast loop")
         broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list, self_node)
 
         # Start Discovery Loop
@@ -115,7 +114,7 @@ class SSDDP(object):
                         description_handler = DescriptionListener(connection, client_address, self_node)
                         description_handler.run()
                     except IOError as e:
-                        log.error(e.args[0])
+                        logger.error(e.args[0])
 
                 elif x == sys.stdin:  # TODO: handle user command (create new socket for sending messages and free it if required)
                     # STDIN -> Input Manager
