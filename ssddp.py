@@ -9,7 +9,7 @@ from app.argument_handler import ArgumentHandler
 from app.globals import AVAILABLE_PORTS
 from app.logfile import Logfile
 from node.node import Node
-from node.peer_node import PeerNode
+# from node.peer_node import PeerNode
 from node.peer_node_list import PeerNodeList
 from node.peer_node_manager import PeerNodeManager
 from networking.socket import Socket
@@ -22,13 +22,13 @@ from manager.command_handler import CommandHandler
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
-    format      = "{levelname:<8} {name:>30}:{funcName:<20}: {message}",
-    style       = '{',
-    level       = logging.DEBUG,
+    format="{levelname:<8} {name:>30}:{funcName:<20}: {message}",
+    style='{',
+    level=logging.DEBUG,
 )
 
-class SSDDP(object):
 
+class SSDDP(object):
     def __init__(self):
         pass
 
@@ -126,6 +126,7 @@ class SSDDP(object):
                     input_listener = CommandHandler(command)
                     input_listener.run()
                     # TODO: output response to user inside thread!!
+
 
 if __name__ == "__main__":
     SSDDP.start()
