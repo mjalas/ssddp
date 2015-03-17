@@ -1,6 +1,9 @@
 
 
 class Logfile(object):
+    """
+    Class for logging important statistics to a file
+    """
     def __init__(self, file_path):
 
         # output file
