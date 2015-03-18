@@ -17,7 +17,8 @@ class DiscoveryBroadcastLoop(threading.Thread):
     def __init__(self, discovery_message_handler, peer_list, self_node):
         if not isinstance(discovery_message_handler, DiscoveryMessageHandler):
             raise RuntimeError
-
+        threading.Thread.__init__(self)
+        self._target = self.start_broadcast
         self.discovery_message_handler = discovery_message_handler
         self.self_node = self_node
         self.peer_list = peer_list
@@ -25,8 +26,6 @@ class DiscoveryBroadcastLoop(threading.Thread):
         self.hub_timestamp = Timestamp.create_timestamp()
         self.logger = logging.getLogger(self.self_node.name + ": " + __name__)
         self.logger.debug("Discovery Broadcast Loop initialized")
-        self._target = self.start_broadcast
-        threading.Thread.__init__(self)
 
     def start_broadcast(self):
         """

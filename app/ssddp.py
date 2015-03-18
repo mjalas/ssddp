@@ -75,7 +75,7 @@ class SSDDP(object):
 
         # Start Discovery Loop
         self.logger.debug("Start Discovery Broadcast Loop")
-        broadcast_manager.run()
+        broadcast_manager.start()
 
         # Initialize message queue
         self.logger.debug("Initializing Message queue")
@@ -85,7 +85,7 @@ class SSDDP(object):
         self.logger.debug("Initializing Peer Node Manager")
         peer_node_manager = PeerNodeManager(message_queue, peer_list)
         self.logger.debug("Running Peer Node Manager")
-        peer_node_manager.run()
+        peer_node_manager.start()
 
         input_list = [listening_udp_socket.socket, listening_tcp_socket.socket, sys.stdin]
         self.logger.info("Start listening to sockets and stdin.")
@@ -104,7 +104,7 @@ class SSDDP(object):
                     self.logger.info("Incoming data from UDP Socket.")
                     data, address = listening_udp_socket.read()
                     discovery_handler = DiscoveryListener(data, address, message_queue, broadcast_manager, self_node)
-                    discovery_handler.run()
+                    discovery_handler.start()
 
                 elif x == listening_tcp_socket.socket:
                     # TCP -> Description Manager
@@ -113,7 +113,7 @@ class SSDDP(object):
                     connection, client_address = listening_tcp_socket.socket.accept()
                     try:
                         description_handler = DescriptionListener(connection, client_address, self_node)
-                        description_handler.run()
+                        description_handler.start()
                     except IOError as e:
                         self.logger.error(e.args[0])
 
@@ -122,7 +122,7 @@ class SSDDP(object):
                     self.logger.info("Incoming data from Standard Input.")
                     command = sys.stdin.read(1024)
                     input_listener = CommandHandler(command)
-                    input_listener.run()
+                    input_listener.start()
                     # TODO: output response to user inside thread!!
 
 
