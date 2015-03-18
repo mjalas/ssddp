@@ -2,6 +2,7 @@ import random
 import select
 import socket
 import sys
+import os
 from queue import Queue
 import logging
 
@@ -20,9 +21,17 @@ from manager.description_listener import DescriptionListener
 from manager.command_handler import CommandHandler
 
 
+def is_int(val):
+    return isinstance(val, int)
+
+
 class SSDDP(object):
-    def __init__(self, name):
+    def __init__(self, name, external_command_input=None, external_output=None):
         self.name = name
+        if is_int(external_command_input):
+            self.command_input = external_command_input
+        if is_int(external_output):
+            self.external_output = external_output
         self.logger = logging.getLogger(self.name + ": " + __name__)
 
     def start(self):
@@ -85,8 +94,12 @@ class SSDDP(object):
         peer_node_manager = PeerNodeManager(message_queue, peer_list)
         self.logger.debug("Running Peer Node Manager")
         peer_node_manager.start()
+        if self.command_input:
+            self.command_input = os.fdopen(self.command_input)
+            input_list = [listening_udp_socket.socket, listening_tcp_socket.socket, sys.stdin, self.command_input]
+        else:
+            input_list = [listening_udp_socket.socket, listening_tcp_socket.socket, sys.stdin]
 
-        input_list = [listening_udp_socket.socket, listening_tcp_socket.socket, sys.stdin]
         self.logger.info("Start listening to sockets and stdin.")
 
         while True:
@@ -116,7 +129,7 @@ class SSDDP(object):
                     except IOError as e:
                         self.logger.error(e.args[0])
 
-                elif x == sys.stdin:  # TODO: handle user command (create new socket for sending messages and free it if required)
+                elif x == sys.stdin:  # TODO: handle user command
                     # STDIN -> Input Manager
                     self.logger.info("Incoming data from Standard Input.")
                     command = sys.stdin.readline()
@@ -125,5 +138,12 @@ class SSDDP(object):
                     input_listener.start()
                     # TODO: output response to user inside thread!!
 
+                elif self.command_input and x == self.command_input:
+                    self.logger.info("Incoming data from external input.")
+                    # command = os.read(self.command_input, 32)
+                    command = self.command_input.readline()
+                    self.logger.debug("Read command [" + str(command) + "]")
+                    input_listener = CommandHandler(command, self_node)
+                    input_listener.start()
 
 
