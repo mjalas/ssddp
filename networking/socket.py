@@ -13,7 +13,7 @@ class Socket(object):
         self.type = sock_type
         self.socket = socket.socket(socket.AF_INET, SOCKET_TYPE[sock_type])
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.logger = logging.getLogger(name + ": " + __name__)
+        self.logger = logging.getLogger(name + ": " + __name__ + "(" + self.type + ")")
         self.logger.info("Socket initialized")
 
     def bind(self, port):
