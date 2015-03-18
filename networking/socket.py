@@ -37,7 +37,8 @@ class Socket(object):
             self.socket.send(message)
 
     def sendto(self, message, address):
-        self.logger.debug("Sending message to [" + str(address[0]) + ", " + str(address[1]) + "]")
+        # Log message disabled for now to avoid 1000x message spam
+        # self.logger.debug("Sending message to [" + str(address[0]) + ", " + str(address[1]) + "]")
         self.socket.sendto(message, address)
 
     def read(self):
