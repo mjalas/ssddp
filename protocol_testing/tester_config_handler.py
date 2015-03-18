@@ -1,4 +1,5 @@
-import json
+from protocol_testing.config_test_file import TestConfiguration
+from protocol_testing.config_test_file import ConfigurationNode
 
 
 class TesterConfigHandler(object):
@@ -6,15 +7,14 @@ class TesterConfigHandler(object):
     Class for handling config files used for testing the protocol nodes.
     """
 
-    def __init__(self):
-        self.node_names = []
+    def __init__(self, file):
+        configuration = TestConfiguration.read_config_from_file(file)
+        if configuration is None:
+            raise FileNotFoundError
+        self.test_configuration = configuration
 
-    def handle_file(self, file):
-        config_file = open(file, "r")
-        config_data = config_file.read()
-        data = json.load(config_data)
-        if 'nodes' in data:
-            nodes = data['nodes']
-            for node in nodes:
-                self.node_names.append(node['name'])
-
+    def get_node_names(self):
+        if self.test_configuration:
+            nodes = self.test_configuration.nodes
+            return ConfigurationNode.get_names_from_node_list(nodes)
+        return None

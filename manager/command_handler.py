@@ -14,7 +14,7 @@ class CommandHandler(threading.Thread):
         self.logger.info("Discovery Listener initialized")
 
     def handle_command(self):
-        pass
+        self.logger.info("Received command: " + self.command)
 
     def run(self):
         # self._target()
