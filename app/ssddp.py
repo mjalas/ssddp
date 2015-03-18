@@ -120,7 +120,7 @@ class SSDDP(object):
                 elif x == sys.stdin:  # TODO: handle user command (create new socket for sending messages and free it if required)
                     # STDIN -> Input Manager
                     self.logger.info("Incoming data from Standard Input.")
-                    command = sys.stdin.read(1024)
+                    command = sys.stdin.readline()
                     self.logger.debug("Read command [" + command + "]")
                     input_listener = CommandHandler(command, self_node)
                     input_listener.start()
