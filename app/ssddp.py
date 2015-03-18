@@ -25,7 +25,6 @@ class SSDDP(object):
         self.name = name
         self.logger = logging.getLogger(self.name + ": " + __name__)
 
-
     def start(self):
 
         # Handle program arguments
