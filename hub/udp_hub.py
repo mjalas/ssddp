@@ -2,7 +2,7 @@
                         S-38.3159 Protocol Design: Aalto University
 '''
 
-''' This script provides a udp braodcaster that listens at a specific port, which can be specified by the user
+''' This script provides a udp broadcaster that listens at a specific port, which can be specified by the user
     It broadcasts the incoming messages to all other nodes it is aware of. If a node does not send any message
     for "timeout" interval, it is removed from the list of connected nodes. 
     The hub is created for a localhost address and is meant to be used with nodes at the same host
