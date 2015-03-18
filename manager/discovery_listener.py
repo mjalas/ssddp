@@ -37,7 +37,8 @@ class DiscoveryListener(threading.Thread):
         self.logger.debug("Handling data")
         message = None
         if self.data:
-            message = Message.to_object(self.data)
+            self.logger.debug("Incoming discovery data: <<<START>>>" + self.data.decode() + "<<<END>>>")
+            message = Message.to_object(self.data.decode())
         return message
 
     def update_broadcast_timestamp(self):
