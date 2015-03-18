@@ -10,6 +10,7 @@ class DiscoveryListener(threading.Thread):
     """
         Listens to incoming discovery messages and handles them
     """
+
     def __init__(self, data, address, message_queue, broadcast_manager, self_node):
         self._target = self.handle_discovery
         self.data = data
@@ -34,10 +35,11 @@ class DiscoveryListener(threading.Thread):
             self.message_queue.put(message)
 
     def handle_data(self):
-        self.logger.debug("Handling data")
+        self.logger.debug("Handling incoming data")
         message = None
         if self.data:
-            self.logger.debug("Incoming discovery data: <<<START>>>" + self.data.decode() + "<<<END>>>")
+            self.logger.info("Incoming discovery data from (" + str(self.address[0]) + ", " + str(
+                self.address[1]) + "):\n<<<START>>>\n" + self.data.decode() + "\n<<<END>>>")
             message = Message.to_object(self.data.decode())
         return message
 
