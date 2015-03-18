@@ -1,3 +1,4 @@
+import logging
 import threading
 
 
@@ -5,10 +6,12 @@ class CommandHandler(threading.Thread):
     """
 
     """
-    def __init__(self, command):
+    def __init__(self, command, self_node):
+        threading.Thread.__init__(self)
         self._target = self.handle_command
         self.command = command
-        threading.Thread.__init__()
+        self.logger = logging.getLogger(self_node.name + ": " + __name__)
+        self.logger.info("Discovery Listener initialized")
 
     def handle_command(self):
         pass
