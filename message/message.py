@@ -38,6 +38,7 @@ class Message(object):
     @staticmethod
     def to_object(json_string):
         data = json.loads(json_string)
+        '''
         if 'protocol' not in data:
             raise ValueError("Protocol key not present in data!")
         elif data['protocol'] is not 'ssddp':
@@ -46,7 +47,8 @@ class Message(object):
             raise ValueError("Message type missing!")
         if 'type' not in data:
             raise ValueError("Type missing")
-        if 'node_name' not in data:
+        '''
+        if 'name' not in data:
             raise ValueError("Node name key not present in data!")
         if 'address' not in data:
             raise ValueError("Address key not present in data!")
@@ -56,8 +58,8 @@ class Message(object):
         # address = Address(data['address']['ip'], data['address']['port'])
         address = (data['address']['ip'], data['address']['port'])
         if data['services']:
-            message = Message(data['name'], address, data['timestamp'], data['services'])
+            message = Message(2, data['name'], address, data['timestamp'], data['services'])
         else:
-            message = Message(data['name'], address, data['timestamp'])
+            message = Message(2, data['name'], address, data['timestamp'])
 
         return message
