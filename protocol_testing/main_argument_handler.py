@@ -9,21 +9,25 @@ class MainArgumentHandler(object):
 
     @staticmethod
     def handle_arguments():
+        opts = None
         try:
-            opts, args = getopt.getopt(argv[1:], "hp:", ["help", "port="])
+            opts, args = getopt.getopt(argv[1:], "hf:", ["help", "file="])
 
         except getopt.GetoptError:
             MainArgumentHandler.usage()
             exit(2)
 
         # Default values
-
+        if not opts:
+            return None
+        file = None
         for opt, arg in opts:
-            if opt in ("-h", "--help"):
-                MainArgumentHandler.usage()
-                exit()
-            elif opt in ("-f", "--file"):
-                file = arg
+            if opt and arg:
+                if opt in ("-h", "--help"):
+                    MainArgumentHandler.usage()
+                    exit()
+                elif opt in ("-f", "--file"):
+                    file = arg
 
         # Return
         return file
