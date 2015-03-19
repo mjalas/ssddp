@@ -168,7 +168,7 @@ if __name__ == "__main__":
         logging.debug("Waiting for the next event --")
         readable = select.select(incoming, outgoing, [], timer)
         if readable[0]:
-            [data, addr] = recv_sock.recvfrom(MTU_SIZE);
+            [data, addr] = recv_sock.recvfrom(MTU_SIZE)
             logging.debug("received  \n %s \n from %s:%d " % (data, addr[0], addr[1]))
             update_list(addr[0], addr[1])
             print("data is %s" % data.lower())
