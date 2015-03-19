@@ -1,5 +1,6 @@
 from threading import Thread
 import sys
+import os
 
 from app.ssddp import SSDDP
 from protocol_testing.main_argument_handler import MainArgumentHandler
@@ -25,7 +26,15 @@ class CommandHandler(object):
             return CommandType.exit
 
     def usage(self):
-        print("To exit test use: 'exit', 'quit'")
+        print("To end test use: 'exit' or 'quit'")
+
+
+def node_process(ssddp_node):
+    if not isinstance(ssddp_node, SSDDP):
+        os._exit(0)
+    ssddp_node.start()
+
+
 
 if __name__ == "__main__":
     print("Setting up test.")
@@ -41,15 +50,22 @@ if __name__ == "__main__":
         exit()
     names = ConfigurationNode.get_names_from_node_list(config_handler.test_configuration.nodes)
     if names is None:
-
         exit()
+
+    pipes = {}
     for name in names:
-        node = SSDDP(name)
-        thread = Thread(target=node.start())
-        #thread.start()
+        pipein, pipeout = os.pipe()
+        if os.fork() == 0:
+            ssddp_node = SSDDP(name, pipeout)
+            ssddp_node.start()
+            exit()
+        else:
+            pipes[name] = pipein
+            continue
 
     print("Test setup complete.")
     command_handler = CommandHandler()
+    command_handler.usage()
     for line in sys.stdin:
         command = command_handler.handle_input(line.strip())
         if command == CommandType.exit:
