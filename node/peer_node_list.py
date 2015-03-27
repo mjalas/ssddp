@@ -1,8 +1,9 @@
 from node.exceptions.node_exceptions import PeerNodeNotFoundException
 
+
 class PeerNodeList(object):
     """
-
+    List of discovered peers.
     """
     def __init__(self):
         self.peers = []
@@ -15,6 +16,18 @@ class PeerNodeList(object):
 
     def add(self, node):
         self.peers.append(node)
+
+    def display(self):
+        """
+        Prints every node in the list, their services and service descriptions.
+        """
+        for peer_node in self.peers:
+            node = peer_node.node
+            print("NODE [%s] (seen %s)", node.name, peer_node.timestamp)
+            for service in node.service_list:
+                print(" - SERVICE: %s", service.name)
+                if service.description:
+                    print("%s", service.description)
 
     def get(self, node_name):
         for node in self.peers:
