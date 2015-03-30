@@ -1,22 +1,15 @@
-from threading import Thread
 import sys
 import os
 import socket
 import select
 import time
 import json
-
-
-import getopt
 from sys import argv, exit
-
-from enum import Enum
 import logging
 
 from app.ssddp import SSDDP
 from protocol_testing.main_argument_handler import MainArgumentHandler
 from protocol_testing.tester_config_handler import TesterConfigHandler
-from protocol_testing.config_test_file import ConfigurationNode
 from manager.command_handler import DESCRIBE_COMMAND, DISPLAY_COMMAND, AVAILABLE_COMMANDS
 from app.globals import NodeCommand
 from protocol_testing.node_process_cleanup import NodeProcessCleanUp
@@ -126,6 +119,58 @@ def clean_up_sequence():
     print("Clean up completed!")
 
 
+def handle_echo_command():
+    echo_child, echo_parent = socket.socketpair()
+    pid = os.fork()
+    if pid:
+        echo_child.close()
+        time.sleep(4)
+        user_input_echo = input("Give line to echo: ")
+        echo_parent.sendall(bytes(user_input_echo, 'UTF-8'))
+        echo_parent.settimeout(10)
+        echo_message = echo_parent.recv(TEST_BUFFER_SIZE).decode('UTF-8')
+        print("Echo: {0}\n".format(echo_message))
+        echo_parent.close()
+    else:
+        echo_parent.close()
+        echo_node(echo_child)
+        echo_child.close()
+        exit()
+
+
+def handle_describe_command(desc_command):
+    print(desc_command)
+    print(names)
+    show_dict(names)
+    user_input_describe = input("Choose node to send command: ")
+    user_choice_describe = int(user_input_describe)
+    try:
+        print(names[user_choice_describe])
+        node_name_desc = names[user_choice_describe]
+        sock_desc = sockets[node_name_desc]
+        # Get nodes peers
+        sock_desc.sendall(bytes(NodeCommand.PEERS, 'UTF-8'))
+        message = sock_desc.recv(TEST_BUFFER_SIZE).decode('UTF-8')
+        print("Nodes peers:")
+        print(message)
+        obj_desc = json.loads(message)
+        print("Nodes available:")
+        dest_nodes = {}
+        for j, name_desc in enumerate(obj_desc):
+            dest_nodes[j+1] = name_desc
+            print("{0}. {1}".format(j+1, name_desc))
+        user_input_describe = input("Choose node to send description request:")
+        user_choice_describe = int(user_input_describe)
+        dest_node = dest_nodes[user_choice_describe]
+        print(dest_node)
+        desc_command += " " + dest_node
+        print(desc_command)
+        sock_desc.sendall(bytes(desc_command, 'UTF-8'))
+
+    except KeyError:
+        print("Not a valid option")
+
+
 if __name__ == "__main__":
     logger = logging.getLogger(__name__)
     logger.info("Setting up test.")
@@ -215,53 +260,11 @@ if __name__ == "__main__":
                             print("Test ended!")
                             exit(0)
                         elif command == NodeCommand.DESCRIBE:
-                            print(command)
-                            print(names)
-                            show_dict(names)
-                            user_input = input("Choose node to send command: ")
-                            user_choice = int(user_input)
-                            try:
-                                print(names[user_choice])
-                                node_name = names[user_choice]
-                                sock = sockets[node_name]
-                                # Get nodes peers
-                                sock.sendall(bytes(NodeCommand.PEERS, 'UTF-8'))
-                                message = sock.recv(TEST_BUFFER_SIZE).decode('UTF-8')
-                                print("Nodes peers:")
-                                print(message)
-                                obj = json.loads(message)
-                                print("Nodes available:")
-                                for i, name in enumerate(obj):
-                                    print("{0}. {1}".format(i+1, name))
-                                user_input = input("Choose node to send description request:")
-                                user_choice = int(user_input)
-                                dest_node = obj[user_choice-1].name
-                                print(dest_node)
-                                command += command + " " + dest_node
-                                sock.sendall(bytes(command, 'UTF-8'))
-                                break
-                            except KeyError:
-                                print("Not a valid option")
+                            handle_describe_command(command)
                         elif command == NodeCommand.DISPLAY:
                             pass
                         elif command == NodeCommand.ECHO:
-                            echo_child, echo_parent = socket.socketpair()
-                            pid = os.fork()
-                            if pid:
-                                echo_child.close()
-                                time.sleep(4)
-                                user_input = input("Give line to echo: ")
-                                echo_parent.sendall(bytes(user_input, 'UTF-8'))
-                                echo_parent.settimeout(10)
-                                message = echo_parent.recv(TEST_BUFFER_SIZE).decode('UTF-8')
-                                print("Echo: {0}\n".format(message))
-                                echo_parent.close()
-                                break
-                            else:
-                                echo_parent.close()
-                                echo_node(echo_child)
-                                echo_child.close()
-                                exit()
+                            handle_echo_command()
                     else:
                         for sock in sockets:
                             if x == sock:
