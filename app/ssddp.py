@@ -30,10 +30,12 @@ class SSDDP(object):
     def __init__(self, name, external_command_input=None, external_output=None, remote_run=False):
         self.name = name
 
-        if isinstance(external_command_input, socket.socket):
+        if isinstance(external_command_input, socket.socket) and external_command_input is not None:
             self.command_input_socket = external_command_input
         elif external_command_input is not None:
             raise TypeError("External command input was not of type socket!")
+        else:
+            self.command_input_socket = None
         if is_int(external_output):
             self.external_output = external_output
         self.remote_run = remote_run
