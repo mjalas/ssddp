@@ -22,11 +22,11 @@ class PeerNodeList(object):
         Prints every node in the list, their services and service descriptions.
         """
         print("PEER NODE LIST:")
-        i = 1
+        node_count = 0
         for peer_node in self.peers:
             node = peer_node.node
-            i += 1
-            print("#" + str(i) + " \"" + node.name + "\" (seen " + peer_node.timestamp+")")
+            node_count += 1
+            print("#" + str(node_count) + ": \"" + node.name + "\" (seen " + peer_node.timestamp+")")
             for service in node.service_list.services:
                 print(" - SERVICE: " + service.name)
                 if service.description:
