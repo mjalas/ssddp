@@ -34,6 +34,10 @@ class Socket(object):
         self.logger.debug("Accepting to socket")
         self.socket.accept()
 
+    def connect(self, address, port):
+        self.logger.debug("Connecting to {0}:{1}".format(address, port))
+        self.socket.connect((address, port))
+
     def send(self, message):
         if self.type == "TCP":
             self.logger.debug("Sending TCP message")
@@ -56,6 +60,9 @@ class Socket(object):
             return self.socket.recvfrom(BUFFER_SIZE)
 
     def terminate(self):
-        self.logger.debug("Terminating")
-        self.socket.shutdown(socket.SHUT_RDWR)
-        self.socket.close()
+        try:
+            self.logger.debug("Terminating")
+            self.socket.shutdown(socket.SHUT_RDWR)
+            self.socket.close()
+        except OSError as error:
+            self.logger.debug("{0}: {1}".format(error.errno, error.args))
