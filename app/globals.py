@@ -11,3 +11,8 @@ HUB_ADDRESS = ("127.0.0.1", 9000)
 HUB_TIMEOUT = 6
 
 AVAILABLE_PORTS = range(9001, 10001)
+
+
+class NodeCommands():
+    SHUTDOWN = "shutdown"
+    OK = "ok"
