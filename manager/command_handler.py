@@ -54,7 +54,9 @@ class CommandHandler(threading.Thread):
         # Create message and send it.
         message = Message(MessageType.description_request, node_name, address, Timestamp.create_timestamp())
         data = message.to_json()
-        self.output_socket.send(bytes(data, 'UTF-8'))
+        data_str = json.dumps(data)
+        self.output_socket.connect(address[0], address[1])
+        self.output_socket.send(bytes(data_str, 'UTF-8'))
         response = self.output_socket.read()
         response_str = response.decode('UTF-8')
         if self.remote_socket:

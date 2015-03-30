@@ -261,17 +261,19 @@ if __name__ == "__main__":
                             exit(0)
                         elif command == NodeCommand.DESCRIBE:
                             handle_describe_command(command)
+                            command_handler.choices()
                         elif command == NodeCommand.DISPLAY:
                             pass
                         elif command == NodeCommand.ECHO:
                             handle_echo_command()
+                            command_handler.choices()
                     else:
                         for sock in sockets:
                             if x == sock:
                                 message = sock.recv()
                                 print(message)
 
-                command_handler.choices()
+
                 # command = ""
 
     except KeyboardInterrupt:
