@@ -34,7 +34,11 @@ class ServiceList(object):
         for data in json_dict:
             name = data["name"]
             s_type = data["type"]
-            desc = data["description"]
+            desc = None
+            try:
+                desc = data["description"]
+            except KeyError:
+                pass
             new_service = Service(name, s_type, desc)
             self.services.append(new_service)
 
