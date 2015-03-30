@@ -4,6 +4,10 @@ import json
 
 from app.globals import NodeCommand
 from node.node import NodeEncoder
+from message.message import Message
+from message.message_types import MessageType
+from message.timestamp import Timestamp
+from networking.socket import Socket
 
 DESCRIBE_COMMAND = 'describe'     #   TODO: remove?
 DISPLAY_COMMAND = 'display'       #   TODO: remove?
@@ -16,7 +20,7 @@ class CommandHandler(threading.Thread):
     """
     Handles commands given in the terminal
     """
-    def __init__(self, command, self_node, peer_list, end_parent, output_socket=None):
+    def __init__(self, command, self_node, peer_list, end_parent, remote_socket=None):
         threading.Thread.__init__(self)
         self._target = self.handle_command
         self.node = self_node
@@ -24,7 +28,8 @@ class CommandHandler(threading.Thread):
         self.end_parent = end_parent
         # self.COMMANDS = AVAILABLE_COMMANDS     #   TODO: remove?
         self.received_command = command.split()
-        self.output_socket = output_socket
+        self.output_socket = Socket("TCP", self.node.name)
+        self.remote_socket = remote_socket
         self.logger = logging.getLogger(self_node.name + ": " + __name__)
         self.logger.info("Discovery Listener initialized")
 
@@ -46,6 +51,17 @@ class CommandHandler(threading.Thread):
         node_name = self.received_command[1]
         address = self.peer_list.get_node_address(node_name)    # TODO: send description request to address in peer_list
         print(address)
+        # Create message and send it.
+        message = Message(MessageType.description_request, node_name, address, Timestamp.create_timestamp())
+        data = message.to_json()
+        self.output_socket.send(bytes(data, 'UTF-8'))
+        response = self.output_socket.read()
+        response_str = response.decode('UTF-8')
+        if self.remote_socket:
+            self.remote_socket.sendall(response)
+        else:
+            print(response_str)
+        message = Message.to_object(response_str)
 
         return None
 
@@ -55,17 +71,17 @@ class CommandHandler(threading.Thread):
 
     def display_node(self):
         obj = {'name': self.node.name, 'address': self.node.address, 'services': self.node.service_list}
-        if self.output_socket:
+        if self.remote_socket:
             output = json.dumps(obj, indent=4, separators=(',', ': '))
-            self.output_socket.sendall(bytes(output, 'UTF-8'))
+            self.remote_socket.sendall(bytes(output, 'UTF-8'))
 
     def display_peers(self):
         peers = {}
         for peer in self.peer_list.peers:
             peers[peer.node.name] = peer.node
-        if self.output_socket:
+        if self.remote_socket:
             output = json.dumps(peers, cls=NodeEncoder, indent=4, separators=(',', ': '))
-            self.output_socket.sendall(bytes(output, 'UTF-8'))
+            self.remote_socket.sendall(bytes(output, 'UTF-8'))
 
     COMMANDS = {
         NodeCommand.DESCRIBE: request_description,
