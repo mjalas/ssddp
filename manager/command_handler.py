@@ -1,7 +1,9 @@
 import logging
 import threading
+import json
 
-from app.globals import NodeCommands
+from app.globals import NodeCommand
+from node.node import NodeEncoder
 
 DESCRIBE_COMMAND = 'describe'     #   TODO: remove?
 DISPLAY_COMMAND = 'display'       #   TODO: remove?
@@ -14,13 +16,15 @@ class CommandHandler(threading.Thread):
     """
     Handles commands given in the terminal
     """
-    def __init__(self, command, self_node, peer_list, end_parent):
+    def __init__(self, command, self_node, peer_list, end_parent, output_socket=None):
         threading.Thread.__init__(self)
         self._target = self.handle_command
+        self.node = self_node
         self.peer_list = peer_list
         self.end_parent = end_parent
         # self.COMMANDS = AVAILABLE_COMMANDS     #   TODO: remove?
         self.received_command = command.split()
+        self.output_socket = output_socket
         self.logger = logging.getLogger(self_node.name + ": " + __name__)
         self.logger.info("Discovery Listener initialized")
 
@@ -40,15 +44,35 @@ class CommandHandler(threading.Thread):
             print("Wrong argument count! Expected \"describe node_name\".")
             return
         node_name = self.received_command[1]
-        self.peer_list.GetAddress(node_name)    # TODO: send description request to address in peer_list
+        address = self.peer_list.get_node_address(node_name)    # TODO: send description request to address in peer_list
+        print(address)
+
+        return None
 
     def end_node(self):
         self.end_parent = True
+        return None
+
+    def display_node(self):
+        obj = {'name': self.node.name, 'address': self.node.address, 'services': self.node.service_list}
+        if self.output_socket:
+            output = json.dumps(obj, indent=4, separators=(',', ': '))
+            self.output_socket.sendall(bytes(output, 'UTF-8'))
+
+    def display_peers(self):
+        peers = {}
+        for peer in self.peer_list.peers:
+            peers[peer.node.name] = peer.node
+        if self.output_socket:
+            output = json.dumps(peers, cls=NodeEncoder, indent=4, separators=(',', ': '))
+            self.output_socket.sendall(bytes(output, 'UTF-8'))
 
     COMMANDS = {
-        'describe': request_description,
-        'display':  display_node_list,
-        NodeCommands.SHUTDOWN: end_node,
+        NodeCommand.DESCRIBE: request_description,
+        NodeCommand.DISPLAY:  display_node_list,
+        NodeCommand.SHUTDOWN: end_node,
+        NodeCommand.DISPLAY_NODE: display_node,
+        NodeCommand.PEERS: display_peers,
     }
 
     def call_command_func(self, command):
@@ -72,15 +96,20 @@ class CommandHandler(threading.Thread):
 
     def handle_command(self):
         # command_function = self.COMMANDS[self.received_command[0]]
-        command_function = self.COMMANDS.get(self.received_command[0])
+        if len(self.received_command) > 0:
+            command_function = self.COMMANDS.get(self.received_command[0])
 
-        if not command_function:
-            self.logger.warning("User command \"%s\" not recognized.", self.received_command)
-            print("\"%s\" not recognized. Supported commands:", self.received_command[0])
-            self.display_commands()
-        else:
-            self.logger.debug("Handling command \"%s\"", self.received_command)
-            command_function(self)
+            if not command_function:
+                self.logger.warning("User command \"%s\" not recognized.", self.received_command)
+                print("\"%s\" not recognized. Supported commands:", self.received_command[0])
+                self.display_commands()
+
+            else:
+                self.logger.debug("Handling command \"%s\"", self.received_command)
+                output = command_function(self)
+                return output
+
+        return None
 
     def run(self):
         # self._target()
