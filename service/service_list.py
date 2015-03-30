@@ -22,5 +22,9 @@ class ServiceList(object):
             service_list.append(a_service.to_json())
         return service_list
 
+    def from_file(self, file_path):
+        json_file = open(file_path)
+        # TODO: fill services with contents
+
     def __str__(self):
         return self.to_list()

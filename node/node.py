@@ -8,4 +8,4 @@ class Node(object):
         self.address = address
         self.service_list = ServiceList()
         if service_list_file:
-            self.service_list.read_file(service_list_file)
+            self.service_list.from_file(service_list_file)
