@@ -140,6 +140,7 @@ if __name__ == "__main__":
         print("Initializing input list.")
         input_list = [sys.stdin]
         failed_count = 0
+        success_count = 0
 
         for i, name in names.items():
             print(name)
@@ -156,6 +157,8 @@ if __name__ == "__main__":
                 print("Received message from child: " + message)
                 if message == NodeCreationType.failed:
                     failed_count += 1
+                else:
+                    success_count += 1
 
             else:
                 print("Created node " + name + ".")
@@ -172,6 +175,9 @@ if __name__ == "__main__":
             for sock in sockets.values():
                 sock.close()
             exit(0)
+        else:
+            print("Initialized {0} nodes.".format(success_count))
+
         print("Input list initialized.")
 
         print("Test setup complete.")
