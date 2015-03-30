@@ -1,6 +1,9 @@
 import logging
 import threading
 
+DESCRIBE_COMMAND = 'describe'
+DISPLAY_COMMAND = 'display'
+
 
 class CommandHandler(threading.Thread):
     """
@@ -30,8 +33,8 @@ class CommandHandler(threading.Thread):
         self.peer_list.GetAddress(node_name)    # TODO: send description request to address in peer_list
 
     COMMANDS = {
-        'describe': request_description(),
-        'display':  display_node_list(),
+        DESCRIBE_COMMAND: request_description(),
+        DISPLAY_COMMAND:  display_node_list(),
     }
 
     def display_commands(self):
