@@ -43,3 +43,7 @@ class PeerNodeList(object):
             if peer is node:
                 return True
         return False
+
+    def get_node_address(self, node_name):
+        peer = self.get(node_name)
+        return peer.node.address
