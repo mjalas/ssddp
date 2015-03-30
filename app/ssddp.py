@@ -27,7 +27,7 @@ def is_int(val):
 
 
 class SSDDP(object):
-    def __init__(self, name, external_command_input=None, external_output=None, remote_run=False):
+    def __init__(self, name, external_command_input=None, external_output=None, remote_run=False, service_list_file=None):
         self.name = name
 
         if isinstance(external_command_input, socket.socket) and external_command_input is not None:
@@ -39,6 +39,7 @@ class SSDDP(object):
         if is_int(external_output):
             self.external_output = external_output
 
+        self.service_list_file = service_list_file
         self.node_manager_queue = Queue()
         self.broadcast_loop_queue = Queue()
         self.remote_run = remote_run
