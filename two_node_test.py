@@ -17,6 +17,7 @@ from protocol_testing.main_argument_handler import MainArgumentHandler
 from protocol_testing.tester_config_handler import TesterConfigHandler
 from protocol_testing.config_test_file import ConfigurationNode
 from manager.command_handler import DESCRIBE_COMMAND, DISPLAY_COMMAND, AVAILABLE_COMMANDS
+from app.globals import NodeCommands
 
 TEST_BUFFER_SIZE = 1024
 
@@ -99,6 +100,18 @@ def show_dict(custom_dict):
         print("{0}: {1}".format(key, value))
 
 
+def send_shut_down_to_sockets(node_sockets):
+    if not node_sockets:
+        print("no sockets")
+    for node_socket in node_sockets.values():
+        node_socket.sendall(bytes(NodeCommands.SHUTDOWN, 'UTF-8'))
+        res = node_socket.recv(TEST_BUFFER_SIZE).decode('UTF-8')
+        if res == NodeCommands.OK:
+            print("Successfully sent shutdown command!")
+        else:
+            print("Shutdown command failed!")
+        node_socket.close()
+
 if __name__ == "__main__":
     logger = logging.getLogger(__name__)
     logger.info("Setting up test.")
@@ -138,7 +151,7 @@ if __name__ == "__main__":
                 input_list.append(parent)
                 child.close()
                 sockets[name] = parent
-                parent.settimeout(8)
+                # parent.settimeout(8)
                 message = parent.recv(TEST_BUFFER_SIZE).decode('UTF-8')
                 print("Received message from child: " + message)
                 if message == NodeCreationType.failed:
@@ -177,8 +190,10 @@ if __name__ == "__main__":
                         print("Read command: " + line)
                         command = command_handler.handle_input(line.strip())
                         if command == CommandType.exit:
-                            print("Ending test!")
-                            exit()
+                            print("Ending test...")
+                            send_shut_down_to_sockets(sockets)
+                            print("Test ended!")
+                            exit(0)
                         elif command == CommandType.describe or command == CommandType.display:
                             print(names)
                             show_dict(names)

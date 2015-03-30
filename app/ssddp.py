@@ -19,6 +19,7 @@ from manager.discovery_broadcast_loop import DiscoveryBroadcastLoop
 from manager.discovery_listener import DiscoveryListener
 from manager.description_listener import DescriptionListener
 from manager.command_handler import CommandHandler
+from app.globals import NodeCommands
 
 
 def is_int(val):
@@ -101,6 +102,7 @@ class SSDDP(object):
         peer_node_manager.start()
 
         if self.command_input_socket:
+            print("here")
             input_list = [listening_udp_socket.socket, listening_tcp_socket.socket, self.command_input_socket]
         else:
             input_list = [listening_udp_socket.socket, listening_tcp_socket.socket, sys.stdin]
@@ -143,25 +145,27 @@ class SSDDP(object):
                         description_handler.start()
                     except IOError as e:
                         self.logger.error(e.args[0])
+                if self.remote_run:
+                    if x == self.command_input_socket:
+                        self.logger.info("Incoming data from external input.")
+                        # command = os.read(self.command_input, 32)
+                        command = self.command_input_socket.recv(BUFFER_SIZE).decode('UTF-8')
+                        if command == NodeCommands.SHUTDOWN:
+                            end_node = True
+                            self.command_input_socket.sendall(bytes(NodeCommands.OK, 'UTF-8'))
+                            continue
+                        if self.remote_run:
+                            print("Received command: " + command)
+                            self.logger.debug("Read command [" + str(command) + "]")
+                            input_listener = CommandHandler(command, self_node, peer_list, end_node)
+                            input_listener.start()
+                else:
+                    if x == sys.stdin:  # TODO: handle user command
+                        # STDIN -> Input Manager
+                        self.logger.debug("Incoming data from Standard Input.")
+                        command = sys.stdin.readline()
 
-                elif x == sys.stdin:  # TODO: handle user command
-                    # STDIN -> Input Manager
-                    self.logger.debug("Incoming data from Standard Input.")
-                    command = sys.stdin.readline()
-
-                    self.logger.debug("Read command [" + command[:-1] + "]")
-                    input_listener = CommandHandler(command, self_node, peer_list, end_node)
-                    input_listener.start()
-                    # TODO: output response to user inside thread!!
-
-                elif self.command_input_socket:
-                    self.logger.info("Incoming data from external input.")
-                    # command = os.read(self.command_input, 32)
-                    command = self.command_input_socket.recv(BUFFER_SIZE).decode('UTF-8')
-                    if self.remote_run:
-                        print("Received command: " + command)
-                    self.logger.debug("Read command [" + str(command) + "]")
-                    input_listener = CommandHandler(command, self_node, peer_list, end_node)
-                    input_listener.start()
-
-
+                        self.logger.debug("Read command [" + command[:-1] + "]")
+                        input_listener = CommandHandler(command, self_node, peer_list, end_node)
+                        input_listener.start()
+                        # TODO: output response to user inside thread!!
