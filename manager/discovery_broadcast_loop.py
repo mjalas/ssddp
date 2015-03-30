@@ -46,10 +46,11 @@ class DiscoveryBroadcastLoop(threading.Thread):
             self.send_message(data)
 
             # Check if any command message has been sent
-            message = self.message_queue.get(timeout=2)
-            if message == NodeCommands.SHUTDOWN:
-                self.logger.info("Received shutdown message, shutting down immediately.")
-                exit(0)
+            if not self.message_queue.empty():
+                message = self.message_queue.get(timeout=2)
+                if message == NodeCommands.SHUTDOWN:
+                    self.logger.info("Received shutdown message, shutting down immediately.")
+                    exit(0)
             # Sleep and restart cycle
             sleep(BROADCAST_INTERVAL)
         # self.start_broadcast()
