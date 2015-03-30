@@ -9,4 +9,8 @@ logging.basicConfig(
 
 if __name__ == "__main__":
     app = SSDDP("[Node01]")
-    app.start()
+    try:
+        app.start()
+    except KeyboardInterrupt:
+        app.stop()
+        print("User interruption occurred!\nEnding program!")
