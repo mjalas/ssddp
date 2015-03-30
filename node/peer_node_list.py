@@ -30,9 +30,9 @@ class PeerNodeList(object):
                     print("%s", service.description)
 
     def get(self, node_name):
-        for node in self.peers:
-            if node.name == node_name:
-                return node
+        for peer in self.peers:
+            if peer.node.name == node_name:
+                return peer
         raise PeerNodeNotFoundException("Peer node not found in list")
 
     def node_in_list(self, node):
