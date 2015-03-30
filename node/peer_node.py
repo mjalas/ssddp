@@ -16,7 +16,7 @@ class PeerNode(object):
     def create_node_from_message(message):
         if not isinstance(message, Message):
             raise ValueError(PeerNode.message_type_error_string)
-        node = Node(message.node_name, message.address,message.services)
+        node = Node(message.node_name, message.address, None, message.services)
         peer_node = PeerNode(node, message.timestamp)
         return peer_node
 
