@@ -7,7 +7,7 @@ from app.globals import BROADCAST_INTERVAL, HUB_ADDRESS, HUB_TIMEOUT, AVAILABLE_
 from message.discovery_message_handler import DiscoveryMessageHandler
 from message.timestamp import Timestamp
 from networking.socket import Socket
-from app.globals import NodeCommands
+from app.globals import NodeCommand
 
 
 class DiscoveryBroadcastLoop(threading.Thread):
@@ -51,7 +51,7 @@ class DiscoveryBroadcastLoop(threading.Thread):
             if not self.message_queue.empty():
                 try:
                     message = self.message_queue.get(timeout=2)
-                    if message == NodeCommands.SHUTDOWN:
+                    if message == NodeCommand.SHUTDOWN:
                         self.logger.info("Received shutdown message, shutting down immediately.")
                         exit(0)
                 except ValueError:
