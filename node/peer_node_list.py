@@ -24,7 +24,7 @@ class PeerNodeList(object):
         for peer_node in self.peers:
             node = peer_node.node
             print("NODE [%s] (seen %s)", node.name, peer_node.timestamp)
-            for service in node.service_list:
+            for service in node.service_list.services:
                 print(" - SERVICE: %s", service.name)
                 if service.description:
                     print("%s", service.description)
