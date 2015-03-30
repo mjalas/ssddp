@@ -20,19 +20,21 @@ class Message(object):
         else:
             self.services = ServiceList()
 
+        """
+        print("MESSAGE <<< START >>>")
+        dict1 = self.__dict__
+        for x in dict1:
+            print(x+":"+str(dict1[x]))
+        print("MESSAGE <<< END >>>")
+        """
+
     def add_service(self, new_service):
         self.services.add(new_service)
-
-    def services_to_list(self):
-        service_list = []
-        for service in self.services.services:
-            service_list.append(service.to_json())
-        return service_list
 
     def to_json(self):
         data = {'name': self.node_name, 'address': {'ip': self.address[0], 'port': self.address[1]},
                 'timestamp': self.timestamp,
-                'services': self.services_to_list()}
+                'services': self.services.to_list()}
         return data
 
     @staticmethod
