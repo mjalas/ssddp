@@ -26,6 +26,9 @@ class CommandHandler(threading.Thread):
         Expects name of the node.
 
         """
+        if len(self.command) != 2:
+            print("Wrong argument count! Expected \"describe node_name\".")
+            return
         node_name = self.command[1]
         self.peer_list.GetAddress(node_name)    # TODO: send description request to address in peer_list
 

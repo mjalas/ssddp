@@ -119,10 +119,10 @@ class SSDDP(object):
 
                 elif x == sys.stdin:  # TODO: handle user command (create new socket for sending messages and free it if required)
                     # STDIN -> Input Manager
-                    self.logger.info("Incoming data from Standard Input.")
+                    self.logger.debug("Incoming data from Standard Input.")
                     command = sys.stdin.readline()
-                    self.logger.debug("Read command [" + command + "]")
-                    input_listener = CommandHandler(command, self_node)
+                    self.logger.debug("Read command [" + command[:-1] + "]")
+                    input_listener = CommandHandler(command, self_node, peer_list)
                     input_listener.start()
                     # TODO: output response to user inside thread!!
 
