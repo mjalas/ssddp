@@ -89,6 +89,11 @@ class SSDDP(object):
                 self.listening_tcp_socket.terminate()
                 self.listening_udp_socket.terminate()
                 continue
+            except OSError as error:
+                self.logger.error('Failed binding to port %d, (%d: %s)', port, error.errno, error.strerror)
+                self.listening_tcp_socket.terminate()
+                self.listening_udp_socket.terminate()
+                continue
 
             self.logger.info('Sockets bound to port %d', port)
             break
