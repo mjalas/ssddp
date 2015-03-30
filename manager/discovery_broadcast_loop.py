@@ -39,8 +39,8 @@ class DiscoveryBroadcastLoop(threading.Thread):
             message = self.discovery_message_handler.create_message(self.self_node)
 
             # Convert message to json
-            json_message = json.dumps(message.to_json())
-            json_hub_message = json.dumps(message.to_json())[:-1]+", \"hub\": 1}"
+            json_message = json.dumps(message.to_discovery_json())
+            json_hub_message = json.dumps(message.to_discovery_json())[:-1]+", \"hub\": 1}"
 
             # Encode message to utf-8 for sending through socket
             data = json_message.encode()

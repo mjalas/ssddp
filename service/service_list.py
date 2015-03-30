@@ -24,6 +24,12 @@ class ServiceList(object):
             service_list.append(a_service.to_json())
         return service_list
 
+    def to_discovery_list(self):
+        service_list = []
+        for a_service in self.services:
+            service_list.append(a_service.to_discovery_json())
+        return service_list
+
     def from_dict(self, json_dict):
         for data in json_dict:
             name = data["name"]

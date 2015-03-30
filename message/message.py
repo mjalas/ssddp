@@ -32,9 +32,23 @@ class Message(object):
         self.services.append(new_service)
 
     def to_json(self):
+        """
+        Converts message to json format.
+        Returns complete description message
+        """
         data = {'name': self.node_name, 'address': {'ip': self.address[0], 'port': self.address[1]},
                 'timestamp': self.timestamp,
                 'services': self.services.to_list()}
+        return data
+
+    def to_discovery_json(self):
+        """
+        Converts message to json format but omits service descriptions.
+        Returns a discovery message
+        """
+        data = {'name': self.node_name, 'address': {'ip': self.address[0], 'port': self.address[1]},
+                'timestamp': self.timestamp,
+                'services': self.services.to_discovery_list()}
         return data
 
     @staticmethod

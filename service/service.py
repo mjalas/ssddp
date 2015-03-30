@@ -13,3 +13,6 @@ class Service(object):
 
     def to_json(self):
         return {'name': self.name, 'type': self.type, 'description': self.description}
+
+    def to_discovery_json(self):
+        return {'name': self.name, 'type': self.type}
