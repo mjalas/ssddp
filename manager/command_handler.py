@@ -30,8 +30,8 @@ class CommandHandler(threading.Thread):
         self.peer_list.GetAddress(node_name)    # TODO: send description request to address in peer_list
 
     COMMANDS = {
-        'describe': request_description(),
-        'display':  display_node_list(),
+        'describe': request_description,
+        'display':  display_node_list,
     }
 
     def handle_command(self):
@@ -43,7 +43,7 @@ class CommandHandler(threading.Thread):
                 print("\"%s\"", cmd)
         else:
             self.logger.debug("Handling command \"%s\"", self.command)
-            command()
+            command(self)
 
     def run(self):
         # self._target()
