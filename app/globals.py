@@ -13,6 +13,12 @@ HUB_TIMEOUT = 6
 AVAILABLE_PORTS = range(9001, 10001)
 
 
-class NodeCommands():
+class NodeCommand():
     SHUTDOWN = "shutdown"
     OK = "ok"
+    EXIT = "exit"
+    DESCRIBE = "describe"
+    DISPLAY = "display"
+    ECHO = "echo"
+    DISPLAY_NODE = "display_node"
+    PEERS = "peers"
