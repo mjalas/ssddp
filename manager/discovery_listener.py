@@ -38,7 +38,7 @@ class DiscoveryListener(threading.Thread):
         self.logger.debug("Handling incoming data")
         message = None
         if self.data:
-            self.logger.info("Incoming discovery data from (" + str(self.address[0]) + ", " + str(
+            self.logger.debug("Incoming discovery data from (" + str(self.address[0]) + ", " + str(
                 self.address[1]) + "):\n<<<START>>>\n" + self.data.decode() + "\n<<<END>>>")
             message = Message.to_object(self.data.decode())
         return message
