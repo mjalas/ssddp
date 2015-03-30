@@ -27,7 +27,7 @@ class PeerNodeList(object):
             node = peer_node.node
             node_count += 1
             print("  #" + str(node_count) + ": \"" + str(node.name) + "\" (seen " + str(peer_node.timestamp)+")")
-            for service in node.service_list.services:
+            for service in node.service_list:
                 print("   - SERVICE: " + service.name)
                 if service.description:
                     print((4*' ') + service.description.replace('\n', '\n'+(4*' ')))
