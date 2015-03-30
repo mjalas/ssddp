@@ -34,13 +34,16 @@ class CommandHandler(threading.Thread):
         'display':  display_node_list(),
     }
 
+    def display_commands(self):
+        for cmd in self.COMMANDS:
+            print("%s", cmd)
+
     def handle_command(self):
         command = self.COMMANDS.get(self.command[0])
         if not command:
             self.logger.warning("User command \"%s\" not recognized.", self.command)
             print("\"%s\" not recognized. Supported commands:", self.command[0])
-            for cmd in self.COMMANDS:
-                print("\"%s\"", cmd)
+            self.display_commands()
         else:
             self.logger.debug("Handling command \"%s\"", self.command)
             command()
