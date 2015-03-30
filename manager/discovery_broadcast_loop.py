@@ -67,16 +67,17 @@ class DiscoveryBroadcastLoop(threading.Thread):
 
         if self.hub_timestamp_expired():
 
-            self.logger.info("Hub timestamp expired; Sending packet to all available ports.")
+            self.logger.info("Discovery -> Hub + all ports, (hub expired)")
             # Hub has expired: Send message to all ports
             for port in AVAILABLE_PORTS:
                 # ...Except our own port
                 if port != self.self_node.address[1]:
                     self.udp_socket.sendto(message, ("127.0.0.1", port))
+        else:
+            self.logger.info("Discovery -> Hub")
 
         # Send to Hub regardless of timestamp
         # (This allows the hub to be recovered)
-        self.logger.info("Sending Discovery packet to hub")
         self.udp_socket.sendto(message, HUB_ADDRESS)
 
     def update_timestamp(self):
