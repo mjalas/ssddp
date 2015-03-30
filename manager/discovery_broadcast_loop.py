@@ -40,10 +40,12 @@ class DiscoveryBroadcastLoop(threading.Thread):
 
             # Convert message to json
             json_message = json.dumps(message.to_json())
+            json_hub_message = json.dumps(message.to_json())[:-1]+", \"hub\": 1}"
 
             # Encode message to utf-8 for sending through socket
             data = json_message.encode()
-            self.send_message(data)
+            hub_data = json_hub_message.encode()
+            self.send_message(data, hub_data)
 
             # Check if any command message has been sent
             if not self.message_queue.empty():
@@ -58,7 +60,7 @@ class DiscoveryBroadcastLoop(threading.Thread):
             sleep(BROADCAST_INTERVAL)
         # self.start_broadcast()
 
-    def send_message(self, message):
+    def send_message(self, message, hub_message):
         """
         Sends the message to the hub.
         If the hub has timed out, sends the message also to all available ports.
@@ -78,7 +80,7 @@ class DiscoveryBroadcastLoop(threading.Thread):
 
         # Send to Hub regardless of timestamp
         # (This allows the hub to be recovered)
-        self.udp_socket.sendto(message, HUB_ADDRESS)
+        self.udp_socket.sendto(hub_message, HUB_ADDRESS)
 
     def update_timestamp(self):
         self.hub_timestamp = Timestamp.create_timestamp()
