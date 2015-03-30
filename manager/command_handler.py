@@ -3,11 +3,11 @@ import threading
 
 from app.globals import NodeCommands
 
-DESCRIBE_COMMAND = 'describe'
-DISPLAY_COMMAND = 'display'
-SHUTDOWN_COMMAND = 'shutdown'
+DESCRIBE_COMMAND = 'describe'     #   TODO: remove?
+DISPLAY_COMMAND = 'display'       #   TODO: remove?
+SHUTDOWN_COMMAND = 'shutdown'     #   TODO: remove?
 
-AVAILABLE_COMMANDS = [DESCRIBE_COMMAND, DISPLAY_COMMAND]
+AVAILABLE_COMMANDS = [DESCRIBE_COMMAND, DISPLAY_COMMAND]  #   TODO: remove?
 
 
 class CommandHandler(threading.Thread):
@@ -19,7 +19,7 @@ class CommandHandler(threading.Thread):
         self._target = self.handle_command
         self.peer_list = peer_list
         self.end_parent = end_parent
-        self.COMMANDS = AVAILABLE_COMMANDS
+        # self.COMMANDS = AVAILABLE_COMMANDS     #   TODO: remove?
         self.received_command = command.split()
         self.logger = logging.getLogger(self_node.name + ": " + __name__)
         self.logger.info("Discovery Listener initialized")
@@ -71,7 +71,8 @@ class CommandHandler(threading.Thread):
             print("%s", cmd)
 
     def handle_command(self):
-        command_function = self.COMMANDS[self.received_command[0]]
+        # command_function = self.COMMANDS[self.received_command[0]]
+        command_function = self.COMMANDS.get(self.received_command[0])
 
         if not command_function:
             self.logger.warning("User command \"%s\" not recognized.", self.received_command)
