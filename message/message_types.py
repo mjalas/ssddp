@@ -1,8 +1,7 @@
-from enum import Enum
 
 
-class MessageType(Enum):
-    discovery_request = 1
-    discovery_response = 2
-    description_request = 3
-    description_response = 4
+class MessageType(object):
+    discovery_request = "discovery_request"
+    discovery_response = "discovery_response"
+    description_request = "description_request"
+    description_response = "description_response"
