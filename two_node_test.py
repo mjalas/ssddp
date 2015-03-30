@@ -1,6 +1,7 @@
 from threading import Thread
 import sys
 import os
+import socket
 
 from app.ssddp import SSDDP
 from protocol_testing.main_argument_handler import MainArgumentHandler
@@ -31,9 +32,8 @@ class CommandHandler(object):
 
 def node_process(ssddp_node):
     if not isinstance(ssddp_node, SSDDP):
-        os._exit(0)
+        exit(0)
     ssddp_node.start()
-
 
 
 if __name__ == "__main__":
@@ -52,15 +52,19 @@ if __name__ == "__main__":
     if names is None:
         exit()
 
-    pipes = {}
+    # pipes = {}
+    sockets = {}
     for name in names:
-        pipein, pipeout = os.pipe()
+        # pipein, pipeout = os.pipe()
+        (child, parent) = socket.socketpair(socket.AF_UNIX, socket.SOCK_STREAM, 0)
         if os.fork() == 0:
-            ssddp_node = SSDDP(name, pipeout)
+            # ssddp_node = SSDDP(name, pipeout)
+            ssddp_node = SSDDP(name, child)
             ssddp_node.start()
             exit()
         else:
-            pipes[name] = pipein
+            # pipes[name] = pipein
+            sockets[name] = parent
             continue
 
     print("Test setup complete.")
