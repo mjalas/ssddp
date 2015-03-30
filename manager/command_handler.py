@@ -1,6 +1,8 @@
 import logging
 import threading
 
+from app.globals import NodeCommands
+
 DESCRIBE_COMMAND = 'describe'
 DISPLAY_COMMAND = 'display'
 SHUTDOWN_COMMAND = 'shutdown'
@@ -18,7 +20,7 @@ class CommandHandler(threading.Thread):
         self.peer_list = peer_list
         self.end_parent = end_parent
         self.COMMANDS = AVAILABLE_COMMANDS
-        self.command = command.split()
+        self.received_command = command.split()
         self.logger = logging.getLogger(self_node.name + ": " + __name__)
         self.logger.info("Discovery Listener initialized")
 
@@ -34,32 +36,34 @@ class CommandHandler(threading.Thread):
         Expects name of the node.
 
         """
-        if len(self.command) != 2:
+        if len(self.received_command) != 2:
             print("Wrong argument count! Expected \"describe node_name\".")
             return
-        node_name = self.command[1]
+        node_name = self.received_command[1]
         self.peer_list.GetAddress(node_name)    # TODO: send description request to address in peer_list
 
+    def end_node(self):
+        self.end_parent = True
 
     COMMANDS = {
         'describe': request_description,
         'display':  display_node_list,
+        NodeCommands.SHUTDOWN: end_node,
     }
-
 
     def call_command_func(self, command):
         if command is DESCRIBE_COMMAND:
-            self.logger.debug("Handling command \"%s\"", self.command)
+            self.logger.debug("Handling command \"%s\"", self.received_command)
             self.request_description()
         elif command is DISPLAY_COMMAND:
-            self.logger.debug("Handling command \"%s\"", self.command)
+            self.logger.debug("Handling command \"%s\"", self.received_command)
             self.display_node_list()
         elif command is SHUTDOWN_COMMAND:
             self.end_parent = True
             return
         else:
-            self.logger.warning("User command \"%s\" not recognized.", self.command)
-            print("\"%s\" not recognized. Supported commands:", self.command[0])
+            self.logger.warning("User command \"%s\" not recognized.", self.received_command)
+            print("\"%s\" not recognized. Supported commands:", self.received_command[0])
             self.display_commands()
 
     def display_commands(self):
@@ -67,15 +71,15 @@ class CommandHandler(threading.Thread):
             print("%s", cmd)
 
     def handle_command(self):
-        command = self.COMMANDS.get(self.command[0])
-        if not command:
-            self.logger.warning("User command \"%s\" not recognized.", self.command)
-            print("\"%s\" not recognized. Supported commands:", self.command[0])
+        command_function = self.COMMANDS[self.received_command[0]]
+
+        if not command_function:
+            self.logger.warning("User command \"%s\" not recognized.", self.received_command)
+            print("\"%s\" not recognized. Supported commands:", self.received_command[0])
             self.display_commands()
         else:
-            self.logger.debug("Handling command \"%s\"", self.command)
-            command(self)
-
+            self.logger.debug("Handling command \"%s\"", self.received_command)
+            command_function(self)
 
     def run(self):
         # self._target()
