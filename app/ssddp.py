@@ -146,9 +146,10 @@ class SSDDP(object):
 
                 elif x == sys.stdin:  # TODO: handle user command
                     # STDIN -> Input Manager
-                    self.logger.info("Incoming data from Standard Input.")
+                    self.logger.debug("Incoming data from Standard Input.")
                     command = sys.stdin.readline()
-                    self.logger.debug("Read command [" + command + "]")
+
+                    self.logger.debug("Read command [" + command[:-1] + "]")
                     input_listener = CommandHandler(command, self_node, peer_list, end_node)
                     input_listener.start()
                     # TODO: output response to user inside thread!!

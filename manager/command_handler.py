@@ -34,13 +34,18 @@ class CommandHandler(threading.Thread):
         Expects name of the node.
 
         """
+        if len(self.command) != 2:
+            print("Wrong argument count! Expected \"describe node_name\".")
+            return
         node_name = self.command[1]
         self.peer_list.GetAddress(node_name)    # TODO: send description request to address in peer_list
 
-    """COMMANDS = {
-        DESCRIBE_COMMAND: request_description(),
-        DISPLAY_COMMAND:  display_node_list(),
-    }"""
+
+    COMMANDS = {
+        'describe': request_description,
+        'display':  display_node_list,
+    }
+
 
     def call_command_func(self, command):
         if command is DESCRIBE_COMMAND:
@@ -62,8 +67,15 @@ class CommandHandler(threading.Thread):
             print("%s", cmd)
 
     def handle_command(self):
-        # command = self.COMMANDS.get(self.command[0])
-        self.call_command_func(self.command[0])
+        command = self.COMMANDS.get(self.command[0])
+        if not command:
+            self.logger.warning("User command \"%s\" not recognized.", self.command)
+            print("\"%s\" not recognized. Supported commands:", self.command[0])
+            self.display_commands()
+        else:
+            self.logger.debug("Handling command \"%s\"", self.command)
+            command(self)
+
 
     def run(self):
         # self._target()
