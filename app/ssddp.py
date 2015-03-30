@@ -103,7 +103,7 @@ class SSDDP(object):
         # Self node
         self.logger.debug("Initializing self node")
         self.address = ("127.0.0.1", port)
-        self.node = Node(self.name, self.address)
+        self.node = Node(self.name, self.address, self.service_list_file)
 
         # Peer list
         self.logger.debug("Initializing an empty Peer Node List")
