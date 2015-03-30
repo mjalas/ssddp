@@ -24,6 +24,14 @@ class ServiceList(object):
             service_list.append(a_service.to_json())
         return service_list
 
+    def from_dict(self, json_dict):
+        data = json.loads(json_dict.read())
+        for service_key in data:
+            name = data[service_key]["name"]
+            s_type = data[service_key]["service_type"]
+            desc = data[service_key]["description"]
+            new_service = Service(name, s_type, desc)
+            self.services.append(new_service)
 
     def from_file(self, file_path):
         json_file = open(file_path)
