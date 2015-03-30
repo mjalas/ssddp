@@ -25,13 +25,19 @@ class ServiceList(object):
         return service_list
 
     def from_dict(self, json_dict):
-        data = json.loads(json_dict.read())
-        for service_key in data:
-            name = data[service_key]["name"]
-            s_type = data[service_key]["service_type"]
-            desc = data[service_key]["description"]
-            new_service = Service(name, s_type, desc)
-            self.services.append(new_service)
+        """
+        print("JSON_DICT FORMAT:")
+        print(json_dict)
+        print("END OF DICT")
+        """
+        for index in json_dict:
+            data = json_dict[index]
+            for service_key in data:
+                name = data[service_key]["name"]
+                s_type = data[service_key]["service_type"]
+                desc = data[service_key]["description"]
+                new_service = Service(name, s_type, desc)
+                self.services.append(new_service)
 
     def from_file(self, file_path):
         json_file = open(file_path)
@@ -49,7 +55,6 @@ class ServiceList(object):
 
     def __len__(self):
         return len(self.services)
-
 
     def __str__(self):
         return self.to_list()
