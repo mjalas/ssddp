@@ -7,7 +7,7 @@ from queue import Queue
 import logging
 
 from app.argument_handler import ArgumentHandler
-from app.globals import AVAILABLE_PORTS
+from app.globals import AVAILABLE_PORTS, BUFFER_SIZE
 from app.logfile import Logfile
 from node.node import Node
 # from node.peer_node import PeerNode
@@ -26,18 +26,23 @@ def is_int(val):
 
 
 class SSDDP(object):
-    def __init__(self, name, external_command_input=None, external_output=None):
+    def __init__(self, name, external_command_input=None, external_output=None, remote_run=False):
         self.name = name
-        if is_int(external_command_input):
-            self.command_input = external_command_input
+
+        if isinstance(external_command_input, socket.socket):
+            self.command_input_socket = external_command_input
+        elif external_command_input is not None:
+            raise TypeError("External command input was not of type socket!")
         if is_int(external_output):
             self.external_output = external_output
+        self.remote_run = remote_run
         self.logger = logging.getLogger(self.name + ": " + __name__)
 
     def start(self):
 
         # Handle program arguments
-        ArgumentHandler.handle_arguments()
+        if not self.remote_run:
+            ArgumentHandler.handle_arguments()
 
         # Logging and logs
         logfile = Logfile("logfile.log")
@@ -94,13 +99,17 @@ class SSDDP(object):
         peer_node_manager = PeerNodeManager(message_queue, peer_list)
         self.logger.debug("Running Peer Node Manager")
         peer_node_manager.start()
-        if self.command_input:
-            self.command_input = os.fdopen(self.command_input)
-            input_list = [listening_udp_socket.socket, listening_tcp_socket.socket, sys.stdin, self.command_input]
+
+        if self.command_input_socket:
+            input_list = [listening_udp_socket.socket, listening_tcp_socket.socket, self.command_input_socket]
         else:
             input_list = [listening_udp_socket.socket, listening_tcp_socket.socket, sys.stdin]
 
-        self.logger.info("Start listening to sockets and stdin.")
+        self.logger.info("Start listening to sockets and standard input.")
+        if self.command_input_socket:
+            self.command_input_socket.sendall(bytes("Start listening to sockets and standard input.", 'UTF-8'))
+
+        end_node = False
 
         while True:
 
@@ -109,6 +118,12 @@ class SSDDP(object):
             input_ready, output_ready, except_ready = select.select(input_list, [], [])
             self.logger.debug("... Select detected input")
             for x in input_ready:
+                if end_node:
+                    print("End Node: " + str(end_node))
+                    self.logger.info("Shutting down node!")
+                    if self.remote_run:
+                        print("Node is shutting down!")
+                    exit(0)
 
                 if x == listening_udp_socket.socket:
                     # UDP -> Discovery Manager
@@ -134,16 +149,18 @@ class SSDDP(object):
                     self.logger.info("Incoming data from Standard Input.")
                     command = sys.stdin.readline()
                     self.logger.debug("Read command [" + command + "]")
-                    input_listener = CommandHandler(command, self_node)
+                    input_listener = CommandHandler(command, self_node, peer_list, end_node)
                     input_listener.start()
                     # TODO: output response to user inside thread!!
 
-                elif self.command_input and x == self.command_input:
+                elif self.command_input_socket:
                     self.logger.info("Incoming data from external input.")
                     # command = os.read(self.command_input, 32)
-                    command = self.command_input.readline()
+                    command = self.command_input_socket.recv(BUFFER_SIZE).decode('UTF-8')
+                    if self.remote_run:
+                        print("Received command: " + command)
                     self.logger.debug("Read command [" + str(command) + "]")
-                    input_listener = CommandHandler(command, self_node)
+                    input_listener = CommandHandler(command, self_node, peer_list, end_node)
                     input_listener.start()
 
 
