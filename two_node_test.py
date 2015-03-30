@@ -3,30 +3,38 @@ import sys
 import os
 import socket
 
+import getopt
+from sys import argv, exit
+
+from enum import Enum
+
 from app.ssddp import SSDDP
 from protocol_testing.main_argument_handler import MainArgumentHandler
 from protocol_testing.tester_config_handler import TesterConfigHandler
 from protocol_testing.config_test_file import ConfigurationNode
-
-from enum import Enum
+from manager.command_handler import DESCRIBE_COMMAND, DISPLAY_COMMAND
 
 
 class CommandType(Enum):
     exit = 1
 
 
-class CommandHandler(object):
+class TestCommandHandler(object):
     """
 
     """
+
     def __init__(self):
-        pass
+        self.command_list = [DESCRIBE_COMMAND, DISPLAY_COMMAND]
 
-    def handle_input(self, input):
+    def handle_input(self, input_line):
+
         if input == "exit" or input == "quit":
             return CommandType.exit
 
+
     def usage(self):
+        print("Type cmd --help to get list of commands.")
         print("To end test use: 'exit' or 'quit'")
 
 
@@ -68,7 +76,7 @@ if __name__ == "__main__":
             continue
 
     print("Test setup complete.")
-    command_handler = CommandHandler()
+    command_handler = TestCommandHandler()
     command_handler.usage()
     for line in sys.stdin:
         command = command_handler.handle_input(line.strip())
