@@ -32,20 +32,20 @@ class TestConfiguration(object):
     @staticmethod
     def read_config_from_file(filename):
         try:
-            fd = open(filename, 'r')
-            data = fd.read()
+            with open(filename) as data_file:
+                data = json.load(data_file)
+
             return TestConfiguration.json_to_object(data)
         except FileNotFoundError as e:
             print(e.args)
             return None
 
     @staticmethod
-    def json_to_object(json_file):
-        data = json.loads(json_file)
+    def json_to_object(data):
         if 'nodes' in data:
             test_conf = TestConfiguration()
             for node in data["nodes"]:
-                if 'name' in data["nodes"]:
+                if 'name' in node:
                     conf_node = ConfigurationNode(node['name'])
                     test_conf.nodes.append(conf_node)
             return test_conf
@@ -61,9 +61,9 @@ class ConfigurationNode(object):
 
     @staticmethod
     def get_names_from_node_list(nodes):
-        node_names = []
-        for node in nodes:
+        node_names = {}
+        for i, node in enumerate(nodes):
             if not isinstance(node, ConfigurationNode):
                 continue
-            node_names.append(node.name)
+            node_names[i+1] = node.name
         return node_names
