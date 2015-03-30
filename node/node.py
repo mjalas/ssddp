@@ -1,4 +1,5 @@
 from service.service_list import ServiceList
+from json import JSONEncoder
 
 
 class Node(object):
@@ -9,3 +10,18 @@ class Node(object):
         self.service_list = ServiceList()
         if service_list_file:
             self.service_list.from_file(service_list_file)
+
+
+
+class NodeEncoder(JSONEncoder):
+    def default(self, o):
+        if isinstance(o, Node):
+            d = {'name': o.name, 'address': o.address}
+            services = []
+            for service in o.service_list:
+                services.append(service)
+            d['services'] = services
+            return d
+        else:
+            raise TypeError("Given argument is not of type Node!")
+
