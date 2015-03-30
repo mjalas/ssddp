@@ -29,7 +29,7 @@ class Message(object):
         """
 
     def add_service(self, new_service):
-        self.services.add(new_service)
+        self.services.append(new_service)
 
     def to_json(self):
         data = {'name': self.node_name, 'address': {'ip': self.address[0], 'port': self.address[1]},

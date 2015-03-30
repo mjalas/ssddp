@@ -7,7 +7,7 @@ from message.message import Message
 from node.peer_node_list import PeerNodeList
 from node.peer_node import PeerNode
 from node.exceptions.node_exceptions import PeerNodeNotFoundException
-from app.globals import NodeCommands
+from app.globals import NodeCommand
 
 log = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class PeerNodeManager(threading.Thread):
 
     def read_message_from_queue(self):
         message = self.message_queue.get()
-        if message == NodeCommands.SHUTDOWN:
+        if message == NodeCommand.SHUTDOWN:
             exit(0)
         if not isinstance(message, Message):
             raise ValueError("Message not of type Message!")

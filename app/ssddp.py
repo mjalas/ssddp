@@ -19,7 +19,7 @@ from manager.discovery_broadcast_loop import DiscoveryBroadcastLoop
 from manager.discovery_listener import DiscoveryListener
 from manager.description_listener import DescriptionListener
 from manager.command_handler import CommandHandler
-from app.globals import NodeCommands
+from app.globals import NodeCommand
 
 
 def is_int(val):
@@ -53,8 +53,8 @@ class SSDDP(object):
             self.logger = logging.getLogger(self.name + ": " + __name__)
 
     def stop(self):
-        self.broadcast_loop_queue.put(NodeCommands.SHUTDOWN)
-        self.node_manager_queue.put(NodeCommands.SHUTDOWN)
+        self.broadcast_loop_queue.put(NodeCommand.SHUTDOWN)
+        self.node_manager_queue.put(NodeCommand.SHUTDOWN)
         if self.listening_tcp_socket:
             self.listening_tcp_socket.terminate()
         if self.listening_udp_socket:
@@ -153,6 +153,7 @@ class SSDDP(object):
                     self.logger.info("Shutting down node!")
                     if self.remote_run:
                         print("Node is shutting down!")
+                    self.stop()
                     exit(0)
 
                 if x == self.listening_udp_socket.socket:
@@ -179,14 +180,14 @@ class SSDDP(object):
                         self.logger.info("Incoming data from external input.")
                         # command = os.read(self.command_input, 32)
                         command = self.command_input_socket.recv(BUFFER_SIZE).decode('UTF-8')
-                        if command == NodeCommands.SHUTDOWN:
+                        if command == NodeCommand.SHUTDOWN:
                             end_node = True
-                            self.command_input_socket.sendall(bytes(NodeCommands.OK, 'UTF-8'))
+                            self.command_input_socket.sendall(bytes(NodeCommand.OK, 'UTF-8'))
                             continue
                         if self.remote_run:
                             print("Received command: " + command)
                             self.logger.debug("Read command [" + str(command) + "]")
-                            input_listener = CommandHandler(command, self.node, peer_list, end_node)
+                            input_listener = CommandHandler(command, self.node, peer_list, end_node, self.command_input_socket)
                             input_listener.start()
                 else:
                     if x == sys.stdin:  # TODO: handle user command
