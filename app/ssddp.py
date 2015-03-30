@@ -46,7 +46,10 @@ class SSDDP(object):
         self.listening_udp_socket = None
         self.address = None
         self.node = None
-        self.logger = logging.getLogger(self.name + ": " + __name__)
+        if not self.name:
+            self.logger = logging.getLogger("UnnamedNode: " + __name__)
+        else:
+            self.logger = logging.getLogger(self.name + ": " + __name__)
 
     def stop(self):
         self.broadcast_loop_queue.put(NodeCommands.SHUTDOWN)
@@ -88,6 +91,13 @@ class SSDDP(object):
 
             self.logger.info('Sockets bound to port %d', port)
             break
+
+        if not self.name:
+            self.name = "Node"+str(port)
+            self.listening_tcp_socket.update_logger_name(self.name)
+            self.listening_udp_socket.update_logger_name(self.name)
+            self.logger = logging.getLogger(self.name + ": " + __name__)
+            self.logger.info("Unnamed node renamed to \"" + self.name + "\" according to port!")
 
         # Self node
         self.logger.debug("Initializing self node")

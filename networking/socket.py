@@ -13,8 +13,14 @@ class Socket(object):
         self.type = sock_type
         self.socket = socket.socket(socket.AF_INET, SOCKET_TYPE[sock_type])
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.logger = logging.getLogger(name + ": " + __name__ + "(" + self.type + ")")
+        if name:
+            self.logger = logging.getLogger(name + ": " + __name__ + "(" + self.type + ")")
+        else:
+            self.logger = logging.getLogger("UnnamedNode: " + __name__ + "(" + self.type + ")")
         self.logger.info("Socket initialized")
+
+    def update_logger_name(self, name):
+        self.logger = logging.getLogger(name + ": " + __name__ + "(" + self.type + ")")
 
     def bind(self, port):
         self.logger.debug("Binding to port %d", port)

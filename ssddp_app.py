@@ -8,7 +8,7 @@ logging.basicConfig(
 )
 
 if __name__ == "__main__":
-    app = SSDDP("[Node01]")
+    app = SSDDP(None)
     try:
         app.start()
     except KeyboardInterrupt:
