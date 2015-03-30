@@ -14,7 +14,7 @@ class ServiceList(object):
     def clear(self):
         self.services.clear()
 
-    def add(self, new_service):
+    def append(self, new_service):
         if isinstance(new_service, service):  # TODO: need to be tested -> create unit test
             self.services.append(new_service)
 
@@ -23,6 +23,7 @@ class ServiceList(object):
         for a_service in self.services:
             service_list.append(a_service.to_json())
         return service_list
+
 
     def from_file(self, file_path):
         json_file = open(file_path)
@@ -34,5 +35,19 @@ class ServiceList(object):
             new_service = Service(name, s_type, desc)
             self.services.append(new_service)
 
+    def __iter__(self):
+        for elem in self.services:
+            yield elem
+
+    def __len__(self):
+        return len(self.services)
+
+
     def __str__(self):
         return self.to_list()
+
+    def __contains__(self, item):
+        for elem in self.services:
+            if elem is item:
+                return True
+        return False
