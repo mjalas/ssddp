@@ -38,8 +38,23 @@ class SSDDP(object):
             self.command_input_socket = None
         if is_int(external_output):
             self.external_output = external_output
+
+        self.node_manager_queue = Queue()
+        self.broadcast_loop_queue = Queue()
         self.remote_run = remote_run
+        self.listening_tcp_socket = None
+        self.listening_udp_socket = None
+        self.address = None
+        self.node = None
         self.logger = logging.getLogger(self.name + ": " + __name__)
+
+    def stop(self):
+        self.broadcast_loop_queue.put(NodeCommands.SHUTDOWN)
+        self.node_manager_queue.put(NodeCommands.SHUTDOWN)
+        if self.listening_tcp_socket:
+            self.listening_tcp_socket.terminate()
+        if self.listening_udp_socket:
+            self.listening_udp_socket.terminate()
 
     def start(self):
 
@@ -54,21 +69,21 @@ class SSDDP(object):
         # Select port and setup sockets
         while True:
 
-            listening_tcp_socket = Socket("TCP", self.name)
-            listening_udp_socket = Socket("UDP", self.name)
+            self.listening_tcp_socket = Socket("TCP", self.name)
+            self.listening_udp_socket = Socket("UDP", self.name)
 
             port = random.choice(AVAILABLE_PORTS)
 
             try:
                 self.logger.debug('Attempting to bind sockets to port %d', port)
-                listening_tcp_socket.bind(port)
-                listening_udp_socket.bind(port)
-                listening_tcp_socket.listen()
+                self.listening_tcp_socket.bind(port)
+                self.listening_udp_socket.bind(port)
+                self.listening_tcp_socket.listen()
 
             except socket.error as error:
                 self.logger.error('Failed binding to port %d, (%d: %s)', port, error.errno, error.strerror)
-                listening_tcp_socket.terminate()
-                listening_udp_socket.terminate()
+                self.listening_tcp_socket.terminate()
+                self.listening_udp_socket.terminate()
                 continue
 
             self.logger.info('Sockets bound to port %d', port)
@@ -76,8 +91,8 @@ class SSDDP(object):
 
         # Self node
         self.logger.debug("Initializing self node")
-        self_address = ("127.0.0.1", port)
-        self_node = Node(self.name, self_address)
+        self.address = ("127.0.0.1", port)
+        self.node = Node(self.name, self.address)
 
         # Peer list
         self.logger.debug("Initializing an empty Peer Node List")
@@ -87,7 +102,7 @@ class SSDDP(object):
         self.logger.debug("Initializing Discovery message handler")
         discovery_manager = DiscoveryMessageHandler()
         self.logger.debug("Initializing Discovery broadcast loop")
-        broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list, self_node)
+        broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list, self.node, self.broadcast_loop_queue)
 
         # Start Discovery Loop
         self.logger.debug("Start Discovery Broadcast Loop")
@@ -95,19 +110,19 @@ class SSDDP(object):
 
         # Initialize message queue
         self.logger.debug("Initializing Message queue")
-        message_queue = Queue()
+        # message_queue = Queue()
 
         # Initialize manager that updates peer node data
         self.logger.debug("Initializing Peer Node Manager")
-        peer_node_manager = PeerNodeManager(message_queue, peer_list)
+        peer_node_manager = PeerNodeManager(self.node_manager_queue, peer_list)
         self.logger.debug("Running Peer Node Manager")
         peer_node_manager.start()
 
         if self.command_input_socket:
             print("here")
-            input_list = [listening_udp_socket.socket, listening_tcp_socket.socket, self.command_input_socket]
+            input_list = [self.listening_udp_socket.socket, self.listening_tcp_socket.socket, self.command_input_socket]
         else:
-            input_list = [listening_udp_socket.socket, listening_tcp_socket.socket, sys.stdin]
+            input_list = [self.listening_udp_socket.socket, self.listening_tcp_socket.socket, sys.stdin]
 
         self.logger.info("Start listening to sockets and standard input.")
         if self.command_input_socket:
@@ -129,21 +144,22 @@ class SSDDP(object):
                         print("Node is shutting down!")
                     exit(0)
 
-                if x == listening_udp_socket.socket:
+                if x == self.listening_udp_socket.socket:
                     # UDP -> Discovery Manager
                     # (Receiving a UDP Discovery packet)
                     self.logger.info("Incoming data from UDP Socket.")
-                    data, address = listening_udp_socket.read()
-                    discovery_handler = DiscoveryListener(data, address, message_queue, broadcast_manager, self_node)
+                    data, address = self.listening_udp_socket.read()
+                    discovery_handler = DiscoveryListener(data, address, self.node_manager_queue, broadcast_manager,
+                                                          self.node)
                     discovery_handler.start()
 
-                elif x == listening_tcp_socket.socket:
+                elif x == self.listening_tcp_socket.socket:
                     # TCP -> Description Manager
                     # (Receiving a TCP Description Request)
                     self.logger.info("Incoming data from TCP Socket.")
-                    connection, client_address = listening_tcp_socket.socket.accept()
+                    connection, client_address = self.listening_tcp_socket.socket.accept()
                     try:
-                        description_handler = DescriptionListener(connection, client_address, self_node)
+                        description_handler = DescriptionListener(connection, client_address, self.node)
                         description_handler.start()
                     except IOError as e:
                         self.logger.error(e.args[0])
@@ -159,7 +175,7 @@ class SSDDP(object):
                         if self.remote_run:
                             print("Received command: " + command)
                             self.logger.debug("Read command [" + str(command) + "]")
-                            input_listener = CommandHandler(command, self_node, peer_list, end_node)
+                            input_listener = CommandHandler(command, self.node, peer_list, end_node)
                             input_listener.start()
                 else:
                     if x == sys.stdin:  # TODO: handle user command
@@ -168,6 +184,6 @@ class SSDDP(object):
                         command = sys.stdin.readline()
 
                         self.logger.debug("Read command [" + command[:-1] + "]")
-                        input_listener = CommandHandler(command, self_node, peer_list, end_node)
+                        input_listener = CommandHandler(command, self.node, peer_list, end_node)
                         input_listener.start()
                         # TODO: output response to user inside thread!!
