@@ -63,6 +63,8 @@ class CommandHandler(threading.Thread):
             self.remote_socket.sendall(response)
         else:
             print(response_str)
+        update_message = Message.to_object(response_str)
+        self.peer_list.update_node(node_name, update_message)
         #message = Message.to_object(response_str)
 
         return None
