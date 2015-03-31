@@ -15,6 +15,7 @@ class Message(object):
         self.address = address
         self.timestamp = timestamp
         self.protocol = protocol
+        self.from_hub = False
         if services:
             self.services = services
         else:
@@ -77,5 +78,7 @@ class Message(object):
             message = Message(2, data['name'], address, data['timestamp'], data['services'])
         else:
             message = Message(2, data['name'], address, data['timestamp'])
+        if 'hub' in data:
+            message.from_hub = True
 
         return message

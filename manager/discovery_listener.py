@@ -28,9 +28,10 @@ class DiscoveryListener(threading.Thread):
         :return:
         """
         self.logger.debug("Incoming message")
-        self.update_broadcast_timestamp()
         message = self.handle_data()
         if message:
+            if message.from_hub:
+                self.update_broadcast_timestamp()
             self.logger.debug("Message: %s", message)
             self.message_queue.put(message)
 
@@ -45,8 +46,7 @@ class DiscoveryListener(threading.Thread):
 
     def update_broadcast_timestamp(self):
         self.logger.debug("Updating broadcast timestamp")
-        if self.address == HUB_ADDRESS:
-            self.broadcast_manager.update_timestamp()
+        self.broadcast_manager.update_timestamp()
 
     def run(self):
         # self._target()
