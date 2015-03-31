@@ -14,7 +14,6 @@ class Node(object):
             self.service_list.from_file(service_list_file)
 
 
-
 class NodeEncoder(JSONEncoder):
     def default(self, o):
         if isinstance(o, Node):
