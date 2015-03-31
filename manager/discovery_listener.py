@@ -1,6 +1,6 @@
 import logging
 import threading
-from app.globals import HUB_ADDRESS
+from app.globals import HUB_ADDRESS_FROM
 
 from networking.socket import Socket
 from message.message import Message
@@ -29,9 +29,9 @@ class DiscoveryListener(threading.Thread):
         """
         self.logger.debug("Incoming message")
         message = self.handle_data()
+        if self.address == HUB_ADDRESS_FROM:
+            self.update_broadcast_timestamp()
         if message:
-            if message.from_hub:
-                self.update_broadcast_timestamp()
             self.logger.debug("Message: %s", message)
             self.message_queue.put(message)
 

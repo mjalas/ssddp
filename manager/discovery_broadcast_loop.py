@@ -3,7 +3,7 @@ import logging
 import threading
 from time import sleep
 
-from app.globals import BROADCAST_INTERVAL, HUB_ADDRESS, HUB_TIMEOUT, AVAILABLE_PORTS
+from app.globals import BROADCAST_INTERVAL, HUB_ADDRESS_TO, HUB_TIMEOUT, AVAILABLE_PORTS
 from message.discovery_message_handler import DiscoveryMessageHandler
 from message.timestamp import Timestamp
 from networking.socket import Socket
@@ -81,7 +81,7 @@ class DiscoveryBroadcastLoop(threading.Thread):
 
         # Send to Hub regardless of timestamp
         # (This allows the hub to be recovered)
-        self.udp_socket.sendto(hub_message, HUB_ADDRESS)
+        self.udp_socket.sendto(hub_message, HUB_ADDRESS_TO)
 
     def update_timestamp(self):
         self.hub_timestamp = Timestamp.create_timestamp()
