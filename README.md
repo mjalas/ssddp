@@ -50,3 +50,8 @@ unavailable.
 We also have plans for implementing separate smaller messages to be used for the p2p 
 messaging in case our regular discovery packets were to cause congestion or other 
 problems due to their size.  
+
+31.3
+It turned out that we had been using an unbound socket for sending udp messages.
+After making the discovery broadcast loop use our listening udp socket also for 
+sending messages, we were able to get the udp hub working.
