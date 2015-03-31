@@ -104,15 +104,17 @@ def send_shut_down_to_sockets(node_sockets):
 def clean_up_sequence():
     print("Clean up stage started!")
     cleaner = NodeProcessCleanUp(__file__)  # for verbose output -> set print_result=True
-    if cleaner.get_node_pids():
-        print("Found nodes still running...")
-        cleaner.kill_nodes(False)
-        given_input = input("Kill processes [y/n]:")
-        if given_input is 'y':
-            cleaner.kill_nodes()
-        elif given_input is not 'n':
-            print("Choice '" + given_input + "' not available")
-            return
+    given_input = input("Show status check [y/n]:")
+    if given_input is 'y':
+        cleaner.check_status()
+    print("Found nodes still running...")
+    cleaner.kill_nodes(False)
+    given_input = input("Kill processes [y/n]:")
+    if given_input is 'y':
+        cleaner.kill_nodes()
+    elif given_input is not 'n':
+        print("Choice '" + given_input + "' not available")
+        return
     given_input = input("Show status check [y/n]:")
     if given_input is 'y':
         cleaner.check_status()
@@ -171,6 +173,47 @@ def handle_describe_command(desc_command):
         print("Not a valid option")
 
 
+def init_nodes(name_dict):
+    remotes = [sys.stdin]
+    failed_count = 0
+    success_count = 0
+    for i, name in name_dict.items():
+        print(name)
+        child, parent = socket.socketpair()
+        pid = os.fork()
+        if pid:
+            print("Created node " + name + ".")
+            remotes.append(parent)
+            child.close()
+            sockets[name] = parent
+            # parent.settimeout(8)
+            response = parent.recv(TEST_BUFFER_SIZE).decode('UTF-8')
+            print("Received message from child: " + response)
+            if response == NodeCreationType.FAILED:
+                failed_count += 1
+            else:
+                success_count += 1
+
+        else:
+            print("Created node " + name + ".")
+            parent.close()
+            result = node_process(name, child)
+            print("Result: " + result)
+            if result == NodeCreationType.FAILED:
+                child.sendall(bytes(result, 'UTF-8'))
+            child.close()
+            exit()
+
+    if failed_count == len(names):
+        print("All node initialization failed!\nEnding test!")
+        for sock in sockets.values():
+            sock.close()
+        exit(0)
+    else:
+        print("Initialized {0} nodes.".format(success_count))
+    return remotes
+
+
 if __name__ == "__main__":
     logger = logging.getLogger(__name__)
     logger.info("Setting up test.")
@@ -197,46 +240,7 @@ if __name__ == "__main__":
         # pipes = {}
 
         print("Initializing input list.")
-        input_list = [sys.stdin]
-        failed_count = 0
-        success_count = 0
-
-        for i, name in names.items():
-            print(name)
-            # child, parent = socket.socketpair(socket.AF_UNIX, socket.SOCK_STREAM, 0)
-            child, parent = socket.socketpair()
-            pid = os.fork()
-            if pid:
-                print("Created node " + name + ".")
-                input_list.append(parent)
-                child.close()
-                sockets[name] = parent
-                # parent.settimeout(8)
-                message = parent.recv(TEST_BUFFER_SIZE).decode('UTF-8')
-                print("Received message from child: " + message)
-                if message == NodeCreationType.FAILED:
-                    failed_count += 1
-                else:
-                    success_count += 1
-
-            else:
-                print("Created node " + name + ".")
-                parent.close()
-                result = node_process(name, child)
-                print("Result: " + result)
-                if result == NodeCreationType.FAILED:
-                    child.sendall(bytes(result, 'UTF-8'))
-                child.close()
-                exit()
-
-        if failed_count == len(names):
-            print("All node initialization failed!\nEnding test!")
-            for sock in sockets.values():
-                sock.close()
-            exit(0)
-        else:
-            print("Initialized {0} nodes.".format(success_count))
-
+        input_list = init_nodes(names)
         print("Input list initialized.")
 
         print("Test setup complete.")
@@ -257,6 +261,7 @@ if __name__ == "__main__":
                         if command == NodeCommand.EXIT:
                             print("Ending test...")
                             send_shut_down_to_sockets(sockets)
+                            clean_up_sequence()
                             print("Test ended!")
                             exit(0)
                         elif command == NodeCommand.DESCRIBE:
@@ -272,9 +277,6 @@ if __name__ == "__main__":
                             if x == sock:
                                 message = sock.recv()
                                 print(message)
-
-
-                # command = ""
 
     except KeyboardInterrupt:
         for s in sockets:
