@@ -51,3 +51,11 @@ class PeerNodeList(object):
     def get_node_address(self, node_name):
         peer = self.get(node_name)
         return peer.node.address
+
+    def update_node(self, node_name, message):
+        """
+        Finds node by name and updates it with the json message contents
+        """
+        for peer in self.peers:
+            if peer.node.name == node_name:
+                peer.update_node(message)
