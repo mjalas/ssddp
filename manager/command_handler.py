@@ -50,7 +50,7 @@ class CommandHandler(threading.Thread):
             return
         node_name = self.received_command[1]
         address = self.peer_list.get_node_address(node_name)    # TODO: send description request to address in peer_list
-        print(address)
+        self.logger.info("Sending description request to "+str(address))
         # Create message and send it.
         message = Message(MessageType.description_request, node_name, address, Timestamp.create_timestamp())
         data = message.to_json()
