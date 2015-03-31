@@ -21,7 +21,7 @@ import logging
 
 local_ip = "localhost"
 recv_port = 9000
-send_port = 9001
+send_port = 8999
 default_timeout = 10
 
 
