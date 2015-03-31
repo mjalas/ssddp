@@ -41,6 +41,11 @@ class TestConfiguration(object):
             return None
 
     @staticmethod
+    def read_config_from_data(data):
+        data = json.loads(data)
+        return TestConfiguration.json_to_object(data)
+
+    @staticmethod
     def json_to_object(data):
         if 'nodes' in data:
             test_conf = TestConfiguration()
