@@ -40,12 +40,13 @@ class DiscoveryBroadcastLoop(threading.Thread):
 
             # Convert message to json
             json_message = json.dumps(message.to_discovery_json())
-            json_hub_message = json.dumps(message.to_discovery_json())[:-1]+", \"hub\": 1}"
+            # json_hub_message = json.dumps(message.to_discovery_json())[:-1]+", \"hub\": 1}"
 
             # Encode message to utf-8 for sending through socket
             data = json_message.encode()
-            hub_data = json_hub_message.encode()
-            self.send_message(data, hub_data)
+            # hub_data = json_hub_message.encode() # Unnecessary now that udp socket ports are working
+            # self.send_message(data, hub_data)
+            self.send_message(data, data)
 
             # Check if any command message has been sent
             if not self.message_queue.empty():
