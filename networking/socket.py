@@ -40,7 +40,7 @@ class Socket(object):
 
     def send(self, message):
         if self.type == "TCP":
-            self.logger.debug("Sending TCP message")
+            self.logger.debug("Sending TCP message: "+str(message))
             self.socket.sendall(message)
         elif self.type == "UDP":
             self.logger.debug("Sending UDP message")
