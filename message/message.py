@@ -74,6 +74,7 @@ class Message(object):
 
         # address = Address(data['address']['ip'], data['address']['port'])
         address = (data['address']['ip'], data['address']['port'])
+        # TODO: Message type is hardcoded as "2"
         if data['services']:
             message = Message(2, data['name'], address, data['timestamp'], data['services'])
         else:
