@@ -1,3 +1,4 @@
+import json
 import socket
 import threading
 import logging
@@ -57,12 +58,28 @@ class DescriptionListener(threading.Thread):
             self.logger.error(e.args[0])
             print(e.args)
             return
+        # TODO: fix message type checking (message.to_object always assigns "2"!)
+        self.logger.debug("Skipping Description request message type check; Responding to request.")
+        # Create description message from node info
+        response = Message(MessageType.description_response, self.node.name, self.node.address,
+                           Timestamp.create_timestamp(), self.node.service_list)
+
+        # Convert message to json
+        json_message = json.dumps(response.to_json())
+
+        # Encode message to utf-8 for sending through socket
+        data = json_message.encode()
+
+        self.connection.send(data)
+        """
         if message.message_type is MessageType.description_request:
+            self.logger.debug("Description request message type is description request; answering")
             response = Message(MessageType.description_response, self.node.name, self.node.address,
                                Timestamp.create_timestamp(), self.node.service_list)
-            self.connection.socket.send(response.to_json())
+            self.connection.send(response.to_json())
         else:  # Handle wrong request!
-            pass
+            self.logger.warn("Description request message type wrong! Found "+str(message.message_type)+", Expected "+str(MessageType.description_request))
+        """
 
     def run(self):
         # self._target()
