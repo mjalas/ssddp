@@ -1,13 +1,15 @@
-from message.description_request_list import DescriptionRequestList
 import socket
 import threading
+import logging
+from datetime import datetime
+
 from app.globals import BUFFER_SIZE
 from message.message import Message
 from message.message_types import MessageType
 from node.peer_node import PeerNode
 from node.node import Node
 from message.timestamp import Timestamp
-import logging
+from app.logfile import Logfile
 
 
 class DescriptionListener(threading.Thread):
@@ -24,17 +26,29 @@ class DescriptionListener(threading.Thread):
         self.connection = connection
         self.client_address = client_address
         self._target = self.respond_to_description_request
+        self.filename = "description_" + self.node.name + ".log"
+
         self.logger = logging.getLogger(node.name + ": " + __name__)
         self.logger.info("Description Listener initialized")
         threading.Thread.__init__(self)
 
     def respond_to_description_request(self):
         """
-
+        Handles the description request and sends a response.
         :return:
         """
+
         self.logger.debug("Responding to description request")
         data = self.connection.recv(BUFFER_SIZE).decode('UTF-8')
+        print(self.node.name + " received a description request:\n" + data)
+
+        with open(self.filename, 'a') as f:
+            log_message = str(datetime.now()) + ": " + "Description request received"
+            f.write(log_message)
+            log_message = "\t\t" + data
+            f.write(log_message)
+            f.flush()
+
         if len(data) <= 0:
             return
         try:
