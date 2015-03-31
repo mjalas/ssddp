@@ -63,7 +63,7 @@ class CommandHandler(threading.Thread):
             self.remote_socket.sendall(response)
         else:
             print(response_str)
-        message = Message.to_object(response_str)
+        #message = Message.to_object(response_str)
 
         return None
 
