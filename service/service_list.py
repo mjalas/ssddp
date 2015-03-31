@@ -1,4 +1,5 @@
 import json
+import logging
 import service.service
 from service.service import Service
 
@@ -8,8 +9,10 @@ class ServiceList(object):
     """
 
     """
+
     def __init__(self):
         self.services = []
+        self.logger = logging.getLogger(__name__)
 
     def clear(self):
         self.services.clear()
@@ -58,14 +61,19 @@ class ServiceList(object):
             1) Add old descriptions to new services without descriptions
             2) Replace old list with new
         """
-
+        self.logger.debug("Merging service list with new services")
+        preserved_descriptions = 0
         # Loop through all new services
         for new_service in new_services:
             if not new_service.description:
                 # New service has no description
                 for old_service in self.services:
-                    if old_service.name == new_service.name:
+                    if (old_service.name == new_service.name) and old_service.description:
                         new_service.description = old_service.description
+                        preserved_descriptions += 1
+        self.logger.debug("Updated old list (" + str(len(self.services)) + " entries) with new list (" + str(
+            len(new_services)) + " entries), preserving "+str(preserved_descriptions)+" descriptions.")
+
         # Replace old list with new
         self.services = new_services
 
