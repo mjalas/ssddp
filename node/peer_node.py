@@ -22,6 +22,7 @@ class PeerNode(object):
         return peer_node
 
     def update_node(self, message):
+
         if not isinstance(message, Message):
             raise ValueError(PeerNode.message_type_error_string)
         if self.node.name is not message.node_name:
@@ -30,6 +31,8 @@ class PeerNode(object):
             self.node.address = message.address
         if self.timestamp < message.timestamp:
             self.timestamp = message.timestamp
-        if self.node.service_list is not message.services:
-            self.node.service_list = ServiceList()
-            self.node.service_list.from_dict(message.services)
+
+        # Update old service list with new data
+        new_service_list = ServiceList()
+        new_service_list.from_dict(message.services)
+        self.node.service_list.update_merge(new_service_list)

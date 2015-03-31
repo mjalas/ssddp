@@ -52,6 +52,23 @@ class ServiceList(object):
             new_service = Service(name, s_type, desc)
             self.services.append(new_service)
 
+    def update_merge(self, new_services):
+        """
+        Updates service list with new services (another ServiceList)
+            1) Add old descriptions to new services without descriptions
+            2) Replace old list with new
+        """
+
+        # Loop through all new services
+        for new_service in new_services:
+            if not new_service.description:
+                # New service has no description
+                for old_service in self.services:
+                    if old_service.name == new_service.name:
+                        new_service.description = old_service.description
+        # Replace old list with new
+        self.services = new_services
+
     def __iter__(self):
         for elem in self.services:
             yield elem
