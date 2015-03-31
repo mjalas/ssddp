@@ -1,5 +1,6 @@
 from message.message import Message
 from node.node import Node
+from service.service_list import ServiceList
 
 
 class PeerNode(object):
@@ -30,4 +31,5 @@ class PeerNode(object):
         if self.timestamp < message.timestamp:
             self.timestamp = message.timestamp
         if self.node.service_list is not message.services:
-            self.node.service_list = message.services
+            self.node.service_list = ServiceList()
+            self.node.service_list.from_dict(message.services)
