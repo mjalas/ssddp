@@ -1,4 +1,4 @@
-
+from datetime import datetime
 
 class Logfile(object):
     """
@@ -21,16 +21,28 @@ class Logfile(object):
             Ratio of total network bytes sent vs useful
             information received during discovery and description processes
     """
-    def __init__(self, file_path):
+    def __init__(self, file_path, append=False):
 
         # output file
         if file_path:
-            self.file = open(file_path, "w")
+            if append:
+                self.file = open(file_path, 'a')
+            else:
+                self.file = open(file_path, 'w')
         else:
             self.file = None
 
     def log(self, message):
 
         if self.file:
-            self.file.write(message)
+            tmp = str(datetime.now()) + message + "\n"
+            self.file.write(tmp)
             self.file.flush()
+
+    @staticmethod
+    def log_message(filename, message):
+        tmp = str(datetime.now()) + ": " + message
+        #filename = "logs/" + filename
+        with open(filename, 'a') as f:
+            f.write(tmp)
+            f.flush()
