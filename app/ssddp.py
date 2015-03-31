@@ -118,7 +118,7 @@ class SSDDP(object):
         self.logger.debug("Initializing Discovery message handler")
         discovery_manager = DiscoveryMessageHandler()
         self.logger.debug("Initializing Discovery broadcast loop")
-        broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list, self.node, self.broadcast_loop_queue)
+        broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list, self.node, self.broadcast_loop_queue, self.listening_udp_socket)
 
         # Start Discovery Loop
         self.logger.debug("Start Discovery Broadcast Loop")
