@@ -11,6 +11,7 @@ class TestConfiguration(object):
             self.nodes = nodes
         else:
             self.nodes = []
+        self.services = None
 
     @staticmethod
     def create_config_file(test_configuration, filename="test_example.json"):
@@ -51,16 +52,17 @@ class TestConfiguration(object):
             test_conf = TestConfiguration()
             for node in data["nodes"]:
                 if 'name' in node:
+
                     if 'services' in node:
+                        print("services: " + str(node['services']))
                         services = ServiceList()
-                        service_data = json.loads(node['services'])
-                        services.from_dict(service_data)
-                        conf_node = ConfigurationNode(node['name'], services)
+                        #service_data = json.loads(node['services'])
+                        #services.from_dict(str(node['services']))
+                        #conf_node = ConfigurationNode(node['name'], services)
+                        conf_node = ConfigurationNode(node['name'])
                     else:
                         conf_node = ConfigurationNode(node['name'])
                     test_conf.nodes.append(conf_node)
-
-
             return test_conf
         return None
 
@@ -71,7 +73,7 @@ class ConfigurationNode(object):
     """
     def __init__(self, name, services=None):
         self.name = name
-        self.service = services
+        self.services = services
 
     @staticmethod
     def get_names_from_node_list(nodes):

@@ -28,7 +28,7 @@ def is_int(val):
 
 class SSDDP(object):
     def __init__(self, name, external_command_input=None, external_output=None, remote_run=False,
-                 service_list_file=None, services= None):
+                 service_list_file=None, services=None):
         self.name = name
 
         if isinstance(external_command_input, socket.socket) and external_command_input is not None:

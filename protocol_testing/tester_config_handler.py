@@ -36,6 +36,7 @@ class TesterConfigHandler(object):
             nodes = self.test_configuration.nodes
             services = {}
             for node in nodes:
-                services[node.name] = node.services
+                if node.services:
+                    services[node.name] = node.services
             return services
         return None
