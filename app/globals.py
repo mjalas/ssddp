@@ -23,3 +23,5 @@ class NodeCommand():
     ECHO = "echo"
     DISPLAY_NODE = "display_node"
     PEERS = "peers"
+    HELP = "help"
+    INCOMPLETE_COMMAND = "incomplete_command"
