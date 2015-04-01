@@ -20,7 +20,13 @@ class NodeProcessCleanUp(object):
             print(result)
         return len(result) > 0
 
-    def kill_nodes(self, execute=True):
+    def kill_nodes(self, script_filename, execute=True):
+        tmp = script_filename.split('.')
+        if len(tmp) > 1:
+            script_filename = tmp[len(tmp)-1]
+        if ".py" not in script_filename:
+            script_filename += ".py"
+        print("Cleaning up processes for script: " + script_filename)
         with open(self.tmp_file, 'r') as f:
             found_pids = []
             for line in f:
@@ -32,7 +38,7 @@ class NodeProcessCleanUp(object):
                     cmd = data[10]
                     if cmd.strip() == "/usr/bin/python3.4":
                         parameter = data[11]
-                        if pid not in found_pids and parameter.endswith("two_node_test.py"):
+                        if pid not in found_pids and parameter.endswith(script_filename):
                             found_pids.append(pid)
                             if execute:
                                 print("Killing: " + cmd + "  " + parameter + ", pid: " + pid)
