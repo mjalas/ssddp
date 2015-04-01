@@ -37,9 +37,9 @@ class Message(object):
         Converts message to json format.
         Returns complete description message
         """
-        data = {'name': self.node_name, 'address': {'ip': self.address[0], 'port': self.address[1]},
-                'timestamp': self.timestamp,
-                'services': self.services.to_list()}
+        data = {'type': self.message_type, 'name': self.node_name,
+                'address': {'ip': self.address[0], 'port': self.address[1]},
+                'timestamp': self.timestamp, 'services': self.services.to_list()}
         return data
 
     def to_discovery_json(self):

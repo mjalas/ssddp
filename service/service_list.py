@@ -36,7 +36,11 @@ class ServiceList(object):
     def from_dict(self, json_dict):
         for data in json_dict:
             name = data["name"]
-            s_type = data["type"]
+            s_type = ""
+            if data['type']:
+                s_type = data["type"]
+            elif data['service_type']:
+                s_type = data['service_type']
             desc = None
             try:
                 desc = data["description"]

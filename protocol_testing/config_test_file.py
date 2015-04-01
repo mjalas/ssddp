@@ -1,5 +1,5 @@
 import json
-
+from service.service_list import ServiceList
 
 class TestConfiguration(object):
     """
@@ -51,8 +51,16 @@ class TestConfiguration(object):
             test_conf = TestConfiguration()
             for node in data["nodes"]:
                 if 'name' in node:
-                    conf_node = ConfigurationNode(node['name'])
+                    if 'services' in node:
+                        services = ServiceList()
+                        service_data = json.loads(node['services'])
+                        services.from_dict(service_data)
+                        conf_node = ConfigurationNode(node['name'], services)
+                    else:
+                        conf_node = ConfigurationNode(node['name'])
                     test_conf.nodes.append(conf_node)
+
+
             return test_conf
         return None
 
@@ -61,8 +69,9 @@ class ConfigurationNode(object):
     """
     A class to represent a configuration node
     """
-    def __init__(self, name):
+    def __init__(self, name, services=None):
         self.name = name
+        self.service = services
 
     @staticmethod
     def get_names_from_node_list(nodes):

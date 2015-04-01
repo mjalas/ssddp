@@ -1,10 +1,11 @@
 from service.service_list import ServiceList
 from json import JSONEncoder
+import json
 
 
 class Node(object):
 
-    def __init__(self, name, address, service_list_file=None, service_json_list=None):
+    def __init__(self, name, address, service_list_file=None, service_json_list=None, services=None):
         self.name = name
         self.address = address
         self.service_list = ServiceList()
@@ -12,6 +13,8 @@ class Node(object):
             self.service_list.from_dict(service_json_list)
         elif service_list_file:
             self.service_list.from_file(service_list_file)
+        elif services:
+            self.service_list = services
 
 
 class NodeEncoder(JSONEncoder):

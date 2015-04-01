@@ -62,6 +62,7 @@ class ProtocolTester(object):
         self.config_file = config_file
         self.input_list = []
         self.config_handler = None
+        self.services = {}
 
     def display(self, message, log=False):
         self.printer.display(message, log)
@@ -71,7 +72,11 @@ class ProtocolTester(object):
 
     def node_process(self, ssddp_node_name, command_sock):
         try:
-            ssddp_node = SSDDP(name=ssddp_node_name, external_command_input=command_sock, remote_run=True)
+            if self.services:
+                services = self.services[ssddp_node_name]
+                ssddp_node = SSDDP(name=ssddp_node_name, external_command_input=command_sock, remote_run=True, services=services)
+            else:
+                ssddp_node = SSDDP(name=ssddp_node_name, external_command_input=command_sock, remote_run=True)
             ssddp_node.start()
             return NodeCreationType.SUCCESS
         except AttributeError as e:
@@ -262,6 +267,7 @@ class ProtocolTester(object):
         if not self.config_handler:
             exit()
         self.names = self.config_handler.get_node_names()
+        self.services = self.config_handler.get_services_for_nodes()
         if self.names is None:
             exit()
 

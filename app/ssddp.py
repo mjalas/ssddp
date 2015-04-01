@@ -27,7 +27,8 @@ def is_int(val):
 
 
 class SSDDP(object):
-    def __init__(self, name, external_command_input=None, external_output=None, remote_run=False, service_list_file=None):
+    def __init__(self, name, external_command_input=None, external_output=None, remote_run=False,
+                 service_list_file=None, services= None):
         self.name = name
 
         if isinstance(external_command_input, socket.socket) and external_command_input is not None:
@@ -39,6 +40,7 @@ class SSDDP(object):
         if is_int(external_output):
             self.external_output = external_output
 
+        self.services = services
         self.service_list_file = service_list_file
         self.node_manager_queue = Queue()
         self.broadcast_loop_queue = Queue()
@@ -108,7 +110,10 @@ class SSDDP(object):
         # Self node
         self.logger.debug("Initializing self node")
         self.address = ("127.0.0.1", port)
-        self.node = Node(self.name, self.address, self.service_list_file)
+        if self.services:
+            self.node = Node(self.name, self.address, services=self.services)
+        else:
+            self.node = Node(self.name, self.address, self.service_list_file)
 
         # Peer list
         self.logger.debug("Initializing an empty Peer Node List")
