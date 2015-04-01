@@ -177,6 +177,8 @@ class ProtocolTester(object):
             desc_command += " " + destination_node
             self.display(desc_command)
             sock_desc.sendall(bytes(desc_command, 'UTF-8'))
+            self.display("Waiting couple of seconds for communication to complete..")
+            time.sleep(4)
 
         except KeyError:
             self.display("Not a valid option")
