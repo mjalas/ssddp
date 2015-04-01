@@ -11,17 +11,18 @@ import logging
 from app.ssddp import SSDDP
 from protocol_testing.main_argument_handler import MainArgumentHandler
 from protocol_testing.tester_config_handler import TesterConfigHandler
-from manager.command_handler import DESCRIBE_COMMAND, DISPLAY_COMMAND, AVAILABLE_COMMANDS
 from app.globals import NodeCommand
 from protocol_testing.node_process_cleanup import NodeProcessCleanUp
 
 
 TEST_BUFFER_SIZE = 1024
+AVAILABLE_CMD_PARAMETERS = [NodeCommand.DESCRIBE, NodeCommand.DISPLAY, NodeCommand.HELP]
 
 
 class NodeCreationType():
     SUCCESS = "success"
     FAILED = "failed"
+
 
 class TestPrinter(object):
     """
@@ -49,7 +50,9 @@ class ProtocolTester(object):
     """
     A class to make protocol testing more convenient.
     """
+
     def __init__(self, log_file="protocol_test.log", test_data=None, config_file=None):
+        self.available_cmd_parameters = AVAILABLE_CMD_PARAMETERS
         self.remote_sockets = None
         self.printer = TestPrinter(log_file)
         self.remotes = {}
@@ -57,6 +60,8 @@ class ProtocolTester(object):
         self.names = {}
         self.test_data = test_data
         self.config_file = config_file
+        self.input_list = []
+        self.config_handler = None
 
     def display(self, message, log=False):
         self.printer.display(message, log)
@@ -98,16 +103,18 @@ class ProtocolTester(object):
             node_socket.close()
 
     def clean_up_sequence(self):
+        self.display("Letting nodes shutdown..")
+        time.sleep(4)
         self.display("Clean up stage started!")
         cleaner = NodeProcessCleanUp(__file__)  # for verbose output -> set print_result=True
         given_input = input("Show status check [y/n]:")
         if given_input is 'y':
             cleaner.check_status()
         self.display("Found nodes still running...")
-        cleaner.kill_nodes(False)
+        cleaner.kill_nodes(__name__, False)
         given_input = input("Kill processes [y/n]:")
         if given_input is 'y':
-            cleaner.kill_nodes()
+            cleaner.kill_nodes(__name__)
         elif given_input is not 'n':
             self.display("Choice '" + given_input + "' not available")
             return
@@ -175,7 +182,7 @@ class ProtocolTester(object):
             self.display("Not a valid option")
 
     def init_nodes(self):
-        input_list = [sys.stdin]
+        self.input_list = [sys.stdin]
         failed_count = 0
         success_count = 0
         for i, name in self.names.items():
@@ -184,7 +191,7 @@ class ProtocolTester(object):
             pid = os.fork()
             if pid:
                 self.display("Created node " + name + ".")
-                input_list.append(parent)
+                self.input_list.append(parent)
                 child.close()
                 self.remotes[name] = parent
                 # parent.settimeout(8)
@@ -212,7 +219,7 @@ class ProtocolTester(object):
             exit(0)
         else:
             self.display("Initialized {0} nodes.".format(success_count))
-        return input_list
+        return self.input_list
 
     def get_config_file(self):
         if self.config_file:
@@ -241,27 +248,36 @@ class ProtocolTester(object):
                     exit()
         return config_handler
 
+    def display_available_cmd_parameters(self):
+        self.display("Command parameters available:")
+        for i, cmd in enumerate(self.available_cmd_parameters):
+            self.display("{0}: {1}".format(i+1, cmd))
+
+    def setup_test(self):
+        self.display("Setting up test.")
+        self.config_handler = self.create_config_handler()
+
+        if not self.config_handler:
+            exit()
+        self.names = self.config_handler.get_node_names()
+        if self.names is None:
+            exit()
+
+        self.config_handler = None
+        self.display("Initializing input list.")
+        self.init_nodes()
+        self.display("Input list initialized.")
+
+        self.display("Test setup complete.")
+        self.display("Starting testing stage.")
+        self.command_handler.choices()
+
     def start(self):
         try:
-            self.display("Setting up test.")
-            config_handler = self.create_config_handler()
-
-            if not config_handler:
-                exit()
-            self.names = config_handler.get_node_names()
-            if self.names is None:
-                exit()
-
-            self.display("Initializing input list.")
-            input_list = self.init_nodes()
-            self.display("Input list initialized.")
-
-            self.display("Test setup complete.")
-            self.command_handler.choices()
-            self.display("Starting testing stage.")
+            self.setup_test()
             while True:
 
-                    input_ready, output_ready, except_ready = select.select(input_list, [], [])
+                    input_ready, output_ready, except_ready = select.select(self.input_list, [], [])
 
                     for x in input_ready:
 
@@ -269,16 +285,21 @@ class ProtocolTester(object):
                             line = sys.stdin.readline()
                             self.display("Read command: " + line)
                             command = self.command_handler.handle_input(line.strip())
-                            if command == NodeCommand.EXIT:
+                            if command == NodeCommand.INCOMPLETE_COMMAND:
+                                self.display("Add command parameter!")
+                                self.display("Command parameters:")
+                                self.display_available_cmd_parameters()
+                            elif command == NodeCommand.EXIT:
                                 self.end_test()
                             elif command == NodeCommand.DESCRIBE:
                                 self.handle_describe_command(command)
-                                self.command_handler.choices()
                             elif command == NodeCommand.DISPLAY:
-                                pass
+                                self.display("Command not yet available..")
+                            elif command == NodeCommand.HELP:
+                                self.display_available_cmd_parameters()
                             elif command == NodeCommand.ECHO:
                                 self.handle_echo_command()
-                                self.command_handler.choices()
+                            self.command_handler.choices()
                         else:
                             for sock in self.remotes:
                                 if x == sock:
@@ -309,8 +330,8 @@ class TestCommandHandler(object):
     A class for handling commands in protocol testing.
     """
 
-    def __init__(self, printer):
-        self.command_list = [DESCRIBE_COMMAND, DISPLAY_COMMAND]
+    def __init__(self, printer,):
+        self.command_list = []
         self.logger = logging.getLogger("Tester")
         self.printer = printer
 
@@ -330,15 +351,13 @@ class TestCommandHandler(object):
         parameters = input_line.split(' ')
         if parameters[0].strip() == "cmd":
             if len(parameters) == 1:
-                self.display("Add command parameter!")
-                self.display("Command parameters:")
-                for available_command in AVAILABLE_COMMANDS:
-                    self.display(available_command)
-                return None
-            if parameters[1].strip() == DESCRIBE_COMMAND:
+                return NodeCommand.INCOMPLETE_COMMAND
+            if parameters[1].strip() == NodeCommand.DESCRIBE:
                 return NodeCommand.DESCRIBE
-            elif parameters[1].strip() == DISPLAY_COMMAND:
+            elif parameters[1].strip() == NodeCommand.DISPLAY:
                 return NodeCommand.DISPLAY
+            elif parameters[1].strip() == NodeCommand.HELP:
+                return NodeCommand.HELP
 
     def usage(self):
         self.display("Type cmd --help to get list of commands.")
