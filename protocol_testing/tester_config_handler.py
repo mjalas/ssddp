@@ -30,3 +30,12 @@ class TesterConfigHandler(object):
             nodes = self.test_configuration.nodes
             return ConfigurationNode.get_names_from_node_list(nodes)
         return None
+
+    def get_services_for_nodes(self):
+        if self.test_configuration:
+            nodes = self.test_configuration.nodes
+            services = {}
+            for node in nodes:
+                services[node.name] = node.services
+            return services
+        return None
