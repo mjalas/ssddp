@@ -9,12 +9,6 @@ from message.message_types import MessageType
 from message.timestamp import Timestamp
 from networking.socket import Socket
 
-DESCRIBE_COMMAND = 'describe'     #   TODO: remove?
-DISPLAY_COMMAND = 'display'       #   TODO: remove?
-SHUTDOWN_COMMAND = 'shutdown'     #   TODO: remove?
-
-AVAILABLE_COMMANDS = [DESCRIBE_COMMAND, DISPLAY_COMMAND]  #   TODO: remove?
-
 
 class CommandHandler(threading.Thread):
     """
@@ -50,7 +44,7 @@ class CommandHandler(threading.Thread):
             return
         node_name = self.received_command[1]
         address = self.peer_list.get_node_address(node_name)    # TODO: send description request to address in peer_list
-        self.logger.info("Sending description request to "+str(address))
+        self.logger.info("Sending description request to " + str(address))
         # Create message and send it.
         message = Message(MessageType.description_request, node_name, address, Timestamp.create_timestamp())
         data = message.to_json()
@@ -59,10 +53,12 @@ class CommandHandler(threading.Thread):
         self.output_socket.send(bytes(data_str, 'UTF-8'))
         response = self.output_socket.read()
         response_str = response.decode('UTF-8')
+        print(self.node.name + " received description response:\n" + response_str)
         if self.remote_socket:
             self.remote_socket.sendall(response)
         else:
-            print(response_str)
+            pass
+            #print(response_str)
         update_message = Message.to_object(response_str)
         self.peer_list.update_node(node_name, update_message)
         #message = Message.to_object(response_str)
@@ -96,13 +92,13 @@ class CommandHandler(threading.Thread):
     }
 
     def call_command_func(self, command):
-        if command is DESCRIBE_COMMAND:
+        if command is NodeCommand.DESCRIBE:
             self.logger.debug("Handling command \"%s\"", self.received_command)
             self.request_description()
-        elif command is DISPLAY_COMMAND:
+        elif command is NodeCommand.DISPLAY:
             self.logger.debug("Handling command \"%s\"", self.received_command)
             self.display_node_list()
-        elif command is SHUTDOWN_COMMAND:
+        elif command is NodeCommand.SHUTDOWN:
             self.end_parent = True
             return
         else:
