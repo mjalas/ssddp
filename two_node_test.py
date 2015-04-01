@@ -10,7 +10,6 @@ import logging
 from app.ssddp import SSDDP
 from protocol_testing.main_argument_handler import MainArgumentHandler
 from protocol_testing.tester_config_handler import TesterConfigHandler
-from manager.command_handler import DESCRIBE_COMMAND, DISPLAY_COMMAND, AVAILABLE_COMMANDS
 from app.globals import NodeCommand
 from protocol_testing.node_process_cleanup import NodeProcessCleanUp
 
@@ -21,14 +20,19 @@ class NodeCreationType():
     SUCCESS = "success"
     FAILED = "failed"
 
+AVAILABLE_COMMANDS = [NodeCommand.DESCRIBE, NodeCommand.DISPLAY]
+
 
 class TestCommandHandler(object):
     """
 
     """
 
+
+
     def __init__(self):
-        self.command_list = [DESCRIBE_COMMAND, DISPLAY_COMMAND]
+        self.available_commands = AVAILABLE_COMMANDS
+        self.command_list = [NodeCommand.DESCRIBE, NodeCommand.DISPLAY]
         self.logger = logging.getLogger("Tester")
 
     def handle_input(self, input_line):
@@ -46,12 +50,12 @@ class TestCommandHandler(object):
             if len(parameters) == 1:
                 print("Add command parameter!")
                 print("Command parameters:")
-                for available_command in AVAILABLE_COMMANDS:
+                for available_command in self.available_commands:
                     print(available_command)
                 return None
-            if parameters[1].strip() == DESCRIBE_COMMAND:
+            if parameters[1].strip() == NodeCommand.DESCRIBE:
                 return NodeCommand.DESCRIBE
-            elif parameters[1].strip() == DISPLAY_COMMAND:
+            elif parameters[1].strip() == NodeCommand.DISPLAY:
                 return NodeCommand.DISPLAY
 
     def usage(self):
@@ -108,10 +112,10 @@ def clean_up_sequence():
     if given_input is 'y':
         cleaner.check_status()
     print("Found nodes still running...")
-    cleaner.kill_nodes(False)
+    cleaner.kill_nodes(__name__, False)
     given_input = input("Kill processes [y/n]:")
     if given_input is 'y':
-        cleaner.kill_nodes()
+        cleaner.kill_nodes(__name__)
     elif given_input is not 'n':
         print("Choice '" + given_input + "' not available")
         return
