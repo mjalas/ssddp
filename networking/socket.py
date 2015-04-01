@@ -54,7 +54,11 @@ class Socket(object):
         # Log message disabled for now to avoid 1000x message spam
         # self.logger.debug("Sending message to [" + str(address[0]) + ", " + str(address[1]) + "]")
         if random.random() > PACKET_DROP_RATE:
-            self.socket.sendto(message, address)
+            try:
+                self.socket.sendto(message, address)
+            except BrokenPipeError as e:
+                self.logger.debug("Tried to send {0} to {1} and got {2}".format(message, address, e.args))
+
         else:
             self.logger.debug("Packet dropped (Packet drop rate: "+str(PACKET_DROP_RATE)+")")
 
