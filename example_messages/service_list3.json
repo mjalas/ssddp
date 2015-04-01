@@ -1,0 +1,7 @@
+{
+  "service1" : {
+    "name" : "music streamer",
+    "service_type" : "media",
+    "description" : "This is a music streaming service."
+  }
+}

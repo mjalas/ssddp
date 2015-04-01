@@ -1,0 +1,24 @@
+{
+  "nodes" : [
+    {
+      "name" : "node1",
+      "services": {
+        "service1" : {
+          "name" : "music streamer",
+          "service_type" : "media",
+          "description" : "This is a music streaming service."
+        }
+      }
+    },
+    {
+      "name" : "node2",
+      "services": {
+        "service1" : {
+          "name" : "video streamer",
+          "service_type" : "media",
+          "description" : "This is a video streaming service."
+        }
+      }
+    }
+  ]
+}

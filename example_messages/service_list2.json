@@ -1,0 +1,18 @@
+{
+  "service1" : {
+    "name" : "temperature service",
+    "service_type" : "sensor",
+    "description" : "This is a temperature sensor service that collects temperature data."
+  },
+  "service2" : {
+    "name" : "moisture service",
+    "service_type" : "sensor",
+    "description" : "This is a moisture sensor service that collects moisture data."
+  },
+  "service3" : {
+    "name" : "air quality service",
+    "service_type" : "sensor",
+    "description" : "This is a air quality sensor service that collects air quality data."
+  }
+
+}
