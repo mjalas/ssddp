@@ -1,6 +1,7 @@
 import logging
+import random
 import socket
-from app.globals import BUFFER_SIZE, TCP_BACKLOG
+from app.globals import BUFFER_SIZE, TCP_BACKLOG, PACKET_DROP_RATE
 
 SOCKET_TYPE = {
     "UDP": socket.SOCK_DGRAM,
@@ -39,17 +40,23 @@ class Socket(object):
         self.socket.connect((address, port))
 
     def send(self, message):
-        if self.type == "TCP":
-            self.logger.debug("Sending TCP message: "+str(message))
-            self.socket.sendall(message)
-        elif self.type == "UDP":
-            self.logger.debug("Sending UDP message")
-            self.socket.send(message)
+        if random.random() > PACKET_DROP_RATE:
+            if self.type == "TCP":
+                self.logger.debug("Sending TCP message: "+str(message))
+                self.socket.sendall(message)
+            elif self.type == "UDP":
+                self.logger.debug("Sending UDP message")
+                self.socket.send(message)
+        else:
+            self.logger.debug("Packet dropped (Packet drop rate: "+str(PACKET_DROP_RATE)+")")
 
     def sendto(self, message, address):
         # Log message disabled for now to avoid 1000x message spam
         # self.logger.debug("Sending message to [" + str(address[0]) + ", " + str(address[1]) + "]")
-        self.socket.sendto(message, address)
+        if random.random() > PACKET_DROP_RATE:
+            self.socket.sendto(message, address)
+        else:
+            self.logger.debug("Packet dropped (Packet drop rate: "+str(PACKET_DROP_RATE)+")")
 
     def read(self):
         if self.type == "TCP":
