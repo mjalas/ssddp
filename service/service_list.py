@@ -81,6 +81,9 @@ class ServiceList(object):
         # Replace old list with new
         self.services = new_services
 
+    def is_empty(self):
+        return len(self.services) > 0
+
     def __iter__(self):
         for elem in self.services:
             yield elem
