@@ -235,7 +235,7 @@ class SSDDP(object):
 
                 elif x == self.listening_tcp_socket.socket:
                     self.handle_tcp_packet()
-                    
+
                 if self.remote_run:
                     if x == self.command_input_socket:
                         self.handle_remote_command(end_node, peer_list)
