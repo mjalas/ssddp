@@ -13,6 +13,7 @@ from protocol_testing.main_argument_handler import MainArgumentHandler
 from protocol_testing.tester_config_handler import TesterConfigHandler
 from app.globals import NodeCommand
 from protocol_testing.node_process_cleanup import NodeProcessCleanUp
+from protocol_testing.config_test_file import ConfigurationNode
 
 
 TEST_BUFFER_SIZE = 1024
@@ -228,6 +229,65 @@ class ProtocolTester(object):
             self.display("Initialized {0} nodes.".format(success_count))
         return self.input_list
 
+    def handle_parent_part(self, child, config_node, failed_count, parent, success_count):
+        self.display("Created node " + config_node.name + ".")
+        self.input_list.append(parent)
+        child.close()
+        self.remotes[config_node.name] = parent
+        # parent.settimeout(8)
+        response = parent.recv(TEST_BUFFER_SIZE).decode('UTF-8')
+        print("Received message from child: " + response)
+        if response == NodeCreationType.FAILED:
+            failed_count += 1
+        else:
+            success_count += 1
+        return failed_count, success_count
+
+    def handle_child_part(self, child, config_node, parent):
+        self.display("Created node " + config_node.name + ".")
+        parent.close()
+        result = self.create_node_process(config_node, child)
+        self.display("Result: " + result)
+        if result == NodeCreationType.FAILED:
+            child.sendall(bytes(result, 'UTF-8'))
+            child.close()
+
+    def init_nodes_from_config_nodes(self, config_nodes):
+        self.input_list = [sys.stdin]
+        failed_count = 0
+        success_count = 0
+        for i, config_node in enumerate(config_nodes):
+            self.display(config_node.name)
+            child, parent = socket.socketpair()
+            pid = os.fork()
+            if pid:
+                failed_count, success_count = self.handle_parent_part(child, config_node, failed_count, parent,
+                                                                      success_count)
+            else:
+                self.handle_child_part(child, config_node, parent)
+                exit()
+
+        if failed_count == len(config_nodes):
+            self.display("All node initialization failed!\nEnding test!")
+            for sock in self.remotes.values():
+                sock.close()
+            exit(0)
+        else:
+            self.display("Initialized {0} nodes.".format(success_count))
+        return self.input_list
+
+    def create_node_process(self, config_node, command_sock):
+        if not isinstance(config_node, ConfigurationNode):
+            raise ValueError("No ConfigurationNode given")
+        try:
+            ssddp_node = SSDDP(name=config_node.name, services=config_node.services, external_command_input=command_sock,
+                               remote_run=True)
+            ssddp_node.start()
+            return NodeCreationType.SUCCESS
+        except AttributeError as e:
+            self.display(e.args)
+        return NodeCreationType.FAILED
+
     def get_config_file(self):
         if self.config_file:
             file = self.config_file
@@ -280,8 +340,25 @@ class ProtocolTester(object):
         self.display("Starting testing stage.")
         self.command_handler.choices()
 
+    def setup_test_v2(self):
+        self.display("Setting up test.")
+        self.config_handler = self.create_config_handler()
+
+        if not self.config_handler:
+            exit()
+
+        # self.config_handler = None
+        self.display("Initializing input list.")
+        self.init_nodes_from_config_nodes(self.config_handler.config_nodes)
+        self.display("Input list initialized.")
+
+        self.display("Test setup complete.")
+        self.display("Starting testing stage.")
+        self.command_handler.choices()
+
     def start(self):
         try:
+            # self.setup_test_v2()
             self.setup_test()
             while True:
 
