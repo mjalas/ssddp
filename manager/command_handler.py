@@ -31,7 +31,11 @@ class CommandHandler(threading.Thread):
         """
         Displays all detected nodes, their services and service descriptions.
         """
-        self.peer_list.display()
+        if self.remote_socket:
+            response = self.peer_list.node_to_str()
+            self.remote_socket.sendall(response.encode('UTF-8'))
+        else:
+            self.peer_list.display()
 
     def request_description(self):
         """
