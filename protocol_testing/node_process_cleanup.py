@@ -13,7 +13,7 @@ class NodeProcessCleanUp(object):
         self.print_result = print_results
 
     def get_node_pids(self):
-        command = 'ps aux | grep "two_node_test.py -f protocol_testing/test_config.json" >> ' + self.tmp_file
+        command = 'ps aux | grep "/home/spacy/aalto/protocol/2015-group1/" >> ' + self.tmp_file
         output = check_output(command, shell=True)
         result = output.decode('UTF-8')
         if self.print_result:
@@ -50,10 +50,11 @@ class NodeProcessCleanUp(object):
                             else:
                                 print("Will kill following: " + cmd + "  " + parameter + ", pid: " + pid)
 
-    def check_status(self):
+    @staticmethod
+    def check_status():
         print('\n')
         ps_command = "ps aux"
-        grep_command = 'grep "/two_node_test.py -f protocol_testing/test_config.json"'
+        grep_command = 'grep "/home/spacy/aalto/protocol/2015-group1/"'
         command = ps_command + " | " + grep_command
         output = check_output(command, shell=True)
         print(output.decode('UTF-8'))
