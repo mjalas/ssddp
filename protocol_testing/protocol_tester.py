@@ -59,6 +59,7 @@ class ProtocolTester(object):
         self.remotes = {}
         self.command_handler = TestCommandHandler(self.printer)
         self.names = {}
+        self.node_names = []
         self.test_data = test_data
         self.config_file = config_file
         self.input_list = []
@@ -165,6 +166,10 @@ class ProtocolTester(object):
 
     def handle_describe_command(self, desc_command):
         self.display(desc_command)
+        if not self.names:
+            print("No node names available")
+            return
+
         self.display(self.names)
         user_choice_describe = self.select_node_name()
         try:
@@ -256,7 +261,7 @@ class ProtocolTester(object):
         self.input_list = [sys.stdin]
         failed_count = 0
         success_count = 0
-        for i, config_node in enumerate(config_nodes):
+        for config_node in config_nodes:
             self.display(config_node.name)
             child, parent = socket.socketpair()
             pid = os.fork()
@@ -308,7 +313,7 @@ class ProtocolTester(object):
                 exit()
             else:
                 try:
-                    config_handler = TesterConfigHandler(file)
+                    config_handler = TesterConfigHandler(file, use_config_nodes=True)
                 except FileNotFoundError:
                     self.display("Configuration file not found! Please check that file exists or path is correct!")
                     # logger.info("Configuration file not found! Please check that file exists or path is correct!")
@@ -347,6 +352,9 @@ class ProtocolTester(object):
         if not self.config_handler:
             exit()
 
+        # add node names to self.names
+        for i, node in enumerate(self.config_handler.config_nodes):
+            self.names[i] = node.name
         # self.config_handler = None
         self.display("Initializing input list.")
         self.init_nodes_from_config_nodes(self.config_handler.config_nodes)
@@ -358,8 +366,8 @@ class ProtocolTester(object):
 
     def start(self):
         try:
-            # self.setup_test_v2()
-            self.setup_test()
+            self.setup_test_v2()
+            # self.setup_test()
             while True:
 
                     input_ready, output_ready, except_ready = select.select(self.input_list, [], [])
