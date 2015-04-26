@@ -52,7 +52,7 @@ class ProtocolTester(object):
     A class to make protocol testing more convenient.
     """
 
-    def __init__(self, log_file="protocol_test.log", test_data=None, config_file=None):
+    def __init__(self, log_file="protocol_test.log", test_data=None, config_file=None, display_outputs=True):
         self.available_cmd_parameters = AVAILABLE_CMD_PARAMETERS
         self.remote_sockets = None
         self.printer = TestPrinter(log_file)
@@ -65,9 +65,11 @@ class ProtocolTester(object):
         self.input_list = []
         self.config_handler = None
         self.services = {}
+        self.display_outputs = display_outputs
 
     def display(self, message, log=False):
-        self.printer.display(message, log)
+        if self.display_outputs:
+            self.printer.display(message, log)
 
     def log(self, message, append=True):
         self.printer.log(message, append)
@@ -164,18 +166,25 @@ class ProtocolTester(object):
         destination_node = destination_nodes[user_choice_describe]
         return destination_node
 
+    def select_node(self):
+        try:
+            self.display(self.names)
+            user_choice = self.select_node_name()
+            self.display(self.names[user_choice])
+            node_name = self.names[user_choice]
+            return self.remotes[node_name]
+        except KeyError:
+            self.display("Not a valid option")
+            return None
+
     def handle_describe_command(self, desc_command):
         self.display(desc_command)
         if not self.names:
-            print("No node names available")
+            self.display("No node names available")
             return
 
-        self.display(self.names)
-        user_choice_describe = self.select_node_name()
-        try:
-            self.display(self.names[user_choice_describe])
-            node_name_desc = self.names[user_choice_describe]
-            sock_desc = self.remotes[node_name_desc]
+        sock_desc = self.select_node()
+        if sock_desc:
             # Get nodes peers
             sock_desc.sendall(bytes(NodeCommand.PEERS, 'UTF-8'))
             message = sock_desc.recv(TEST_BUFFER_SIZE).decode('UTF-8')
@@ -191,8 +200,17 @@ class ProtocolTester(object):
             self.display("Waiting couple of seconds for communication to complete..")
             time.sleep(4)
 
-        except KeyError:
-            self.display("Not a valid option")
+    def handle_display_command(self):
+        if not self.names:
+            self.display("No node names available")
+            return
+
+        sock_disp = self.select_node()
+        if sock_disp:
+            sock_disp.sendall(bytes(NodeCommand.DISPLAY, 'UTF-8'))
+            message = sock_disp.recv(TEST_BUFFER_SIZE).decode('UTF-8')
+            self.display(message)
+            time.sleep(4)
 
     def init_nodes(self):
         self.input_list = [sys.stdin]
@@ -387,7 +405,7 @@ class ProtocolTester(object):
                             elif command == NodeCommand.DESCRIBE:
                                 self.handle_describe_command(command)
                             elif command == NodeCommand.DISPLAY:
-                                self.display("Command not yet available..")
+                                self.handle_display_command()
                             elif command == NodeCommand.HELP:
                                 self.display_available_cmd_parameters()
                             elif command == NodeCommand.ECHO:
