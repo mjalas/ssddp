@@ -5,6 +5,7 @@ class PeerNodeList(object):
     """
     List of discovered peers.
     """
+
     def __init__(self):
         self.peers = []
 
@@ -26,7 +27,7 @@ class PeerNodeList(object):
         for peer_node in self.peers:
             node = peer_node.node
             node_count += 1
-            print("  #" + str(node_count) + ": \"" + str(node.name) + "\" (seen " + str(peer_node.timestamp)+")")
+            print("  #" + str(node_count) + ": \"" + str(node.name) + "\" (seen " + str(peer_node.timestamp) + ")")
             for service in node.service_list:
                 print("   - SERVICE: " + service.name)
                 # TODO: AttributeError: 'dict' object has no attribute 'name'
@@ -34,7 +35,24 @@ class PeerNodeList(object):
                 # TODO: (probably peer list update changes service from object to dict)
                 # TODO: (OR the service should be dict but it works as object somehow first time)
                 if service.description:
-                    print((4*' ') + service.description.replace('\n', '\n'+(4*' ')))
+                    print((4 * ' ') + service.description.replace('\n', '\n' + (4 * ' ')))
+
+    def node_to_str(self):
+        str_list = []
+        for i, peer_node in enumerate(self.peers):
+            line = "{0}: {1} (seen {2})\n".format(i, peer_node.node.name, peer_node.timestamp)
+            str_list.append(line)
+            line = "\tServices:\n"
+            str_list.append(line)
+            for j, service in enumerate(peer_node.node.service_list):
+                line = "\t\t{0}: {1}\n".format(j, service.name)
+                str_list.append(line)
+                if service.description:
+                    description = "description: "
+                    line = "\t{0}{1}".format(description,
+                                             service.description.replace('\n', '\n\t' + (len(description) * '')))
+                    str_list.append(line)
+        return ''.join(str_list)
 
     def get(self, node_name):
         for peer in self.peers:
