@@ -1,3 +1,4 @@
+import logging
 from node.exceptions.node_exceptions import PeerNodeNotFoundException
 
 
@@ -6,8 +7,10 @@ class PeerNodeList(object):
     List of discovered peers.
     """
 
-    def __init__(self):
+    def __init__(self, self_node):
         self.peers = []
+        self.self_node = self_node
+        self.logger = logging.getLogger(self.self_node.name + ": " + __name__)
 
     def count(self):
         return len(self.peers)
@@ -82,13 +85,16 @@ class PeerNodeList(object):
         """
         Clean node list of timed out nodes
         """
+        self.logger.info("Cleaning timed out peers from peer list")
         for peer in self.peers:
             if peer.is_timed_out():
+                self.logger.info("Peer %s timed out", peer.node.name)
                 self.peers.remove(peer)
 
-    def message_list(self, message):
+    def message_list(self, udp_socket, message):
         """
         Sends the message to all known addresses
         """
         for peer in self.peers:
-            self.udp_socket.sendto(message, peer.node.address)
+            self.logger.info("Discovery -> Known peers, (hub expired)")
+            udp_socket.sendto(message, peer.node.address)
