@@ -3,7 +3,7 @@ import logging
 import threading
 from time import sleep
 
-from app.globals import BROADCAST_INTERVAL, HUB_ADDRESS_TO, HUB_TIMEOUT, AVAILABLE_PORTS
+from app.globals import BROADCAST_INTERVAL, HUB_ADDRESS_TO, HUB_TIMEOUT, AVAILABLE_PORTS, PORT_SCAN_INTERVAL
 from message.discovery_message_handler import DiscoveryMessageHandler
 from message.timestamp import Timestamp
 from networking.socket import Socket
@@ -26,6 +26,7 @@ class DiscoveryBroadcastLoop(threading.Thread):
         self.udp_socket = udp_socket
         self.hub_timestamp = Timestamp.create_timestamp()
         self.message_queue = message_queue
+        self.port_scan_delay = 1
         self.logger = logging.getLogger(self.self_node.name + ": " + __name__)
         self.logger.debug("Discovery Broadcast Loop initialized")
 
@@ -70,12 +71,18 @@ class DiscoveryBroadcastLoop(threading.Thread):
 
         if self.hub_timestamp_expired():
 
-            # Hub has expired: Send message to all ports
-            # self.logger.info("Discovery -> Hub + all ports, (hub expired)")
-            # self.port_scan(message)
+            # Hub has expired
+            self.port_scan_delay -= 1
 
-            self.logger.info("Discovery -> Known peers, (hub expired)")
-            self.message_known_nodes(message)
+            if self.port_scan_delay <= 0:
+                # Reset scan interval & send message to all ports
+                self.port_scan_delay = PORT_SCAN_INTERVAL
+                self.logger.info("Discovery -> Hub + all ports, (hub expired)")
+                self.port_scan(message)
+            else:
+                # Send message to all known peers
+                self.logger.info("Discovery -> Known peers, (hub expired)")
+                self.message_known_nodes(message)
 
         else:
             self.logger.info("Discovery -> Hub")
