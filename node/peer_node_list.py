@@ -85,3 +85,10 @@ class PeerNodeList(object):
         for peer in self.peers:
             if peer.is_timed_out():
                 self.peers.remove(peer)
+
+    def message_list(self, message):
+        """
+        Sends the message to all known addresses
+        """
+        for peer in self.peers:
+            self.udp_socket.sendto(message, peer.node.address)
