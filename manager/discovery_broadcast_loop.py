@@ -102,3 +102,9 @@ class DiscoveryBroadcastLoop(threading.Thread):
             # ...Except our own port
             if port != self.self_node.address[1]:
                 self.udp_socket.sendto(message, ("127.0.0.1", port))
+
+    def message_known_nodes(self, message):
+        """
+        Send given message to all known peer addresses
+        """
+        self.peer_list.message_list(message)
