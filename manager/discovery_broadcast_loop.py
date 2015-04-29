@@ -70,9 +70,12 @@ class DiscoveryBroadcastLoop(threading.Thread):
 
         if self.hub_timestamp_expired():
 
-            self.logger.info("Discovery -> Hub + all ports, (hub expired)")
             # Hub has expired: Send message to all ports
-            self.port_scan(message)
+            # self.logger.info("Discovery -> Hub + all ports, (hub expired)")
+            # self.port_scan(message)
+
+            self.logger.info("Discovery -> Known peers, (hub expired)")
+            self.message_known_nodes(message)
 
         else:
             self.logger.info("Discovery -> Hub")
@@ -107,4 +110,4 @@ class DiscoveryBroadcastLoop(threading.Thread):
         """
         Send given message to all known peer addresses
         """
-        self.peer_list.message_list(message)
+        self.peer_list.message_list(self.udp_socket, message)
