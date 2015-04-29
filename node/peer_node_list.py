@@ -77,3 +77,8 @@ class PeerNodeList(object):
         for peer in self.peers:
             if peer.node.name == node_name:
                 peer.update_node(message)
+
+    def clean_list(self):
+        for peer in self.peers:
+            if peer.is_timed_out():
+                self.peers.remove(peer)
