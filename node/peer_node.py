@@ -40,6 +40,9 @@ class PeerNode(object):
         self.node.service_list.update_merge(new_service_list)
 
     def is_timed_out(self):
+        """
+        Checks whether the node has timed out
+        """
         now = Timestamp.create_timestamp()
         if (now - self.timestamp) > NODE_TIMEOUT:
             return True
