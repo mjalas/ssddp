@@ -72,10 +72,8 @@ class DiscoveryBroadcastLoop(threading.Thread):
 
             self.logger.info("Discovery -> Hub + all ports, (hub expired)")
             # Hub has expired: Send message to all ports
-            for port in AVAILABLE_PORTS:
-                # ...Except our own port
-                if port != self.self_node.address[1]:
-                    self.udp_socket.sendto(message, ("127.0.0.1", port))
+            self.port_scan(message)
+
         else:
             self.logger.info("Discovery -> Hub")
 
@@ -95,3 +93,12 @@ class DiscoveryBroadcastLoop(threading.Thread):
     def run(self):
         # self._target()
         self.start_broadcast()
+
+    def port_scan(self, message):
+        """
+        Send given message to all available ports
+        """
+        for port in AVAILABLE_PORTS:
+            # ...Except our own port
+            if port != self.self_node.address[1]:
+                self.udp_socket.sendto(message, ("127.0.0.1", port))
