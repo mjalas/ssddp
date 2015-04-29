@@ -1,4 +1,6 @@
+from app.globals import NODE_TIMEOUT
 from message.message import Message
+from message.timestamp import Timestamp
 from node.node import Node
 from service.service_list import ServiceList
 
@@ -36,3 +38,9 @@ class PeerNode(object):
         new_service_list = ServiceList()
         new_service_list.from_dict(message.services)
         self.node.service_list.update_merge(new_service_list)
+
+    def is_timed_out(self):
+        now = Timestamp.create_timestamp()
+        if (now - self.timestamp) > NODE_TIMEOUT:
+            return True
+        return False
