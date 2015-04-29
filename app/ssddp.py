@@ -189,7 +189,7 @@ class SSDDP(object):
 
         # Peer list
         self.log_debug("Initializing an empty Peer Node List")
-        peer_list = PeerNodeList()
+        peer_list = PeerNodeList(self.node)
 
         # Initialize Managers
         self.log_debug("Initializing Discovery message handler")
