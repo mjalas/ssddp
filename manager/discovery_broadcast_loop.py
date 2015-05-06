@@ -33,21 +33,11 @@ class DiscoveryBroadcastLoop(threading.Thread):
     def start_broadcast(self):
         """
         Runs the broadcast loop
-        :return:
         """
         while True:
             # Create discovery message from node info
-            message = self.discovery_message_handler.create_message(self.self_node)
-
-            # Convert message to json
-            json_message = json.dumps(message.to_discovery_json())
-            # json_hub_message = json.dumps(message.to_discovery_json())[:-1]+", \"hub\": 1}"
-
-            # Encode message to utf-8 for sending through socket
-            data = json_message.encode()
-            # hub_data = json_hub_message.encode() # Unnecessary now that udp socket ports are working
-            # self.send_message(data, hub_data)
-            self.send_message(data, data)
+            encoded_message = self.create_discovery_message()
+            self.send_message(encoded_message, encoded_message)
 
             # Check if any command message has been sent
             if not self.message_queue.empty():
@@ -61,6 +51,20 @@ class DiscoveryBroadcastLoop(threading.Thread):
             # Sleep and restart cycle
             sleep(BROADCAST_INTERVAL)
         # self.start_broadcast()
+
+    def create_discovery_message(self):
+        """
+        Create and return discovery message from node info
+        """
+        message = self.discovery_message_handler.create_message(self.self_node)
+
+        # Convert message to json
+        json_message = json.dumps(message.to_discovery_json())
+
+        # Encode message to utf-8 for sending through socket
+        encoded_message = json_message.encode()
+
+        return encoded_message
 
     def send_message(self, message, hub_message):
         """
@@ -81,7 +85,7 @@ class DiscoveryBroadcastLoop(threading.Thread):
                 self.port_scan(message)
             else:
                 # Send message to all known peers
-                self.logger.info("Discovery -> Known peers, (hub expired)")
+                self.logger.info("Discovery -> Hub + known peers, (hub expired)")
                 self.message_known_nodes(message)
 
         else:
@@ -118,3 +122,7 @@ class DiscoveryBroadcastLoop(threading.Thread):
         Send given message to all known peer addresses
         """
         self.peer_list.message_list(self.udp_socket, message)
+
+    def message_address(self, address):
+        encoded_message = self.create_discovery_message()
+        self.udp_socket.sendto(encoded_message, address)
