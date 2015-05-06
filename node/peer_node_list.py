@@ -20,6 +20,7 @@ class PeerNodeList(object):
 
     def add(self, node):
         self.peers.append(node)
+        self.clean_list()
 
     def display(self):
         """
@@ -94,7 +95,9 @@ class PeerNodeList(object):
     def message_list(self, udp_socket, message):
         """
         Sends the message to all known addresses
+        Also cleans timed out nodes first
         """
+        self.clean_list()
         for peer in self.peers:
             self.logger.info("Discovery -> Known peers, (hub expired)")
             udp_socket.sendto(message, peer.node.address)
