@@ -208,7 +208,7 @@ class SSDDP(object):
 
         # Initialize manager that updates peer node data
         self.log_debug("Initializing Peer Node Manager")
-        peer_node_manager = PeerNodeManager(self.node_manager_queue, peer_list)
+        peer_node_manager = PeerNodeManager(self.node_manager_queue, peer_list, broadcast_manager)
         self.log_debug("Running Peer Node Manager")
         peer_node_manager.start()
 

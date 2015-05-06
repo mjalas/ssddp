@@ -19,13 +19,14 @@ class PeerNodeManager(threading.Thread):
     queue_error_string = "Given Message Queue is not of type Queue."
     node_list_error_string = "Given node list is not of type PeerNodeList."
 
-    def __init__(self, message_queue, node_list):
+    def __init__(self, message_queue, node_list, discovery_listener):
         if not isinstance(message_queue, Queue):
             raise ValueError(PeerNodeManager.queue_error_string)
         if not isinstance(node_list, PeerNodeList):
             raise ValueError(PeerNodeManager.node_list_error_string)
         self.message_queue = message_queue
         self.node_list = node_list
+        self.discovery_listener = discovery_listener
         self.keep_alive = True
         self._target = self.handle_queue
         threading.Thread.__init__(self)
@@ -44,9 +45,13 @@ class PeerNodeManager(threading.Thread):
             node = self.node_list.get(message.node_name)
             node.update_node(message)
         except PeerNodeNotFoundException:
+            # Create new node to list
             node = PeerNode.create_node_from_message(message)
             self.node_list.add(node)
             added_new = True
+
+            # Active response
+            self.discovery_listener.message_address(node.node.address)
 
         if added_new:
             return UpdateResult.added_new_node
