@@ -56,7 +56,6 @@ class PeerNodeManager(threading.Thread):
             # Active response
             self.discovery_listener.message_address(node.node.address)
             self.logger.debug("Sending active response message to (%s)", str(node.node.address))
-            # TODO: log messages
 
         if added_new:
             return UpdateResult.added_new_node
@@ -72,7 +71,6 @@ class PeerNodeManager(threading.Thread):
     def run(self):
         # self._target()
         self.handle_queue()
-
 
 
 class UpdateResult(Enum):
