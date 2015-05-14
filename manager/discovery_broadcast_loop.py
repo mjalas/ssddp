@@ -37,7 +37,14 @@ class DiscoveryBroadcastLoop(threading.Thread):
         while True:
             # Create discovery message from node info
             encoded_message = self.create_discovery_message()
-            self.send_message(encoded_message, encoded_message)
+            portscan_message = self.create_discovery_message(True)
+
+            #self.send_message(encoded_message, encoded_message, portscan_message)
+            self.send_message(encoded_message, encoded_message, encoded_message)
+            # TODO: Message types must be implemented before enabling portscan_messages!
+            # (Otherwise recipient will not distinguish between regular and
+            # simplified discovery messages. This will cause the recipient to
+            # think the sender has removed all their services.)
 
             # Check if any command message has been sent
             if not self.message_queue.empty():
@@ -52,11 +59,14 @@ class DiscoveryBroadcastLoop(threading.Thread):
             sleep(BROADCAST_INTERVAL)
         # self.start_broadcast()
 
-    def create_discovery_message(self):
+    def create_discovery_message(self, portscan_version=False):
         """
         Create and return discovery message from node info
         """
-        message = self.discovery_message_handler.create_message(self.self_node)
+        if portscan_version:
+            message = self.discovery_message_handler.create_portscan_message(self.self_node)
+        else:
+            message = self.discovery_message_handler.create_message(self.self_node)
 
         # Convert message to json
         json_message = json.dumps(message.to_discovery_json())
@@ -66,7 +76,7 @@ class DiscoveryBroadcastLoop(threading.Thread):
 
         return encoded_message
 
-    def send_message(self, message, hub_message):
+    def send_message(self, message, hub_message, portscan_message):
         """
         Sends the message to the hub.
         If the hub has timed out, sends the message also to all available ports.
@@ -82,7 +92,7 @@ class DiscoveryBroadcastLoop(threading.Thread):
                 # Reset scan interval & send message to all ports
                 self.port_scan_delay = PORT_SCAN_INTERVAL
                 self.logger.info("Discovery -> Hub + all ports, (hub expired)")
-                self.port_scan(message)
+                self.port_scan(portscan_message)
             else:
                 # Send message to all known peers
                 self.logger.info("Discovery -> Hub + known peers, (hub expired)")
