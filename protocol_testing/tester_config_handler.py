@@ -51,3 +51,18 @@ class TesterConfigHandler(object):
             return services
         return None
 
+    @staticmethod
+    def create_config_handler_from_file(self, config_file):
+        config_handler = None
+        file = config_file
+        if not file:
+            # logger.info("No configuration file was given.")
+            raise ArgumentError("No config file given!")
+        else:
+            try:
+                config_handler = TesterConfigHandler(file, use_config_nodes=True)
+            except FileNotFoundError:
+                raise FileNotFoundError("Could not find config file!")
+                # logger.info("Configuration file not found! Please check that file exists or path is correct!")
+
+        return config_handler
