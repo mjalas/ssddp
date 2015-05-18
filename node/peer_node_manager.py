@@ -49,6 +49,7 @@ class PeerNodeManager(threading.Thread):
             node.update_node(message)
         except PeerNodeNotFoundException:
             # Create new node to list
+            # TODO: Increase new node counter for measurements here! - MJ
             node = PeerNode.create_node_from_message(message)
             self.node_list.add(node)
             added_new = True
