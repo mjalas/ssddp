@@ -14,37 +14,84 @@ from protocol_testing.tester_config_handler import TesterConfigHandler
 from app.globals import NodeCommand
 from protocol_testing.node_process_cleanup import NodeProcessCleanUp
 from protocol_testing.config_test_file import ConfigurationNode
-
+from protocol_testing.test_printer import TestPrinter
+from protocol_testing.ui_printer import TestUIPrinter
+from node.node_creation_type import NodeCreationType
 
 TEST_BUFFER_SIZE = 1024
 AVAILABLE_CMD_PARAMETERS = [NodeCommand.DESCRIBE, NodeCommand.DISPLAY, NodeCommand.HELP]
 
 
-class NodeCreationType():
-    SUCCESS = "success"
-    FAILED = "failed"
-
-
-class TestPrinter(object):
+class BaseProtocolTester(object):
     """
+    Base class for creating protocol testers.
     """
-    def __init__(self, log_file="protocol_test.log"):
-        self.log_file = log_file
+    def __init__(self, node_count, log_file):
+        self.available_cmd_parameters = AVAILABLE_CMD_PARAMETERS
+        self.ui_printer = TestUIPrinter()
+        self.remotes = {}
+        self.printer = TestPrinter(log_file)
+        self.command_handler = TestCommandHandler(self.printer)
+        self.node_count = node_count
 
-    def log(self, message, append=True):
-        mode = 'w'
-        if append:
-            mode = 'a'
+    def setup_nodes_from_config_file(self, config_file):
+        config_handler = TesterConfigHandler.create_config_handler_from_file(config_file)
 
-        with open(self.log_file, mode) as f:
-            tmp = str(datetime.now()) + ": " + message
-            f.write(tmp)
-            f.flush()
+    def init_nodes_from_config_nodes(self, config_nodes):
+        failed_count = 0
+        success_count = 0
+        for config_node in config_nodes:
+            self.ui_printer.display(config_node.name)
+            child, parent = socket.socketpair()
+            pid = os.fork()
+            if pid:
+                failed_count, success_count = self.handle_parent_part(child, parent, config_node, failed_count,
+                                                                      success_count)
+            else:
+                self.handle_child_part(child, config_node, parent)
+                exit()
 
-    def display(self, message, log=False):
-        if log:
-            self.log(message)
-        print(message)
+        if failed_count == len(config_nodes):
+            self.ui_printer.all_nodes_init_failed()
+            for sock in self.remotes.values():
+                sock.close()
+            exit(0)
+        else:
+            self.ui_printer.nodes_initialized(success_count)
+
+    def handle_parent_part(self, child, parent, config_node, failed_count, success_count):
+        self.ui_printer.display("Created node " + config_node.name + ".")
+        child.close()
+        self.remotes[config_node.name] = parent
+        # parent.settimeout(8)
+        response = parent.recv(TEST_BUFFER_SIZE).decode('UTF-8')
+        self.ui_printer.received_message_from_child(response)
+        if response == NodeCreationType.FAILED:
+            failed_count += 1
+        else:
+            success_count += 1
+        return failed_count, success_count
+
+    def handle_child_part(self, child, config_node, parent):
+        self.ui_printer.created_node(config_node.name)
+        parent.close()
+        result = self.create_node_process(config_node, child)
+        self.ui_printer.result(result)
+        if result == NodeCreationType.FAILED:
+            child.sendall(bytes(result, 'UTF-8'))
+            child.close()
+
+    def create_node_process(self, config_node, command_sock):
+        if not isinstance(config_node, ConfigurationNode):
+            raise ValueError("No ConfigurationNode given")
+        try:
+            ssddp_node = SSDDP(name=config_node.name, services=config_node.services, external_command_input=command_sock,
+                       remote_run=True)
+            ssddp_node.start()
+            return NodeCreationType.SUCCESS
+        except AttributeError as e:
+            self.ui_printer.display(e.args)
+        return NodeCreationType.FAILED
 
 
 class ProtocolTester(object):
@@ -65,14 +112,7 @@ class ProtocolTester(object):
         self.input_list = []
         self.config_handler = None
         self.services = {}
-        self.display_outputs = display_outputs
-
-    def display(self, message, log=False):
-        if self.display_outputs:
-            self.printer.display(message, log)
-
-    def log(self, message, append=True):
-        self.printer.log(message, append)
+        self.ui_printer = TestUIPrinter()
 
     def node_process(self, ssddp_node_name, command_sock):
         try:
@@ -84,53 +124,50 @@ class ProtocolTester(object):
             ssddp_node.start()
             return NodeCreationType.SUCCESS
         except AttributeError as e:
-            self.display(e.args)
+            self.ui_printer.display(e.args)
         return NodeCreationType.FAILED
 
     def echo_node(self, command_sock):
-        message = "Echo node waiting for command..."
-        self.display(message)
-        self.log(message)
+        self.ui_printer.echo_node_waiting()
         command_in = command_sock.recv(TEST_BUFFER_SIZE)
         command_sock.sendall(command_in)
 
     def show_dict(self, custom_dict):
         for key, value in custom_dict.items():
-            message = "{0}: {1}".format(key, value)
-            self.display(message)
+            self.ui_printer.show_key_value_pair(key, value)
 
     def send_shut_down_to_sockets(self):
         if not self.remotes:
-            self.display("no sockets")
+            self.ui_printer.no_sockets()
         for node_socket in self.remotes.values():
             node_socket.sendall(bytes(NodeCommand.SHUTDOWN, 'UTF-8'))
             res = node_socket.recv(TEST_BUFFER_SIZE).decode('UTF-8')
             if res == NodeCommand.OK:
-                self.display("Successfully sent shutdown command!")
+                self.ui_printer.shutdown_sent_success()
             else:
-                self.display("Shutdown command failed!")
+                self.ui_printer.shutdown_sent_failed()
             node_socket.close()
 
     def clean_up_sequence(self):
-        self.display("Letting nodes shutdown..")
+        self.ui_printer.letting_nodes_shutdown()
         time.sleep(4)
-        self.display("Clean up stage started!")
+        self.ui_printer.cleanup_started()
         cleaner = NodeProcessCleanUp(__file__)  # for verbose output -> set print_result=True
         given_input = input("Show status check [y/n]:")
         if given_input is 'y':
             cleaner.check_status()
-        self.display("Found nodes still running...")
+        self.ui_printer.nodes_still_running()
         cleaner.kill_nodes(__name__, False)
         given_input = input("Kill processes [y/n]:")
         if given_input is 'y':
             cleaner.kill_nodes(__name__)
         elif given_input is not 'n':
-            self.display("Choice '" + given_input + "' not available")
+            self.ui_printer.choice_not_available(given_input)
             return
         given_input = input("Show status check [y/n]:")
         if given_input is 'y':
             cleaner.check_status()
-        self.display("Clean up completed!")
+        self.ui_printer.cleanup_complete()
 
     def handle_echo_command(self):
         echo_child, echo_parent = socket.socketpair()
@@ -142,7 +179,7 @@ class ProtocolTester(object):
             echo_parent.sendall(bytes(user_input_echo, 'UTF-8'))
             echo_parent.settimeout(10)
             echo_message = echo_parent.recv(TEST_BUFFER_SIZE).decode('UTF-8')
-            self.display("Echo: {0}\n".format(echo_message))
+            self.ui_printer.echo_received(echo_message)
             echo_parent.close()
         else:
             echo_parent.close()
@@ -157,30 +194,34 @@ class ProtocolTester(object):
         return user_choice_describe
 
     def select_destination_node(self, obj_desc):
-        destination_nodes = {}
-        for j, name_desc in enumerate(obj_desc):
-            destination_nodes[j+1] = name_desc
-            self.display("{0}. {1}".format(j+1, name_desc))
+        destination_nodes = self.show_node_selection(obj_desc)
         user_input_describe = input("Choose node to send description request:")
         user_choice_describe = int(user_input_describe)
         destination_node = destination_nodes[user_choice_describe]
         return destination_node
 
+    def show_node_selection(self, object_description):
+        destination_nodes = {}
+        for j, name_desc in enumerate(object_description):
+            destination_nodes[j+1] = name_desc
+            self.ui_printer.show_node_enumeration(j+1, name_desc)
+        return destination_nodes
+
     def select_node(self):
         try:
-            self.display(self.names)
+            self.ui_printer.display(self.names)
             user_choice = self.select_node_name()
-            self.display(self.names[user_choice])
+            self.ui_printer.display(self.names[user_choice])
             node_name = self.names[user_choice]
             return self.remotes[node_name]
         except KeyError:
-            self.display("Not a valid option")
+            self.ui_printer.option_not_valid()
             return None
 
     def handle_describe_command(self, desc_command):
-        self.display(desc_command)
+        self.ui_printer.display(desc_command)
         if not self.names:
-            self.display("No node names available")
+            self.ui_printer.node_names_not_available()
             return
 
         sock_desc = self.select_node()
@@ -188,28 +229,28 @@ class ProtocolTester(object):
             # Get nodes peers
             sock_desc.sendall(bytes(NodeCommand.PEERS, 'UTF-8'))
             message = sock_desc.recv(TEST_BUFFER_SIZE).decode('UTF-8')
-            self.display("Nodes peers:")
-            self.display(message)
+            self.ui_printer.nodes_peers()
+            self.ui_printer.display(message)
             obj_desc = json.loads(message)
-            self.display("Nodes available:")
+            self.ui_printer.nodes_available()
             destination_node = self.select_destination_node(obj_desc)
-            self.display(destination_node)
+            self.ui_printer.display(destination_node)
             desc_command += " " + destination_node
-            self.display(desc_command)
+            self.ui_printer.display(desc_command)
             sock_desc.sendall(bytes(desc_command, 'UTF-8'))
-            self.display("Waiting couple of seconds for communication to complete..")
+            self.ui_printer.communication_wait()
             time.sleep(4)
 
     def handle_display_command(self):
         if not self.names:
-            self.display("No node names available")
+            self.ui_printer.node_names_not_available()
             return
 
         sock_disp = self.select_node()
         if sock_disp:
             sock_disp.sendall(bytes(NodeCommand.DISPLAY, 'UTF-8'))
             message = sock_disp.recv(TEST_BUFFER_SIZE).decode('UTF-8')
-            self.display(message)
+            self.ui_printer.display(message)
             time.sleep(4)
 
     def init_nodes(self):
@@ -217,49 +258,49 @@ class ProtocolTester(object):
         failed_count = 0
         success_count = 0
         for i, name in self.names.items():
-            self.display(name)
+            self.ui_printer.display(name)
             child, parent = socket.socketpair()
             pid = os.fork()
             if pid:
-                self.display("Created node " + name + ".")
+                self.ui_printer.created_node(name)
                 self.input_list.append(parent)
                 child.close()
                 self.remotes[name] = parent
                 # parent.settimeout(8)
                 response = parent.recv(TEST_BUFFER_SIZE).decode('UTF-8')
-                self.display("Received message from child: " + response)
+                self.ui_printer.received_message_from_child(response)
                 if response == NodeCreationType.FAILED:
                     failed_count += 1
                 else:
                     success_count += 1
 
             else:
-                self.display("Created node " + name + ".")
+                self.ui_printer.created_node(name)
                 parent.close()
                 result = self.node_process(name, child)
-                self.display("Result: " + result)
+                self.ui_printer.result(result)
                 if result == NodeCreationType.FAILED:
                     child.sendall(bytes(result, 'UTF-8'))
                 child.close()
                 exit()
 
         if failed_count == len(self.names):
-            self.display("All node initialization failed!\nEnding test!")
+            self.ui_printer.all_nodes_init_failed()
             for sock in self.remotes.values():
                 sock.close()
             exit(0)
         else:
-            self.display("Initialized {0} nodes.".format(success_count))
+            self.ui_printer.nodes_initialized(success_count)
         return self.input_list
 
     def handle_parent_part(self, child, config_node, failed_count, parent, success_count):
-        self.display("Created node " + config_node.name + ".")
+        self.ui_printer.display("Created node " + config_node.name + ".")
         self.input_list.append(parent)
         child.close()
         self.remotes[config_node.name] = parent
         # parent.settimeout(8)
         response = parent.recv(TEST_BUFFER_SIZE).decode('UTF-8')
-        print("Received message from child: " + response)
+        self.ui_printer.received_message_from_child(response)
         if response == NodeCreationType.FAILED:
             failed_count += 1
         else:
@@ -267,10 +308,10 @@ class ProtocolTester(object):
         return failed_count, success_count
 
     def handle_child_part(self, child, config_node, parent):
-        self.display("Created node " + config_node.name + ".")
+        self.ui_printer.created_node(config_node.name)
         parent.close()
         result = self.create_node_process(config_node, child)
-        self.display("Result: " + result)
+        self.ui_printer.result(result)
         if result == NodeCreationType.FAILED:
             child.sendall(bytes(result, 'UTF-8'))
             child.close()
@@ -280,7 +321,7 @@ class ProtocolTester(object):
         failed_count = 0
         success_count = 0
         for config_node in config_nodes:
-            self.display(config_node.name)
+            self.ui_printer.display(config_node.name)
             child, parent = socket.socketpair()
             pid = os.fork()
             if pid:
@@ -291,12 +332,12 @@ class ProtocolTester(object):
                 exit()
 
         if failed_count == len(config_nodes):
-            self.display("All node initialization failed!\nEnding test!")
+            self.ui_printer.all_nodes_init_failed()
             for sock in self.remotes.values():
                 sock.close()
             exit(0)
         else:
-            self.display("Initialized {0} nodes.".format(success_count))
+            self.ui_printer.nodes_initialized(success_count)
         return self.input_list
 
     def create_node_process(self, config_node, command_sock):
@@ -308,7 +349,7 @@ class ProtocolTester(object):
             ssddp_node.start()
             return NodeCreationType.SUCCESS
         except AttributeError as e:
-            self.display(e.args)
+            self.ui_printer.display(e.args)
         return NodeCreationType.FAILED
 
     def get_config_file(self):
@@ -326,25 +367,25 @@ class ProtocolTester(object):
         else:
             file = self.get_config_file()
             if not file:
-                self.display("No configuration file was given.")
+                self.ui_printer.config_missing()
                 # logger.info("No configuration file was given.")
                 exit()
             else:
                 try:
                     config_handler = TesterConfigHandler(file, use_config_nodes=True)
                 except FileNotFoundError:
-                    self.display("Configuration file not found! Please check that file exists or path is correct!")
+                    self.ui_printer.config_not_found()
                     # logger.info("Configuration file not found! Please check that file exists or path is correct!")
                     exit()
         return config_handler
 
     def display_available_cmd_parameters(self):
-        self.display("Command parameters available:")
+        self.ui_printer.available_command_parameters()
         for i, cmd in enumerate(self.available_cmd_parameters):
-            self.display("{0}: {1}".format(i+1, cmd))
+            self.ui_printer.display("{0}: {1}".format(i+1, cmd))
 
     def setup_test(self):
-        self.display("Setting up test.")
+        self.ui_printer.setup_test()
         self.config_handler = self.create_config_handler()
 
         if not self.config_handler:
@@ -355,16 +396,16 @@ class ProtocolTester(object):
             exit()
 
         self.config_handler = None
-        self.display("Initializing input list.")
+        self.ui_printer.init_input_list()
         self.init_nodes()
-        self.display("Input list initialized.")
+        self.ui_printer.init_input_list(False)
 
-        self.display("Test setup complete.")
-        self.display("Starting testing stage.")
+        self.ui_printer.setup_complete()
+        self.ui_printer.start_testing()
         self.command_handler.choices()
 
     def setup_test_v2(self):
-        self.display("Setting up test.")
+        self.ui_printer.setup_test()
         self.config_handler = self.create_config_handler()
 
         if not self.config_handler:
@@ -374,12 +415,12 @@ class ProtocolTester(object):
         for i, node in enumerate(self.config_handler.config_nodes):
             self.names[i] = node.name
         # self.config_handler = None
-        self.display("Initializing input list.")
+        self.ui_printer.init_input_list()
         self.init_nodes_from_config_nodes(self.config_handler.config_nodes)
-        self.display("Input list initialized.")
+        self.ui_printer.init_input_list(False)
 
-        self.display("Test setup complete.")
-        self.display("Starting testing stage.")
+        self.ui_printer.setup_complete()
+        self.ui_printer.start_testing()
         self.command_handler.choices()
 
     def start(self):
@@ -394,11 +435,11 @@ class ProtocolTester(object):
 
                         if x == sys.stdin:
                             line = sys.stdin.readline()
-                            self.display("Read command: " + line)
+                            self.ui_printer.read_command(line)
                             command = self.command_handler.handle_input(line.strip())
                             if command == NodeCommand.INCOMPLETE_COMMAND:
-                                self.display("Add command parameter!")
-                                self.display("Command parameters:")
+                                self.ui_printer.add_command_parameter()
+                                self.ui_printer.command_parameters()
                                 self.display_available_cmd_parameters()
                             elif command == NodeCommand.EXIT:
                                 self.end_test()
@@ -415,7 +456,7 @@ class ProtocolTester(object):
                             for sock in self.remotes:
                                 if x == sock:
                                     message = sock.recv()
-                                    self.display(message)
+                                    self.ui_printer.display(message)
 
         except KeyboardInterrupt:
             for sock in self.remotes:
@@ -423,17 +464,17 @@ class ProtocolTester(object):
             self.user_interruption()
 
     def end_test(self):
-        self.display("Ending test...")
+        self.ui_printer.ending_test()
         self.send_shut_down_to_sockets()
         self.clean_up_sequence()
-        self.display("Test ended!")
+        self.ui_printer.end_test()
         exit(0)
 
     def user_interruption(self):
-        self.display("\n")
-        self.display("User interrupted test!")
+        self.ui_printer.new_line()
+        self.ui_printer.user_interrupted_test()
         self.clean_up_sequence()
-        self.display("Ending test!")
+        self.ui_printer.ending_test()
 
 
 class TestCommandHandler(object):
