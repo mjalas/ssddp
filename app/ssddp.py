@@ -44,11 +44,17 @@ class SSDDP(object):
         self.service_list_file = service_list_file
         self.node_manager_queue = Queue()
         self.broadcast_loop_queue = Queue()
+        self.broadcast_manager = None
+        self.peer_node_manager = None
+        self.discovery_manager = None
+        self.peer_list = None
+        self.input_list = None
         self.remote_run = remote_run
         self.listening_tcp_socket = None
         self.listening_udp_socket = None
         self.address = None
         self.node = None
+        self.end_node = False
         if not self.name:
             self.logger = logging.getLogger("UnnamedNode: " + __name__)
         else:
@@ -124,10 +130,9 @@ class SSDDP(object):
     def init_input_list(self):
         if self.command_input_socket:
             print("here")
-            input_list = [self.listening_udp_socket.socket, self.listening_tcp_socket.socket, self.command_input_socket]
+            self.input_list = [self.listening_udp_socket.socket, self.listening_tcp_socket.socket, self.command_input_socket]
         else:
-            input_list = [self.listening_udp_socket.socket, self.listening_tcp_socket.socket, sys.stdin]
-        return input_list
+            self.input_list = [self.listening_udp_socket.socket, self.listening_tcp_socket.socket, sys.stdin]
 
     def handle_udp_packet(self, broadcast_manager):
         # UDP -> Discovery Manager
@@ -171,82 +176,104 @@ class SSDDP(object):
                                             self.command_input_socket)
             input_listener.start()
 
+    def init_managers(self):
+        # Initialize Managers
+        self.log_debug("Initializing Discovery message handler")
+        self.discovery_manager = DiscoveryMessageHandler()
+        self.log_debug("Initializing Discovery broadcast loop")
+        self.broadcast_manager = DiscoveryBroadcastLoop(self.discovery_manager, self.peer_list, self.node, self.broadcast_loop_queue,
+                                                   self.listening_udp_socket)
+        # Initialize manager that updates peer node data
+        self.log_debug("Initializing Peer Node Manager")
+        self.peer_node_manager = PeerNodeManager(self.node_manager_queue, self.peer_list, self.node, self.broadcast_manager)
+
+    def setup_node(self):
+        # Logging and logs
+        logfile = Logfile("logfile.log")
+        self.log_info("SSDDP started")
+
+        port = self.init_sockets()
+        self.set_name_if_not_set(port)
+        self.init_node(port)
+
+        # Peer list
+        self.log_debug("Initializing an empty Peer Node List")
+        self.peer_list = PeerNodeList(self.node)
+
+        self.init_managers()
+
+        self.init_input_list()
+
+        self.log_info("Start listening to sockets and standard input.")
+        if self.command_input_socket:
+            self.command_input_socket.sendall(bytes("Start listening to sockets and standard input.", 'UTF-8'))
+
+    def start_broadcasting(self):
+        # Start Discovery Loop
+        self.log_debug("Start Discovery Broadcast Loop")
+        self.broadcast_manager.start()
+
+    def start_peer_node_manager(self):
+        self.log_debug("Running Peer Node Manager")
+        self.peer_node_manager.start()
+
     def start(self):
 
         # Handle program arguments
         if not self.remote_run:
             ArgumentHandler.handle_arguments()
 
-        # Logging and logs
-        logfile = Logfile("logfile.log")
-        self.log_info("SSDDP started")
-
-        port = self.init_sockets()
-
-        self.set_name_if_not_set(port)
-
-        self.init_node(port)
-
-        # Peer list
-        self.log_debug("Initializing an empty Peer Node List")
-        peer_list = PeerNodeList(self.node)
-
-        # Initialize Managers
-        self.log_debug("Initializing Discovery message handler")
-        discovery_manager = DiscoveryMessageHandler()
-        self.log_debug("Initializing Discovery broadcast loop")
-        broadcast_manager = DiscoveryBroadcastLoop(discovery_manager, peer_list, self.node, self.broadcast_loop_queue,
-                                                   self.listening_udp_socket)
-
-        # Start Discovery Loop
-        self.log_debug("Start Discovery Broadcast Loop")
-        broadcast_manager.start()
-
-        # Initialize message queue
-        self.log_debug("Initializing Message queue")
-        # message_queue = Queue()
-
-        # Initialize manager that updates peer node data
-        self.log_debug("Initializing Peer Node Manager")
-        peer_node_manager = PeerNodeManager(self.node_manager_queue, peer_list, self.node, broadcast_manager)
-        self.log_debug("Running Peer Node Manager")
-        peer_node_manager.start()
-
-        input_list = self.init_input_list()
-
-        self.log_info("Start listening to sockets and standard input.")
-        if self.command_input_socket:
-            self.command_input_socket.sendall(bytes("Start listening to sockets and standard input.", 'UTF-8'))
-
-        end_node = False
+        self.setup_node()
+        self.start_broadcasting()
+        self.start_peer_node_manager()
 
         while True:
+            self.do_select_loop()
 
-            # listen (select UDP, TCP, STDIN)
+    def do_select_loop(self):
+        # listen (select UDP, TCP, STDIN)
             self.log_debug("Select waiting for input...")
-            input_ready, output_ready, except_ready = select.select(input_list, [], [])
+            input_ready, output_ready, except_ready = select.select(self.input_list, [], [])
             self.log_debug("... Select detected input")
             for x in input_ready:
-                if end_node:
-                    self.shutdown(end_node)
+                if self.end_node:
+                    self.shutdown(self.end_node)
 
                 if x == self.listening_udp_socket.socket:
-                    self.handle_udp_packet(broadcast_manager)
+                    self.handle_udp_packet(self.broadcast_manager)
 
                 elif x == self.listening_tcp_socket.socket:
                     self.handle_tcp_packet()
 
                 if self.remote_run:
-                    if x == self.command_input_socket:
-                        self.handle_remote_command(end_node, peer_list)
-
+                    self.handle_remote_select(x)
                 else:
-                    if x == sys.stdin:  # TODO: handle user command
-                        # STDIN -> Input Manager
-                        self.log_debug("Incoming data from Standard Input.")
-                        command = sys.stdin.readline()
+                    self.handle_stdin_select(x)
 
-                        self.log_debug("Read command [" + command[:-1] + "]")
-                        input_listener = CommandHandler(command, self.node, peer_list, end_node)
-                        input_listener.start()
-                        # TODO: output response to user inside thread!!
+    def handle_stdin_select(self, x):
+        if x == sys.stdin:  # TODO: handle user command
+            # STDIN -> Input Manager
+            self.log_debug("Incoming data from Standard Input.")
+            command = sys.stdin.readline()
+
+            self.log_debug("Read command [" + command[:-1] + "]")
+            input_listener = CommandHandler(command, self.node, self.peer_list, self.end_node)
+            input_listener.start()
+            # TODO: output response to user inside thread!!
+
+    def handle_remote_select(self, x):
+        if x == self.command_input_socket:
+            self.handle_remote_command(self.end_node, self.peer_list)
+
+    def remote_start(self):
+
+        self.setup_node()
+
+        # Continue here!!
+        # wait for remote to send start command
+        # start managers
+        # start timers for measurements
+        self.command_input_socket.recv()
+
+        while True:
+            self.do_select_loop()
