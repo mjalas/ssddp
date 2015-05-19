@@ -30,7 +30,7 @@ def is_int(val):
 
 class SSDDP(object):
     def __init__(self, name, external_command_input=None, external_output=None, remote_run=False,
-                 service_list_file=None, services=None, debug_mode=True, nodes_in_test=None, measurement_data=None):
+                 service_list_file=None, services=None, debug_mode=True, nodes_in_test=0, measurement_data=None):
         self.name = name
 
         if isinstance(external_command_input, socket.socket) and external_command_input is not None:
@@ -60,7 +60,7 @@ class SSDDP(object):
         else:
             if not nodes_in_test:
                 nodes_in_test = 0
-            self.measurement_data = MeasurementData(nodes_in_test)
+            self.measurement_data = MeasurementData(name, nodes_in_test)
         self.node = None
         self.end_node = False
 
@@ -138,7 +138,7 @@ class SSDDP(object):
 
     def init_input_list(self):
         if self.command_input_socket:
-            print("here")
+            #print("here")
             self.input_list = [self.listening_udp_socket.socket, self.listening_tcp_socket.socket,
                                self.command_input_socket]
         else:
@@ -294,7 +294,15 @@ class SSDDP(object):
         while True:
             c = self.command_input_socket.recv(BUFFER_SIZE).decode('UTF-8')
             print(c)
-            if c == NodeCommand.START:
+            parts = c.split(':')
+            command = parts[0].strip()
+            node_count = 0
+            if len(parts) > 1:
+                node_count = int(parts[1].strip())
+
+            if command == NodeCommand.START:
+                if node_count > 0:
+                    self.measurement_data.nodes_in_test = node_count
                 # start timers for measurements
                 self.measurement_data.start_test()
                 # start managers
