@@ -52,7 +52,7 @@ class TesterConfigHandler(object):
         return None
 
     @staticmethod
-    def create_config_handler_from_file(self, config_file):
+    def create_config_handler_from_file(config_file):
         config_handler = None
         file = config_file
         if not file:
