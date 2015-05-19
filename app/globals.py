@@ -27,3 +27,4 @@ class NodeCommand():
     PEERS = "peers"
     HELP = "help"
     INCOMPLETE_COMMAND = "incomplete_command"
+    START = "start"
