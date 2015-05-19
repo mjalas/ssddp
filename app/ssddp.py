@@ -58,6 +58,8 @@ class SSDDP(object):
         if measurement_data and isinstance(measurement_data, MeasurementData):
             self.measurement_data = measurement_data
         else:
+            if not nodes_in_test:
+                nodes_in_test = 0
             self.measurement_data = MeasurementData(nodes_in_test)
         self.node = None
         self.end_node = False
@@ -298,7 +300,7 @@ class SSDDP(object):
                 # start managers
                 self.start_broadcasting()
                 self.start_peer_node_manager()
-
+                self.command_input_socket.sendall(bytes(NodeCommand.START_SUCCESS, 'UTF-8'))
                 break
 
         while True:
