@@ -4,6 +4,7 @@ import socket
 import sys
 import os
 from queue import Queue
+import time
 import logging
 
 from app.argument_handler import ArgumentHandler
@@ -20,6 +21,7 @@ from manager.discovery_listener import DiscoveryListener
 from manager.description_listener import DescriptionListener
 from manager.command_handler import CommandHandler
 from app.globals import NodeCommand
+from measurements.measurement_data import MeasurementData
 
 
 def is_int(val):
@@ -28,7 +30,7 @@ def is_int(val):
 
 class SSDDP(object):
     def __init__(self, name, external_command_input=None, external_output=None, remote_run=False,
-                 service_list_file=None, services=None, debug_mode=True):
+                 service_list_file=None, services=None, debug_mode=True, nodes_in_test=None, measurement_data=None):
         self.name = name
 
         if isinstance(external_command_input, socket.socket) and external_command_input is not None:
@@ -53,8 +55,13 @@ class SSDDP(object):
         self.listening_tcp_socket = None
         self.listening_udp_socket = None
         self.address = None
+        if measurement_data and isinstance(measurement_data, MeasurementData):
+            self.measurement_data = measurement_data
+        else:
+            self.measurement_data = MeasurementData(nodes_in_test)
         self.node = None
         self.end_node = False
+
         if not self.name:
             self.logger = logging.getLogger("UnnamedNode: " + __name__)
         else:
@@ -130,7 +137,8 @@ class SSDDP(object):
     def init_input_list(self):
         if self.command_input_socket:
             print("here")
-            self.input_list = [self.listening_udp_socket.socket, self.listening_tcp_socket.socket, self.command_input_socket]
+            self.input_list = [self.listening_udp_socket.socket, self.listening_tcp_socket.socket,
+                               self.command_input_socket]
         else:
             self.input_list = [self.listening_udp_socket.socket, self.listening_tcp_socket.socket, sys.stdin]
 
@@ -159,6 +167,7 @@ class SSDDP(object):
         self.log_info("Shutting down node!")
         if self.remote_run:
             print("Node is shutting down!")
+        self.measurement_data.end_test()
         self.stop()
         exit(0)
 
@@ -176,16 +185,25 @@ class SSDDP(object):
                                             self.command_input_socket)
             input_listener.start()
 
+    def are_all_nodes_discovered(self):
+        if self.measurement_data.check_if_all_nodes_found():
+            self.measurement_data.display_discovery_duration()
+
+    def new_node_found(self):
+        self.measurement_data.discovered_new_node()
+
     def init_managers(self):
         # Initialize Managers
         self.log_debug("Initializing Discovery message handler")
         self.discovery_manager = DiscoveryMessageHandler()
         self.log_debug("Initializing Discovery broadcast loop")
-        self.broadcast_manager = DiscoveryBroadcastLoop(self.discovery_manager, self.peer_list, self.node, self.broadcast_loop_queue,
-                                                   self.listening_udp_socket)
+        self.broadcast_manager = DiscoveryBroadcastLoop(self.discovery_manager, self.peer_list, self.node,
+                                                        self.broadcast_loop_queue, self.listening_udp_socket,
+                                                        self.measurement_data)
         # Initialize manager that updates peer node data
         self.log_debug("Initializing Peer Node Manager")
-        self.peer_node_manager = PeerNodeManager(self.node_manager_queue, self.peer_list, self.node, self.broadcast_manager)
+        self.peer_node_manager = PeerNodeManager(self.node_manager_queue, self.peer_list, self.node,
+                                                 self.broadcast_manager, self.measurement_data)
 
     def setup_node(self):
         # Logging and logs
@@ -232,23 +250,23 @@ class SSDDP(object):
 
     def do_select_loop(self):
         # listen (select UDP, TCP, STDIN)
-            self.log_debug("Select waiting for input...")
-            input_ready, output_ready, except_ready = select.select(self.input_list, [], [])
-            self.log_debug("... Select detected input")
-            for x in input_ready:
-                if self.end_node:
-                    self.shutdown(self.end_node)
+        self.log_debug("Select waiting for input...")
+        input_ready, output_ready, except_ready = select.select(self.input_list, [], [])
+        self.log_debug("... Select detected input")
+        for x in input_ready:
+            if self.end_node:
+                self.shutdown(self.end_node)
 
-                if x == self.listening_udp_socket.socket:
-                    self.handle_udp_packet(self.broadcast_manager)
+            if x == self.listening_udp_socket.socket:
+                self.handle_udp_packet(self.broadcast_manager)
 
-                elif x == self.listening_tcp_socket.socket:
-                    self.handle_tcp_packet()
+            elif x == self.listening_tcp_socket.socket:
+                self.handle_tcp_packet()
 
-                if self.remote_run:
-                    self.handle_remote_select(x)
-                else:
-                    self.handle_stdin_select(x)
+            if self.remote_run:
+                self.handle_remote_select(x)
+            else:
+                self.handle_stdin_select(x)
 
     def handle_stdin_select(self, x):
         if x == sys.stdin:  # TODO: handle user command
@@ -257,7 +275,7 @@ class SSDDP(object):
             command = sys.stdin.readline()
 
             self.log_debug("Read command [" + command[:-1] + "]")
-            input_listener = CommandHandler(command, self.node, self.peer_list, self.end_node)
+            input_listener = CommandHandler(command, self.node, self.peer_list, self.end_node, self.measurement_data)
             input_listener.start()
             # TODO: output response to user inside thread!!
 
@@ -271,9 +289,17 @@ class SSDDP(object):
 
         # Continue here!!
         # wait for remote to send start command
-        # start managers
-        # start timers for measurements
-        self.command_input_socket.recv()
+        while True:
+            c = self.command_input_socket.recv(BUFFER_SIZE).decode('UTF-8')
+            print(c)
+            if c == NodeCommand.START:
+                # start timers for measurements
+                self.measurement_data.start_test()
+                # start managers
+                self.start_broadcasting()
+                self.start_peer_node_manager()
+
+                break
 
         while True:
             self.do_select_loop()
