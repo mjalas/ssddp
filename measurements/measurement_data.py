@@ -1,5 +1,6 @@
 import time
 import abc
+from json import JSONEncoder, JSONDecoder
 
 
 class MeasurementDataStringCreator(object):
@@ -112,3 +113,39 @@ class MeasurementData(object):
         count = len(self.description_durations)
         average = sum(self.description_durations)/count
         self.printer.average_description_request(average)
+
+
+class MeasurementDataEncoder(JSONEncoder):
+    def default(self, o):
+        if isinstance(o, MeasurementData):
+            d = {'test_started': o.test_started,
+                 'test_ended': o.test_ended,
+                 'discovery_started': o.discovery_started,
+                 'node_name': o.node_name,
+                 'node_count': o.node_count,
+                 'nodes_in_test': o.nodes_in_test,
+                 'description_durations': o.description_durations}
+            return d
+        else:
+            raise TypeError("Given argument is not of type Node!")
+
+
+class MeasurementDataDecoder(JSONDecoder):
+    def __init__(self):
+        JSONDecoder.__init__(self, object_hook=self.dict_to_object)
+
+    def dict_to_object(self, d):
+        node_name = d['node_name']
+        node_count = d['node_count']
+        test_started = d['test_started']
+        test_ended = d['test_ended']
+        discovery_started = d['discovery_started']
+        nodes_in_test = d['nodes_in_test']
+        description_durations = d['description_durations']
+        m = MeasurementData(node_name, nodes_in_test)
+        m.test_started = test_started
+        m.test_ended = test_ended
+        m.discovery_started = discovery_started
+        m.node_count = node_count
+        m.description_durations = description_durations
+        return m

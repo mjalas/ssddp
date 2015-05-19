@@ -5,15 +5,15 @@ class BaseUIPrinter(object):
     """
     Base logger class
     """
-    def __init__(self, display=True, debug=False, log_messages=False):
+    def __init__(self, log_file, display=True, debug=False, log_messages=False):
         self.debug = debug
         self.display_outputs = display
-        self.printer = TestPrinter
+        self.printer = TestPrinter(log_file)
         self.log_messages = log_messages
 
-    def display(self, message, log=False):
+    def display(self, message):
         if self.display_outputs:
-            self.printer.display(message, log)
+            self.printer.display(message)
 
     def log(self, message, append=True):
         self.printer.log(message, append)
@@ -24,8 +24,8 @@ class TestUIPrinter(BaseUIPrinter):
     Class that can be used to log test runs.
     """
 
-    def __init__(self, display=True, debug=False, log_messages=False):
-        super().__init__(display, debug, log_messages)
+    def __init__(self, log_file, display=True, debug=False, log_messages=True):
+        super().__init__(log_file, display, debug, log_messages)
 
     def init_input_list(self, start=True):
         if start:
@@ -140,3 +140,9 @@ class TestUIPrinter(BaseUIPrinter):
 
     def show_key_value_pair(self, key, value):
         self.display("{0}: {1}".format(key, value))
+
+    def successfully_started_node(self, node_name):
+        self.display("Successfully started node '{0}'".format(node_name))
+
+    def failed_to_start_node(self, node_name):
+        self.display("Failed to start node '{0}'".format(node_name))

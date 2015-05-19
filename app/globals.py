@@ -28,3 +28,5 @@ class NodeCommand():
     HELP = "help"
     INCOMPLETE_COMMAND = "incomplete_command"
     START = "start"
+    START_SUCCESS = "start_success"
+    GET_MEASUREMENTS = "get_measurements"

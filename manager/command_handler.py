@@ -10,6 +10,7 @@ from message.message_types import MessageType
 from message.timestamp import Timestamp
 from networking.socket import Socket
 from measurements.measurement_data import MeasurementData
+from measurements.measurement_data import MeasurementDataEncoder
 
 
 class CommandHandler(threading.Thread):
@@ -97,12 +98,18 @@ class CommandHandler(threading.Thread):
             output = json.dumps(peers, cls=NodeEncoder, indent=4, separators=(',', ': '))
             self.remote_socket.sendall(bytes(output, 'UTF-8'))
 
+    def get_measurements(self):
+        if self.remote_socket:
+            output = json.dumps(self.measurements, cls=MeasurementDataEncoder, indent=4, separators=(',', ': '))
+            self.remote_socket.sendall(bytes(output, 'UTF-8'))
+
     COMMANDS = {
         NodeCommand.DESCRIBE: request_description,
         NodeCommand.DISPLAY:  display_node_list,
         NodeCommand.SHUTDOWN: end_node,
         NodeCommand.DISPLAY_NODE: display_node,
         NodeCommand.PEERS: display_peers,
+        NodeCommand.GET_MEASUREMENTS: get_measurements,
     }
 
     def call_command_func(self, command):

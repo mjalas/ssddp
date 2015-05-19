@@ -28,13 +28,14 @@ class BaseProtocolTester(object):
     Base class for creating protocol testers.
     """
 
-    def __init__(self, node_count, log_file):
+    def __init__(self, node_count, log_file, test_script_file):
         self.available_cmd_parameters = AVAILABLE_CMD_PARAMETERS
-        self.ui_printer = TestUIPrinter()
+        self.ui_printer = TestUIPrinter(log_file)
         self.remotes = {}
         self.printer = TestPrinter(log_file)
         self.command_handler = TestCommandHandler(self.printer)
         self.node_count = node_count
+        self.test_script_file = test_script_file
         self.input_list = []
 
     def init_nodes_from_config_nodes(self, config_nodes):
@@ -95,8 +96,9 @@ class BaseProtocolTester(object):
 
     def create_node_process(self, node_name, node_services, command_sock):
         try:
+
             ssddp_node = SSDDP(name=node_name, services=node_services,
-                               external_command_input=command_sock, remote_run=True)
+                               external_command_input=command_sock, remote_run=True, nodes_in_test=0)
             ssddp_node.remote_start()
             return NodeCreationType.SUCCESS
         except AttributeError as e:
@@ -128,6 +130,19 @@ class BaseProtocolTester(object):
         peers = self.get_peers_for_node(node_name)
         return choice(peers)
 
+    def start_node(self, node_name, node_count):
+        remote = self.remotes[node_name]
+        command = NodeCommand.START + ":" + str(node_count)
+        remote.sendall(bytes(command, 'UTF-8'))
+        response = remote.recv(TEST_BUFFER_SIZE).decode('UTF-8')
+        if response == NodeCommand.START_SUCCESS:
+            self.ui_printer.successfully_started_node(node_name)
+        else:
+            self.ui_printer.failed_to_start_node(node_name)
+
+    def get_measurements(self, node_name):
+        pass
+
     def send_description_request(self, sender, receiver):
         remote = self.remotes[sender]
         command = "{0} {1}".format(NodeCommand.DESCRIBE, receiver)
@@ -135,6 +150,46 @@ class BaseProtocolTester(object):
         self.ui_printer.printer.display("Sent '{0}' to {1}".format(command, sender))
         response = remote.recv(TEST_BUFFER_SIZE).decode('UTF-8')
         self.ui_printer.printer.display("Received '{0}' from {1}".format(response, receiver))
+
+    def clean_up_sequence(self):
+        self.ui_printer.letting_nodes_shutdown()
+        time.sleep(4)
+        self.ui_printer.cleanup_started()
+        cleaner = NodeProcessCleanUp(self.test_script_file)  # for verbose output -> set print_result=True
+        given_input = input("Show status check [y/n]:")
+        if given_input is 'y':
+            cleaner.check_status()
+        self.ui_printer.nodes_still_running()
+        cleaner.kill_nodes(__name__, False)
+        given_input = input("Kill processes [y/n]:")
+        if given_input is 'y':
+            cleaner.kill_nodes(__name__)
+        elif given_input is not 'n':
+            self.ui_printer.choice_not_available(given_input)
+            return
+        given_input = input("Show status check [y/n]:")
+        if given_input is 'y':
+            cleaner.check_status()
+        self.ui_printer.cleanup_complete()
+
+    def send_shut_down_to_sockets(self):
+        if not self.remotes:
+            self.ui_printer.no_sockets()
+        for node_socket in self.remotes.values():
+            node_socket.sendall(bytes(NodeCommand.SHUTDOWN, 'UTF-8'))
+            res = node_socket.recv(TEST_BUFFER_SIZE).decode('UTF-8')
+            if res == NodeCommand.OK:
+                self.ui_printer.shutdown_sent_success()
+            else:
+                self.ui_printer.shutdown_sent_failed()
+            node_socket.close()
+
+    def end_test(self):
+        self.ui_printer.ending_test()
+        self.send_shut_down_to_sockets()
+        self.clean_up_sequence()
+        self.ui_printer.end_test()
+        exit(0)
 
 
 class ProtocolTester(object):
