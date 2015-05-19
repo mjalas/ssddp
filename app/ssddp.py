@@ -60,7 +60,7 @@ class SSDDP(object):
         else:
             if not nodes_in_test:
                 nodes_in_test = 0
-            self.measurement_data = MeasurementData(nodes_in_test)
+            self.measurement_data = MeasurementData(self.name, nodes_in_test)
         self.node = None
         self.end_node = False
 
