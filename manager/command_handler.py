@@ -1,6 +1,7 @@
 import logging
 import threading
 import json
+import time
 
 from app.globals import NodeCommand
 from node.node import NodeEncoder
@@ -8,16 +9,20 @@ from message.message import Message
 from message.message_types import MessageType
 from message.timestamp import Timestamp
 from networking.socket import Socket
+from measurements.measurement_data import MeasurementData
 
 
 class CommandHandler(threading.Thread):
     """
     Handles commands given in the terminal
     """
-    def __init__(self, command, self_node, peer_list, end_parent, remote_socket=None):
+    def __init__(self, command, self_node, peer_list, end_parent, measurement_data, remote_socket=None):
+        if not isinstance(measurement_data, MeasurementData):
+            raise ValueError("Measurement data parameter not of type MeasurementData!")
         threading.Thread.__init__(self)
         self._target = self.handle_command
         self.node = self_node
+        self.measurements = measurement_data
         self.peer_list = peer_list
         self.end_parent = end_parent
         # self.COMMANDS = AVAILABLE_COMMANDS     #   TODO: remove?
@@ -25,7 +30,7 @@ class CommandHandler(threading.Thread):
         self.output_socket = Socket("TCP", self.node.name)
         self.remote_socket = remote_socket
         self.logger = logging.getLogger(self_node.name + ": " + __name__)
-        self.logger.info("Discovery Listener initialized")
+        # self.logger.info("Discovery Listener initialized")
 
     def display_node_list(self):
         """
@@ -54,8 +59,13 @@ class CommandHandler(threading.Thread):
         data = message.to_json()
         data_str = json.dumps(data)
         self.output_socket.connect(address[0], address[1])
+        start = time.clock()
         self.output_socket.send(bytes(data_str, 'UTF-8'))
         response = self.output_socket.read()
+        end = time.clock()
+        duration = end - start
+        self.measurements.add_description_duration(duration)
+        print("Description request duration: {0}".format(duration))
         response_str = response.decode('UTF-8')
         print(self.node.name + " received description response:\n" + response_str)
         if self.remote_socket:
