@@ -1,5 +1,6 @@
 import subprocess
 from subprocess import Popen, PIPE, check_output
+import os
 
 
 class NodeProcessCleanUp(object):
@@ -10,10 +11,16 @@ class NodeProcessCleanUp(object):
     def __init__(self, script_name, print_results=False):
         self.script_name = script_name
         self.tmp_file = "node_ps.txt"
+        self.dirname = os.path.dirname(os.path.abspath(__file__))
+        self.abspath = self.dirname + "/" + self.tmp_file
         self.print_result = print_results
+        self.project_path = str.join("/", self.dirname.split("/")[:-1])
 
     def get_node_pids(self):
-        command = 'ps aux | grep "/home/spacy/aalto/protocol/2015-group1/" >> ' + self.tmp_file
+        # command = 'ps aux | grep "/home/spacy/aalto/protocol/2015-group1/" >> ' + self.abspath
+        # print(self.abspath)
+        # print(self.dirname)
+        command = 'ps aux | grep "' + self.dirname + '" >> ' + self.abspath
         output = check_output(command, shell=True)
         result = output.decode('UTF-8')
         if self.print_result:
@@ -27,7 +34,7 @@ class NodeProcessCleanUp(object):
         if ".py" not in script_filename:
             script_filename += ".py"
         print("Cleaning up processes for script: " + script_filename)
-        with open(self.tmp_file, 'r') as f:
+        with open(self.abspath, 'r') as f:
             found_pids = []
             for line in f:
                 if line:
