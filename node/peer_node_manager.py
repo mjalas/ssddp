@@ -30,7 +30,7 @@ class PeerNodeManager(threading.Thread):
         self.keep_alive = True
         self.self_node = self_node
         self.logger = logging.getLogger(self.self_node.name + ": " + __name__)
-        self.logger.debug("Discovery Broadcast Loop initialized")
+        self.logger.debug("PeerNodeManager initialized")
         self._target = self.handle_queue
         threading.Thread.__init__(self)
 
