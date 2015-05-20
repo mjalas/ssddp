@@ -38,7 +38,8 @@ class DiscoveryBroadcastLoop(threading.Thread):
         """
         Runs the broadcast loop
         """
-        self.measurements.discovery_started()
+
+        self.measurements.start_discovery()
         while True:
             # Create discovery message from node info
             encoded_message = self.create_discovery_message()
@@ -58,7 +59,7 @@ class DiscoveryBroadcastLoop(threading.Thread):
                     print(message)
                     if message == NodeCommand.SHUTDOWN:
                         self.logger.info("Received shutdown message, shutting down immediately.")
-                        print("broadcast received shutdown")
+                        print("{0}: broadcast received shutdown".format(self.self_node.name))
                         exit(0)
                 except ValueError:
                     pass
