@@ -19,9 +19,6 @@
           "description" : "This is a video streaming service."
         }
       }
-    },
-    {
-      "name" : "node3"
     }
   ]
 }
