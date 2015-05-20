@@ -74,7 +74,7 @@ class BaseProtocolTester(object):
         self.init_nodes_from_config_nodes(config_handler.config_nodes)
 
     def handle_parent_part(self, child, parent, node_name):
-        self.ui_printer.created_node(node_name)
+        # self.ui_printer.created_node(node_name)
         child.close()
         self.remotes[node_name] = parent
         # parent.settimeout(8)
@@ -86,7 +86,7 @@ class BaseProtocolTester(object):
             return NodeCreationType.SUCCESS
 
     def handle_child_part(self, child, parent, node_name, node_services):
-        self.ui_printer.created_node(node_name)
+        # self.ui_printer.created_node(node_name)
         parent.close()
         result = self.create_node_process(node_name, node_services, child)
         self.ui_printer.result(result)
@@ -99,6 +99,7 @@ class BaseProtocolTester(object):
 
             ssddp_node = SSDDP(name=node_name, services=node_services,
                                external_command_input=command_sock, remote_run=True, nodes_in_test=0)
+            self.ui_printer.created_node(node_name)
             ssddp_node.remote_start()
             return NodeCreationType.SUCCESS
         except AttributeError as e:
@@ -160,6 +161,7 @@ class BaseProtocolTester(object):
         if given_input is 'y':
             cleaner.check_status()
         self.ui_printer.nodes_still_running()
+        cleaner.get_node_pids()
         cleaner.kill_nodes(__name__, False)
         given_input = input("Kill processes [y/n]:")
         if given_input is 'y':
@@ -256,6 +258,7 @@ class ProtocolTester(object):
         if given_input is 'y':
             cleaner.check_status()
         self.ui_printer.nodes_still_running()
+        cleaner.get_node_pids()
         cleaner.kill_nodes(__name__, False)
         given_input = input("Kill processes [y/n]:")
         if given_input is 'y':
