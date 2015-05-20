@@ -1,12 +1,16 @@
+from message.timestamp import Timestamp
 
 from app.globals import NodeCommand
 from protocol_testing.protocol_tester import BaseProtocolTester
+from testing_scripts.log_file_handler import LogFileHandler
 
-log_file = "two_node_test.log"
+base_log_file = "test_logs/two_node_test"
 config_file = "test_configurations/two_nodes.json"
 
 
 def main():
+
+    log_file = LogFileHandler.create_log_file(base_log_file)
 
     tester = BaseProtocolTester(2, log_file, __file__)
     # Setup nodes for the test
@@ -20,7 +24,7 @@ def main():
 
 
 
-    tester.end_test()
+    tester.end_test(no_prompt=True)
 
 
 if __name__ == '__main__':
