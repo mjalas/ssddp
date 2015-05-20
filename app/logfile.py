@@ -32,10 +32,13 @@ class Logfile(object):
         else:
             self.file = None
         self.node_discovery_times = {}
+        self.node_disappear_times = {}
         self.node_initialization_time = None
 
     def log(self, message):
-
+        """
+        Logs the given message to logfile with current timestamp
+        """
         if self.file:
             tmp = str(datetime.now()) + " " + message + "\n"
             self.file.write(tmp)
@@ -43,16 +46,26 @@ class Logfile(object):
 
     def node_discovery(self, name, timestamp):
         """
-
+        Logs the discovery of a node
         """
         if self.file:
             if not self.node_discovery_times.get(name):
                 self.node_discovery_times[name] = timestamp
                 self.log("Peer {0} discovered ({1})".format(name, timestamp))
 
+    def node_disappear(self, name, timestamp):
+        """
+        Logs the disappearance of a node
+        """
+        if self.file:
+            if not self.node_discovery_times.get(name):
+                self.node_disappear_times[name] = timestamp
+                self.log("Peer {0} discovered ({1})".format(name, timestamp))
+
     def write_summary(self):
         """
         Calculate network discovery time
+        node discovery time & disappear time
         """
         if self.file:
             nw_discovery_time = 0
