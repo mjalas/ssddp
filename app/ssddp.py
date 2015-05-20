@@ -104,7 +104,7 @@ class SSDDP(object):
             break
         return port
 
-    def init_node(self, port):
+    def init_node(self, port, logfile):
         # Self node
         self.log_debug("Initializing self node")
         self.address = ("127.0.0.1", port)
@@ -112,6 +112,7 @@ class SSDDP(object):
             self.node = Node(self.name, self.address, services=self.services)
         else:
             self.node = Node(self.name, self.address, self.service_list_file)
+        self.node.initialize_logfile(logfile)
 
     def set_name_if_not_set(self, port):
         if not self.name:
@@ -178,14 +179,14 @@ class SSDDP(object):
             ArgumentHandler.handle_arguments()
 
         # Logging and logs
-        logfile = Logfile("logfile.log")
         self.log_info("SSDDP started")
 
         port = self.init_sockets()
 
         self.set_name_if_not_set(port)
-
-        self.init_node(port)
+        # Logfile
+        logfile = Logfile("{0}.log".format(self.name))
+        self.init_node(port, logfile)
 
         # Peer list
         self.log_debug("Initializing an empty Peer Node List")
