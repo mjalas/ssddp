@@ -1,0 +1,97 @@
+{
+  "nodes" : [
+    {
+      "name" : "node1",
+      "services": {
+        "service1" : {
+          "name" : "music streamer",
+          "service_type" : "media",
+          "description" : "This is a music streaming service."
+        }
+      }
+    },
+    {
+      "name" : "node2",
+      "services": {
+        "service1" : {
+          "name" : "video streamer",
+          "service_type" : "media",
+          "description" : "This is a video streaming service."
+        }
+      }
+    },
+    {
+      "name" : "node3"
+    },
+    {
+      "name" : "node4",
+      "services": {
+        "service1" : {
+          "name" : "video streamer",
+          "service_type" : "media",
+          "description" : "This is a video streaming service."
+        }
+      }
+    },
+    {
+      "name" : "node5",
+      "services": {
+        "service1" : {
+          "name" : "video streamer",
+          "service_type" : "media",
+          "description" : "This is a video streaming service."
+        }
+      }
+    },
+    {
+      "name" : "node6",
+      "services": {
+        "service1" : {
+          "name" : "video streamer",
+          "service_type" : "media",
+          "description" : "This is a video streaming service."
+        }
+      }
+    },
+    {
+      "name" : "node7",
+      "services": {
+        "service1" : {
+          "name" : "video streamer",
+          "service_type" : "media",
+          "description" : "This is a video streaming service."
+        }
+      }
+    },
+    {
+      "name" : "node8",
+      "services": {
+        "service1" : {
+          "name" : "video streamer",
+          "service_type" : "media",
+          "description" : "This is a video streaming service."
+        }
+      }
+    },
+    {
+      "name" : "node9",
+      "services": {
+        "service1" : {
+          "name" : "video streamer",
+          "service_type" : "media",
+          "description" : "This is a video streaming service."
+        }
+      }
+    },
+    {
+      "name" : "node10",
+      "services": {
+        "service1" : {
+          "name" : "video streamer",
+          "service_type" : "media",
+          "description" : "This is a video streaming service."
+        }
+      }
+    }
+  ]
+}
