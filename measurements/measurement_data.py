@@ -87,7 +87,7 @@ class MeasurementData(object):
     def end_test(self):
         self.test_ended = time.clock()
 
-    def discovery_started(self):
+    def start_discovery(self):
         self.discovery_started = time.clock()
 
     def discovered_new_node(self):
