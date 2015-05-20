@@ -174,22 +174,38 @@ class BaseProtocolTester(object):
             cleaner.check_status()
         self.ui_printer.cleanup_complete()
 
+    def cleanup_without_prompts(self):
+        self.ui_printer.letting_nodes_shutdown()
+        time.sleep(4)
+        self.ui_printer.cleanup_started()
+        cleaner = NodeProcessCleanUp(self.test_script_file)  # for verbose output -> set print_result=True
+        cleaner.check_status()
+        self.ui_printer.nodes_still_running()
+        cleaner.get_node_pids()
+        cleaner.kill_nodes(__name__)
+        cleaner.check_status()
+        self.ui_printer.cleanup_complete()
+
     def send_shut_down_to_sockets(self):
         if not self.remotes:
             self.ui_printer.no_sockets()
         for node_socket in self.remotes.values():
             node_socket.sendall(bytes(NodeCommand.SHUTDOWN, 'UTF-8'))
             res = node_socket.recv(TEST_BUFFER_SIZE).decode('UTF-8')
+            print("shutdown response: " + res)
             if res == NodeCommand.OK:
                 self.ui_printer.shutdown_sent_success()
             else:
                 self.ui_printer.shutdown_sent_failed()
             node_socket.close()
 
-    def end_test(self):
+    def end_test(self, no_prompt=False):
         self.ui_printer.ending_test()
         self.send_shut_down_to_sockets()
-        self.clean_up_sequence()
+        if no_prompt:
+            self.cleanup_without_prompts()
+        else:
+            self.clean_up_sequence()
         self.ui_printer.end_test()
         exit(0)
 
