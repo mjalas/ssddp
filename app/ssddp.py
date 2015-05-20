@@ -178,6 +178,7 @@ class SSDDP(object):
         # command = os.read(self.command_input, 32)
         command = self.command_input_socket.recv(BUFFER_SIZE).decode('UTF-8')
         if command == NodeCommand.SHUTDOWN:
+            print("shutdown received")
             self.command_input_socket.sendall(bytes(NodeCommand.OK, 'UTF-8'))
             self.shutdown(True)
         if self.remote_run:
