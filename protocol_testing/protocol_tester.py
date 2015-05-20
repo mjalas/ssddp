@@ -18,6 +18,7 @@ from protocol_testing.config_test_file import ConfigurationNode
 from protocol_testing.test_printer import TestPrinter
 from protocol_testing.ui_printer import TestUIPrinter
 from node.node_creation_type import NodeCreationType
+from measurements.measurement_data import MeasurementData
 
 TEST_BUFFER_SIZE = 1024
 AVAILABLE_CMD_PARAMETERS = [NodeCommand.DESCRIBE, NodeCommand.DISPLAY, NodeCommand.HELP]
@@ -37,6 +38,8 @@ class BaseProtocolTester(object):
         self.node_count = node_count
         self.test_script_file = test_script_file
         self.input_list = []
+        self.node_names = []
+        self.previous_name = ""
 
     def init_nodes_from_config_nodes(self, config_nodes):
         self.input_list = [sys.stdin]
@@ -59,6 +62,7 @@ class BaseProtocolTester(object):
             self.ui_printer.nodes_initialized(success_count)
 
     def init_node(self, node_name, node_services):
+        self.node_names.append(node_name)
         result = NodeCreationType.FAILED
         child, parent = socket.socketpair()
         pid = os.fork()
@@ -81,7 +85,7 @@ class BaseProtocolTester(object):
         response = parent.recv(TEST_BUFFER_SIZE).decode('UTF-8')
         self.ui_printer.received_message_from_child(response)
         if response == NodeCreationType.FAILED:
-            return response                     # Should improve code to validate response and return it.
+            return response  # Should improve code to validate response and return it.
         else:
             return NodeCreationType.SUCCESS
 
@@ -96,9 +100,10 @@ class BaseProtocolTester(object):
 
     def create_node_process(self, node_name, node_services, command_sock):
         try:
-
+            measurement_data = MeasurementData(node_name, self.node_count)
             ssddp_node = SSDDP(name=node_name, services=node_services,
-                               external_command_input=command_sock, remote_run=True, nodes_in_test=0)
+                               external_command_input=command_sock, remote_run=True, nodes_in_test=0,
+                               measurement_data=measurement_data)
             self.ui_printer.created_node(node_name)
             ssddp_node.remote_start()
             return NodeCreationType.SUCCESS
@@ -106,12 +111,22 @@ class BaseProtocolTester(object):
             self.ui_printer.display(e.args)
         return NodeCreationType.FAILED
 
+    def get_new_random_remote_name(self):
+        old_name = self.previous_name
+        name = self.previous_name
+        while name is old_name:
+            name = self.get_random_remote_name()
+        return name
+
     def get_random_remote_name(self):
-        return choice(list(self.remotes.keys()))
+
+        self.previous_name = choice(list(self.remotes.keys()))
+        return self.previous_name
 
     def get_remote_name_at(self, index):
         for i, k in enumerate(self.remotes):
             if i == index:
+                self.previous_name = k
                 return k
         raise IndexError("Index out of bound")
 
@@ -132,6 +147,7 @@ class BaseProtocolTester(object):
         return choice(peers)
 
     def start_node(self, node_name, node_count):
+        print("Node count " + str(node_count))
         remote = self.remotes[node_name]
         command = NodeCommand.START + ":" + str(node_count)
         remote.sendall(bytes(command, 'UTF-8'))
@@ -179,11 +195,9 @@ class BaseProtocolTester(object):
         time.sleep(4)
         self.ui_printer.cleanup_started()
         cleaner = NodeProcessCleanUp(self.test_script_file)  # for verbose output -> set print_result=True
-        cleaner.check_status()
         self.ui_printer.nodes_still_running()
         cleaner.get_node_pids()
         cleaner.kill_nodes(__name__)
-        cleaner.check_status()
         self.ui_printer.cleanup_complete()
 
     def send_shut_down_to_sockets(self):
