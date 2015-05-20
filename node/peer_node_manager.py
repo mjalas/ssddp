@@ -53,6 +53,10 @@ class PeerNodeManager(threading.Thread):
             self.node_list.add(node)
             added_new = True
 
+            # Logfile
+            discovery_time = node.timestamp - self.self_node.creation_time
+            self.self_node.logfile.log("Peer {0} discovered ({1})".format(node.node.name, discovery_time))
+
             # Active response
             self.discovery_listener.message_address(node.node.address)
             self.logger.debug("Sending active response message to (%s)", str(node.node.address))
