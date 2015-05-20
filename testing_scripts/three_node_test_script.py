@@ -10,7 +10,6 @@ config_file = "test_configurations/three_nodes.json"
 
 def main():
     log_file = LogFileHandler.create_log_file(base_log_file)
-    node_count = 1
     tester = BaseProtocolTester(2, log_file, __file__)
     try:
         # Setup nodes for the test
