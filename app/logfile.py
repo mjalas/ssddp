@@ -35,7 +35,7 @@ class Logfile(object):
     def log(self, message):
 
         if self.file:
-            tmp = str(datetime.now()) + message + "\n"
+            tmp = str(datetime.now()) + " " + message + "\n"
             self.file.write(tmp)
             self.file.flush()
 
