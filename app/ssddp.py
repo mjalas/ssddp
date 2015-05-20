@@ -200,9 +200,11 @@ class SSDDP(object):
         self.log_debug("Initializing Discovery message handler")
         self.discovery_manager = DiscoveryMessageHandler()
         self.log_debug("Initializing Discovery broadcast loop")
-        self.broadcast_manager = DiscoveryBroadcastLoop(self.discovery_manager, self.peer_list, self.node,
-                                                        self.broadcast_loop_queue, self.listening_udp_socket,
-                                                        self.measurement_data)
+        self.broadcast_manager = DiscoveryBroadcastLoop(discovery_message_handler=self.discovery_manager,
+                                                        peer_list=self.peer_list, self_node=self.node,
+                                                        message_queue=self.broadcast_loop_queue,
+                                                        udp_socket=self.listening_udp_socket,
+                                                        measurement_data=self.measurement_data)
         # Initialize manager that updates peer node data
         self.log_debug("Initializing Peer Node Manager")
         self.peer_node_manager = PeerNodeManager(self.node_manager_queue, self.peer_list, self.node,
