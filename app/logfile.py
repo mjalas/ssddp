@@ -31,11 +31,36 @@ class Logfile(object):
                 self.file = open(file_path, 'w')
         else:
             self.file = None
+        self.node_discovery_times = {}
+        self.node_initialization_time = None
 
     def log(self, message):
 
         if self.file:
             tmp = str(datetime.now()) + " " + message + "\n"
+            self.file.write(tmp)
+            self.file.flush()
+
+    def node_discovery(self, name, timestamp):
+        """
+
+        """
+        if self.file:
+            if not self.node_discovery_times.get(name):
+                self.node_discovery_times[name] = timestamp
+                self.log("Peer {0} discovered ({1})".format(name, timestamp))
+
+    def write_summary(self):
+        """
+        Calculate network discovery time
+        """
+        if self.file:
+            nw_discovery_time = 0
+            for d_time in self.node_discovery_times:
+                nw_discovery_time += d_time
+            node_discovery_time = nw_discovery_time/len(self.node_discovery_times)
+
+            tmp = str("\n\nSummary:\nNetwork Discovery Time: {0}\nNode Discovery Time: {1}\n".format(nw_discovery_time, node_discovery_time))
             self.file.write(tmp)
             self.file.flush()
 
