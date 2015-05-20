@@ -10,6 +10,7 @@ from networking.socket import Socket
 from app.globals import NodeCommand
 from measurements.measurement_data import MeasurementData
 
+
 class DiscoveryBroadcastLoop(threading.Thread):
     """
     Broadcasts discovery messages to all peers via the hub.
@@ -37,7 +38,7 @@ class DiscoveryBroadcastLoop(threading.Thread):
         """
         Runs the broadcast loop
         """
-        self.measurements.discovery_started
+        self.measurements.discovery_started()
         while True:
             # Create discovery message from node info
             encoded_message = self.create_discovery_message()
@@ -54,8 +55,10 @@ class DiscoveryBroadcastLoop(threading.Thread):
             if not self.message_queue.empty():
                 try:
                     message = self.message_queue.get(timeout=2)
+                    print(message)
                     if message == NodeCommand.SHUTDOWN:
                         self.logger.info("Received shutdown message, shutting down immediately.")
+                        print("broadcast received shutdown")
                         exit(0)
                 except ValueError:
                     pass
