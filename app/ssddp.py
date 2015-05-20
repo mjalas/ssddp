@@ -310,6 +310,8 @@ class SSDDP(object):
                 self.start_peer_node_manager()
                 self.command_input_socket.sendall(bytes(NodeCommand.START_SUCCESS, 'UTF-8'))
                 break
+            elif command == NodeCommand.SHUTDOWN:
+                self.shutdown(True)
 
         while True:
             self.do_select_loop()
