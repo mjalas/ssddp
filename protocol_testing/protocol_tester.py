@@ -29,17 +29,17 @@ class BaseProtocolTester(object):
     Base class for creating protocol testers.
     """
 
-    def __init__(self, node_count, log_file, test_script_file):
+    def __init__(self, log_file, test_script_file):
         self.available_cmd_parameters = AVAILABLE_CMD_PARAMETERS
         self.ui_printer = TestUIPrinter(log_file)
         self.remotes = {}
         self.printer = TestPrinter(log_file)
         self.command_handler = TestCommandHandler(self.printer)
-        self.node_count = node_count
         self.test_script_file = test_script_file
         self.input_list = []
         self.node_names = []
         self.previous_name = ""
+        self.current_node_count = 0
 
     def init_nodes_from_config_nodes(self, config_nodes):
         self.input_list = [sys.stdin]
@@ -100,7 +100,7 @@ class BaseProtocolTester(object):
 
     def create_node_process(self, node_name, node_services, command_sock):
         try:
-            measurement_data = MeasurementData(node_name, self.node_count)
+            measurement_data = MeasurementData(node_name, self.current_node_count)
             ssddp_node = SSDDP(name=node_name, services=node_services,
                                external_command_input=command_sock, remote_run=True, nodes_in_test=0,
                                measurement_data=measurement_data)
@@ -222,6 +222,15 @@ class BaseProtocolTester(object):
             self.clean_up_sequence()
         self.ui_printer.end_test()
         exit(0)
+
+    def start_remote_node(self, node_at_index, seconds_to_wait=3):
+        remote_name = self.node_names[node_at_index]
+        self.ui_printer.starting_node(remote_name)
+        self.start_node(remote_name, self.current_node_count)
+        self.current_node_count += 1
+        self.ui_printer.node_started(remote_name)
+        self.ui_printer.waiting_for_broadcast_test(seconds_to_wait)
+        time.sleep(seconds_to_wait)
 
 
 class ProtocolTester(object):
