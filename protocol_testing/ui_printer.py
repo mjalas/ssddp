@@ -146,3 +146,12 @@ class TestUIPrinter(BaseUIPrinter):
 
     def failed_to_start_node(self, node_name):
         self.display("Failed to start node '{0}'".format(node_name))
+
+    def starting_node(self, node_name):
+        self.display("Starting node '{0}'".format(node_name))
+
+    def node_started(self, node_name):
+        self.display("Node '{0}' started".format(node_name))
+
+    def waiting_for_broadcast_test(self, seconds_to_wait):
+        self.display("Waiting {0} seconds for broadcast test".format(seconds_to_wait))
