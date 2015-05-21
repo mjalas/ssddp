@@ -14,7 +14,7 @@ class TestPrinter(object):
             mode = 'a'
 
         with open(self.log_file, mode) as f:
-            tmp = str(datetime.now()) + ": " + message + "\n"
+            tmp = str(datetime.now()) + ": " + str(message) + "\n"
             f.write(tmp)
             f.flush()
 

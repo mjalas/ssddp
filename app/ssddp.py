@@ -171,7 +171,7 @@ class SSDDP(object):
             print("Node is shutting down!")
         self.measurement_data.end_test()
         self.stop()
-        exit(0)
+        #exit(0)
 
     def handle_remote_command(self, end_node, peer_list):
         self.log_info("Incoming data from external input.")
@@ -180,13 +180,16 @@ class SSDDP(object):
         if command == NodeCommand.SHUTDOWN:
             print("shutdown received")
             self.command_input_socket.sendall(bytes(NodeCommand.OK, 'UTF-8'))
+            time.sleep(2)
             self.shutdown(True)
+            return False
         if self.remote_run:
             print("Received command: " + command)
             self.log_debug("Read command [" + str(command) + "]")
             input_listener = CommandHandler(command, self.node, peer_list, end_node,
                                             self.command_input_socket)
             input_listener.start()
+        return True
 
     def are_all_nodes_discovered(self):
         if self.measurement_data.check_if_all_nodes_found():
@@ -251,7 +254,9 @@ class SSDDP(object):
         self.start_peer_node_manager()
 
         while True:
-            self.do_select_loop()
+            res = self.do_select_loop()
+            if not res:
+                break
 
     def do_select_loop(self):
         # listen (select UDP, TCP, STDIN)
@@ -269,9 +274,11 @@ class SSDDP(object):
                 self.handle_tcp_packet()
 
             if self.remote_run:
-                self.handle_remote_select(x)
+                res = self.handle_remote_select(x)
+                return False
             else:
                 self.handle_stdin_select(x)
+        return True
 
     def handle_stdin_select(self, x):
         if x == sys.stdin:  # TODO: handle user command
@@ -286,7 +293,8 @@ class SSDDP(object):
 
     def handle_remote_select(self, x):
         if x == self.command_input_socket:
-            self.handle_remote_command(self.end_node, self.peer_list)
+            return self.handle_remote_command(self.end_node, self.peer_list)
+        return True
 
     def remote_start(self):
 
