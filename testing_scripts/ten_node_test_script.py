@@ -14,22 +14,24 @@ def main():
     try:
         # Setup nodes for the test
         tester.setup_nodes_from_config_file(config_file)
+        print("Nodes " + str(len(tester.node_names)))
         # Start nodes in turn and check measurements.
-        start_node(tester, 0, 0)
-        start_node(tester, 1, 1)
-        start_node(tester, 2, 2)
-        start_node(tester, 3, 3)
-        start_node(tester, 4, 4)
-        start_node(tester, 5, 5)
-        start_node(tester, 6, 6)
-        start_node(tester, 7, 7)
-        start_node(tester, 8, 8)
-        start_node(tester, 9, 9)
+        tester.start_remote_node(0)
+        tester.start_remote_node(1)
+        tester.start_remote_node(2)
+        tester.start_remote_node(3)
+        tester.start_remote_node(4)
+        tester.start_remote_node(5)
+        tester.start_remote_node(6)
+        tester.start_remote_node(7)
+        tester.start_remote_node(8)
+        tester.start_remote_node(9)
 
         time.sleep(10)
 
-        tester.end_test(no_prompt=True)
     except KeyboardInterrupt:
+        pass
+    finally:
         tester.end_test(no_prompt=True)
 
 if __name__ == '__main__':
