@@ -191,7 +191,7 @@ class SSDDP(object):
             print("Node is shutting down!")
         self.measurement_data.end_test()
         self.stop()
-        # exit(0)
+        exit(0)
 
     def handle_remote_command(self, end_node, peer_list):
         self.log_info("Incoming data from external input.")
