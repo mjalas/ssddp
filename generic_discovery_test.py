@@ -1,18 +1,20 @@
 import time
+from os import path, utime
 
-
-from protocol_testing.protocol_tester import BaseProtocolTester
+from message.timestamp import Timestamp
+from protocol_testing.base_protocol_tester import BaseProtocolTester
 from testing_scripts.log_file_handler import LogFileHandler
 
 # Test scenarios can be changed by changing file base name or config file directly.
-file_base = "ten_nodes"
+file_base = "three_nodes"
 base_log_file = "testing_scripts/test_logs/" + file_base + "_test"
 config_file = "testing_scripts/test_configurations/" + file_base + ".json"
+node_log_file = "node_discovery_test.log"
 
 
 def main():
     log_file = LogFileHandler.create_log_file(base_log_file)
-    tester = BaseProtocolTester(log_file, __file__)
+    tester = BaseProtocolTester(log_file, __file__, node_log_file)
     try:
         # Setup nodes for the test
         tester.setup_nodes_from_config_file(config_file)
