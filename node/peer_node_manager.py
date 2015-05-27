@@ -20,7 +20,7 @@ class PeerNodeManager(threading.Thread):
     queue_error_string = "Given Message Queue is not of type Queue."
     node_list_error_string = "Given node list is not of type PeerNodeList."
 
-    def __init__(self, message_queue, node_list, self_node, discovery_listener, measurement_data):
+    def __init__(self, message_queue, node_list, self_node, discovery_listener, measurement_data, printer=None):
         if not isinstance(message_queue, Queue):
             raise ValueError(PeerNodeManager.queue_error_string)
         if not isinstance(node_list, PeerNodeList):
@@ -35,6 +35,7 @@ class PeerNodeManager(threading.Thread):
         self.self_node = self_node
         self.logger = logging.getLogger(self.self_node.name + ": " + __name__)
         self.logger.debug("Discovery Broadcast Loop initialized")
+        self.printer = printer
         self._target = self.handle_queue
         threading.Thread.__init__(self)
 
