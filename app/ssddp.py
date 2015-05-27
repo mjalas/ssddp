@@ -22,6 +22,7 @@ from manager.description_listener import DescriptionListener
 from manager.command_handler import CommandHandler
 from app.globals import NodeCommand
 from measurements.measurement_data import MeasurementData
+from printers.node_printer import NodePrinter
 
 
 def is_int(val):
@@ -29,8 +30,14 @@ def is_int(val):
 
 
 class SSDDP(object):
+    """
+    Seriously simple discovery description protocol prototype node.
+    """
+
+    # TODO: remove unnecessary parameters and think about refactoring with inheritance
     def __init__(self, name, external_command_input=None, external_output=None, remote_run=False,
-                 service_list_file=None, services=None, debug_mode=True, nodes_in_test=0, measurement_data=None):
+                 service_list_file=None, services=None, debug_mode=True, nodes_in_test=0, measurement_data=None,
+                 log_file=None, print_to_ui=False):
         self.name = name
 
         if isinstance(external_command_input, socket.socket) and external_command_input is not None:
@@ -63,22 +70,35 @@ class SSDDP(object):
             self.measurement_data = MeasurementData(self.name, nodes_in_test)
         self.node = None
         self.end_node = False
-
-        if not self.name:
-            self.logger = logging.getLogger("UnnamedNode: " + __name__)
+        if log_file:
+            self.printer = NodePrinter(name, log_file, print_to_ui)
+            self.logger = None
         else:
-            self.logger = logging.getLogger(self.name + ": " + __name__)
+            self.printer = None
+            if not self.name:
+                self.logger = logging.getLogger("UnnamedNode: " + __name__)
+            else:
+                self.logger = logging.getLogger(self.name + ": " + __name__)
         self.display_debug_message = debug_mode
 
     def log_debug(self, message):
-        if self.display_debug_message:
-            self.logger.debug(message)
+        if self.logger:
+            if self.display_debug_message:
+                self.logger.debug(message)
+        else:
+            self.printer.log(message)
 
     def log_info(self, message):
-        self.logger.info(message)
+        if self.logger:
+            self.logger.info(message)
+        else:
+            self.printer.log(message)
 
     def log_error(self, message):
-        self.logger.error(message)
+        if self.logger:
+            self.logger.error(message)
+        else:
+            self.printer.log(message)
 
     def stop(self):
         self.broadcast_loop_queue.put(NodeCommand.SHUTDOWN)
@@ -138,7 +158,7 @@ class SSDDP(object):
 
     def init_input_list(self):
         if self.command_input_socket:
-            #print("here")
+            # print("here")
             self.input_list = [self.listening_udp_socket.socket, self.listening_tcp_socket.socket,
                                self.command_input_socket]
         else:
@@ -171,7 +191,7 @@ class SSDDP(object):
             print("Node is shutting down!")
         self.measurement_data.end_test()
         self.stop()
-        #exit(0)
+        # exit(0)
 
     def handle_remote_command(self, end_node, peer_list):
         self.log_info("Incoming data from external input.")
@@ -211,7 +231,7 @@ class SSDDP(object):
         # Initialize manager that updates peer node data
         self.log_debug("Initializing Peer Node Manager")
         self.peer_node_manager = PeerNodeManager(self.node_manager_queue, self.peer_list, self.node,
-                                                 self.broadcast_manager, self.measurement_data)
+                                                 self.broadcast_manager, self.measurement_data, self.printer)
 
     def setup_node(self):
         # Logging and logs
@@ -244,7 +264,6 @@ class SSDDP(object):
         self.peer_node_manager.start()
 
     def start(self):
-
         # Handle program arguments
         if not self.remote_run:
             ArgumentHandler.handle_arguments()

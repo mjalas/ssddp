@@ -4,8 +4,7 @@ import socket
 import select
 import time
 import json
-from datetime import datetime
-from sys import argv, exit
+from sys import exit
 import logging
 from random import choice
 
@@ -15,10 +14,11 @@ from protocol_testing.tester_config_handler import TesterConfigHandler
 from app.globals import NodeCommand
 from protocol_testing.node_process_cleanup import NodeProcessCleanUp
 from protocol_testing.config_test_file import ConfigurationNode
-from protocol_testing.test_printer import TestPrinter
-from protocol_testing.ui_printer import TestUIPrinter
+from printers.test_printer import TestPrinter
+from printers.ui_printer import TestUIPrinter
 from node.node_creation_type import NodeCreationType
 from measurements.measurement_data import MeasurementData
+
 
 TEST_BUFFER_SIZE = 1024
 AVAILABLE_CMD_PARAMETERS = [NodeCommand.DESCRIBE, NodeCommand.DISPLAY, NodeCommand.HELP]
@@ -40,6 +40,7 @@ class BaseProtocolTester(object):
         self.node_names = []
         self.previous_name = ""
         self.current_node_count = 0
+        self.log_file = log_file
 
     def init_nodes_from_config_nodes(self, config_nodes):
         self.input_list = [sys.stdin]
@@ -251,7 +252,7 @@ class ProtocolTester(object):
         self.input_list = []
         self.config_handler = None
         self.services = {}
-        self.ui_printer = TestUIPrinter()
+        self.ui_printer = TestUIPrinter(log_file)
 
     def node_process(self, ssddp_node_name, command_sock):
         try:
