@@ -51,7 +51,16 @@ We also have plans for implementing separate smaller messages to be used for the
 messaging in case our regular discovery packets were to cause congestion or other 
 problems due to their size.  
 
-31.3
+31.3.2015
 It turned out that we had been using an unbound socket for sending udp messages.
 After making the discovery broadcast loop use our listening udp socket also for 
 sending messages, we were able to get the udp hub working.
+
+xx.x.2015
+We implemented active discovery which allows the network to discover nodes faster. 
+This means that a node will immediately respond when it receives a discovery message 
+from a previously unknown node. Also, we optimized the port scanning function. Now,
+when the hub is not available, the node will only do a port scan every tenth time the 
+broadcast loop runs. Other times, the node will only message its known peers. This 
+improvement considerably reduces network flooding in the absence of a hub, while still
+maintaining connections between nodes.
