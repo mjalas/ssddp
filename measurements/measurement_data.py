@@ -25,6 +25,7 @@ class MeasurementDataWriter(object):
 
     def __init__(self, node_name):
         self.string_creator = MeasurementDataStringCreator(node_name)
+        self.node_name = node_name
 
     @abc.abstractmethod
     def log(self, message):
@@ -44,11 +45,14 @@ class MeasurementDataPrinter(MeasurementDataWriter):
     Class for printing measurement data to screen.
     """
 
-    def __init__(self, node_name, printer=None):
+    def __init__(self, node_name, printer=None, measurement_logger=None):
         super().__init__(node_name)
         self.printer = printer
+        self.measurement_logger = measurement_logger
 
     def log(self, message):
+        if self.measurement_logger:
+            self.measurement_logger.log(message, self.node_name)
         if self.printer:
             self.printer.log(message)
         else:
@@ -71,7 +75,7 @@ class MeasurementData(object):
     """
     Class for holding measurement data that can be shared to managers in SSDDP app.
     """
-    def __init__(self, node_name, nodes_in_test, printer=None, log=False):
+    def __init__(self, node_name, nodes_in_test, printer=None, log=False, measurement_logger=None):
         self.test_started = None
         self.test_ended = None
         self.discovery_started = None
@@ -83,7 +87,7 @@ class MeasurementData(object):
         if log:
             self.printer = MeasurementDataLogger(node_name)
         else:
-            self.printer = MeasurementDataPrinter(node_name, printer)
+            self.printer = MeasurementDataPrinter(node_name, printer, measurement_logger)
 
     def start_test(self):
         self.test_started = time.clock()
