@@ -1,4 +1,4 @@
-from printers.base_ui_printer import BaseUIPrinter
+from printers_and_loggers.base_ui_printer import BaseUIPrinter
 
 
 class TestUIPrinter(BaseUIPrinter):

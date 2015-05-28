@@ -1,4 +1,4 @@
-from printers.printer import Printer
+from printers_and_loggers.printer import Printer
 
 
 class NodePrinter(Printer):
