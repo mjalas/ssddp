@@ -16,15 +16,13 @@ class DiscoveryBroadcastLoop(threading.Thread):
     Broadcasts discovery messages to all peers via the hub.
     In the absence of hub, sends the messages to all available ports
     """
-    def __init__(self, discovery_message_handler, peer_list, self_node, message_queue, udp_socket, measurement_data):
+    def __init__(self, discovery_message_handler, peer_list, self_node, message_queue, udp_socket, measurer):
         if not isinstance(discovery_message_handler, DiscoveryMessageHandler):
-            raise RuntimeError
-        if not isinstance(measurement_data, MeasurementData):
             raise RuntimeError
         threading.Thread.__init__(self)
         self._target = self.start_broadcast
         self.discovery_message_handler = discovery_message_handler
-        self.measurements = measurement_data
+        self.measurer = measurer
         self.self_node = self_node
         self.peer_list = peer_list
         self.udp_socket = udp_socket
@@ -38,8 +36,8 @@ class DiscoveryBroadcastLoop(threading.Thread):
         """
         Runs the broadcast loop
         """
+        self.measurer.start_discovery(self.self_node.name)
 
-        self.measurements.start_discovery()
         while True:
             # Create discovery message from node info
             encoded_message = self.create_discovery_message()
