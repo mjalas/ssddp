@@ -44,11 +44,15 @@ class MeasurementDataPrinter(MeasurementDataWriter):
     Class for printing measurement data to screen.
     """
 
-    def __init__(self, node_name):
+    def __init__(self, node_name, printer=None):
         super().__init__(node_name)
+        self.printer = printer
 
     def log(self, message):
-        print(message)
+        if self.printer:
+            self.printer.log(message)
+        else:
+            print(message)
 
 
 class MeasurementDataLogger(MeasurementDataWriter):
@@ -67,7 +71,7 @@ class MeasurementData(object):
     """
     Class for holding measurement data that can be shared to managers in SSDDP app.
     """
-    def __init__(self, node_name, nodes_in_test, log=False):
+    def __init__(self, node_name, nodes_in_test, printer=None, log=False):
         self.test_started = None
         self.test_ended = None
         self.discovery_started = None
@@ -79,7 +83,7 @@ class MeasurementData(object):
         if log:
             self.printer = MeasurementDataLogger(node_name)
         else:
-            self.printer = MeasurementDataPrinter(node_name)
+            self.printer = MeasurementDataPrinter(node_name, printer)
 
     def start_test(self):
         self.test_started = time.clock()
