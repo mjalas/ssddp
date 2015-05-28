@@ -17,13 +17,11 @@ class CommandHandler(threading.Thread):
     """
     Handles commands given in the terminal
     """
-    def __init__(self, command, self_node, peer_list, end_parent, measurement_data, remote_socket=None):
-        if not isinstance(measurement_data, MeasurementData):
-            raise ValueError("Measurement data parameter not of type MeasurementData!")
+    def __init__(self, command, self_node, peer_list, end_parent, measurer, remote_socket=None):
         threading.Thread.__init__(self)
         self._target = self.handle_command
         self.node = self_node
-        self.measurements = measurement_data
+        self.measurer = measurer
         self.peer_list = peer_list
         self.end_parent = end_parent
         # self.COMMANDS = AVAILABLE_COMMANDS     #   TODO: remove?
@@ -60,12 +58,14 @@ class CommandHandler(threading.Thread):
         data = message.to_json()
         data_str = json.dumps(data)
         self.output_socket.connect(address[0], address[1])
-        start = time.clock()
+
+        self.measurer.start_timer()
         self.output_socket.send(bytes(data_str, 'UTF-8'))
         response = self.output_socket.read()
-        end = time.clock()
-        duration = end - start
-        self.measurements.add_description_duration(duration)
+        self.measurer.stop_timer()
+        duration = self.measurer.get_last_duration()
+        self.measurer.description_duration(self.node.name, duration)
+
         print("Description request duration: {0}".format(duration))
         response_str = response.decode('UTF-8')
         print(self.node.name + " received description response:\n" + response_str)
@@ -100,7 +100,8 @@ class CommandHandler(threading.Thread):
 
     def get_measurements(self):
         if self.remote_socket:
-            output = json.dumps(self.measurements, cls=MeasurementDataEncoder, indent=4, separators=(',', ': '))
+            # output = json.dumps(self.measurer, cls=MeasurementDataEncoder, indent=4, separators=(',', ': '))
+            output = "This information is not required anymore!"
             self.remote_socket.sendall(bytes(output, 'UTF-8'))
 
     COMMANDS = {
