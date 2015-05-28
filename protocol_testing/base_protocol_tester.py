@@ -10,12 +10,13 @@ from app.ssddp import SSDDP
 from protocol_testing.tester_config_handler import TesterConfigHandler
 from app.globals import NodeCommand
 from protocol_testing.node_process_cleanup import NodeProcessCleanUp
-from printers.test_printer import TestPrinter
-from printers.ui_printer import TestUIPrinter
+from printers_and_loggers.test_printer import TestPrinter
+from printers_and_loggers.ui_printer import TestUIPrinter
 from node.node_creation_type import NodeCreationType
 from measurements.measurement_data import MeasurementData
 from protocol_testing.test_command_handler import TestCommandHandler
-from printers.node_printer import NodePrinter
+from printers_and_loggers.node_printer import NodePrinter
+from printers_and_loggers.measurement_logger import MeasurementLogger
 
 
 TEST_BUFFER_SIZE = 1024
@@ -27,7 +28,7 @@ class BaseProtocolTester(object):
     Base class for creating protocol testers.
     """
 
-    def __init__(self, log_file, test_script_file, node_log_file=None):
+    def __init__(self, log_file, test_script_file, node_log_file=None, measurement_log_file=None):
         self.available_cmd_parameters = AVAILABLE_CMD_PARAMETERS
         self.ui_printer = TestUIPrinter(log_file)
         self.remotes = {}
@@ -40,6 +41,7 @@ class BaseProtocolTester(object):
         self.current_node_count = 0
         self.log_file = log_file
         self.node_log_file = node_log_file
+        self.measurement_logger = MeasurementLogger(measurement_log_file)
 
     def init_nodes_from_config_nodes(self, config_nodes):
         self.input_list = [sys.stdin]
@@ -101,7 +103,8 @@ class BaseProtocolTester(object):
     def create_node_process(self, node_name, node_services, command_sock):
         try:
             measurement_data = MeasurementData(node_name, self.current_node_count,
-                                               NodePrinter(node_name, self.node_log_file, True))
+                                               NodePrinter(node_name, self.node_log_file, True),
+                                               self.measurement_logger)
             ssddp_node = SSDDP(name=node_name, services=node_services,
                                external_command_input=command_sock, remote_run=True, nodes_in_test=0,
                                measurement_data=measurement_data, log_file=self.node_log_file)

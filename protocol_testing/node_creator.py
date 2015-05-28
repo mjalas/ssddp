@@ -1,7 +1,7 @@
 import socket
 import os
 
-from printers.ui_printer import TestUIPrinter
+from printers_and_loggers.ui_printer import TestUIPrinter
 from node.node_creation_type import NodeCreationType
 from protocol_testing.protocol_tester import TEST_BUFFER_SIZE
 from app.ssddp import SSDDP

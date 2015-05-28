@@ -22,7 +22,7 @@ from manager.description_listener import DescriptionListener
 from manager.command_handler import CommandHandler
 from app.globals import NodeCommand
 from measurements.measurement_data import MeasurementData
-from printers.node_printer import NodePrinter
+from printers_and_loggers.node_printer import NodePrinter
 
 
 def is_int(val):

@@ -14,8 +14,8 @@ from protocol_testing.tester_config_handler import TesterConfigHandler
 from app.globals import NodeCommand
 from protocol_testing.node_process_cleanup import NodeProcessCleanUp
 from protocol_testing.config_test_file import ConfigurationNode
-from printers.test_printer import TestPrinter
-from printers.ui_printer import TestUIPrinter
+from printers_and_loggers.test_printer import TestPrinter
+from printers_and_loggers.ui_printer import TestUIPrinter
 from node.node_creation_type import NodeCreationType
 from measurements.measurement_data import MeasurementData
 
