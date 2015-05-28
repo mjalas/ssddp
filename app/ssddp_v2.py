@@ -189,8 +189,8 @@ class SSDDP(object):
             print("Node is shutting down!")
         self.measurer.node_shutdown(self.name)
         # Write all measurement data to a file before exit!
-        log_file = self.name + "_measurement_data.txt"
-        log_file = "measurement_data.txt"
+        # log_file = self.name + "_measurement_data.txt" # Can be used instead if nodes should log to own files.
+        log_file = "measurement_data.log"
         self.measurer.log_all_data(log_file)
         self.stop()
         exit(0)

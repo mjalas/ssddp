@@ -20,17 +20,16 @@ class PeerNodeManager(threading.Thread):
     queue_error_string = "Given Message Queue is not of type Queue."
     node_list_error_string = "Given node list is not of type PeerNodeList."
 
-    def __init__(self, message_queue, node_list, self_node, discovery_listener, measurement_data, printer=None):
+    def __init__(self, message_queue, node_list, self_node, discovery_listener, measurer, printer=None):
         if not isinstance(message_queue, Queue):
             raise ValueError(PeerNodeManager.queue_error_string)
         if not isinstance(node_list, PeerNodeList):
             raise ValueError(PeerNodeManager.node_list_error_string)
-        if not isinstance(measurement_data, MeasurementData):
-            raise ValueError("Measurement data not of type MeasurementData")
+
         self.message_queue = message_queue
         self.node_list = node_list
         self.discovery_listener = discovery_listener
-        self.measurements = measurement_data
+        self.measurer = measurer
         self.keep_alive = True
         self.self_node = self_node
         self.logger = logging.getLogger(self.self_node.name + ": " + __name__)
@@ -57,9 +56,8 @@ class PeerNodeManager(threading.Thread):
             # TODO: Increase new node counter for measurements here! - MJ
             node = PeerNode.create_node_from_message(message)
             self.node_list.add(node)
-            self.measurements.discovered_new_node()
-            if self.measurements.check_if_all_nodes_found():
-                self.measurements.display_discovery_duration()
+            self.measurer.discovered_new_node(self.self_node.name, message.node_name)
+
             added_new = True
 
             # Active response
