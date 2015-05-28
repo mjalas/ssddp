@@ -15,6 +15,7 @@ from printers.ui_printer import TestUIPrinter
 from node.node_creation_type import NodeCreationType
 from measurements.measurement_data import MeasurementData
 from protocol_testing.test_command_handler import TestCommandHandler
+from printers.node_printer import NodePrinter
 
 
 TEST_BUFFER_SIZE = 1024
@@ -99,7 +100,8 @@ class BaseProtocolTester(object):
 
     def create_node_process(self, node_name, node_services, command_sock):
         try:
-            measurement_data = MeasurementData(node_name, self.current_node_count)
+            measurement_data = MeasurementData(node_name, self.current_node_count,
+                                               NodePrinter(node_name, self.node_log_file, True))
             ssddp_node = SSDDP(name=node_name, services=node_services,
                                external_command_input=command_sock, remote_run=True, nodes_in_test=0,
                                measurement_data=measurement_data, log_file=self.node_log_file)
