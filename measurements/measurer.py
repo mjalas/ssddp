@@ -101,3 +101,7 @@ class Measurer(object):
     def description_duration(self, node_name, duration):
         message = "Description sent and received"
         self.add_duration(node_name, message, duration)
+
+    def discovered_node_missing(self, node_name, missing_node_name):
+        message = "'{0}' has leaved network.".format(missing_node_name)
+        self.add_event(node_name, message)
