@@ -7,9 +7,10 @@ class PeerNodeList(object):
     List of discovered peers.
     """
 
-    def __init__(self, self_node):
+    def __init__(self, self_node, measurer):
         self.peers = []
         self.self_node = self_node
+        self.measurer = measurer
         self.logger = logging.getLogger(self.self_node.name + ": " + __name__)
 
     def count(self):
@@ -89,6 +90,7 @@ class PeerNodeList(object):
         self.logger.info("Cleaning timed out peers from peer list")
         for peer in self.peers:
             if peer.is_timed_out():
+                self.measurer.discovered_node_missing(self.self_node.name, peer.node.name)
                 self.logger.info("Peer %s timed out", peer.node.name)
                 self.peers.remove(peer)
 
