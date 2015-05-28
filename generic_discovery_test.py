@@ -10,11 +10,12 @@ file_base = "three_nodes"
 base_log_file = "testing_scripts/test_logs/" + file_base + "_test"
 config_file = "testing_scripts/test_configurations/" + file_base + ".json"
 node_log_file = "node_discovery_test.log"
+measurement_log_file = "discovery_test_measurements.log"
 
 
 def main():
     log_file = LogFileHandler.create_log_file(base_log_file)
-    tester = BaseProtocolTester(log_file, __file__, node_log_file)
+    tester = BaseProtocolTester(log_file, __file__, node_log_file, measurement_log_file)
     try:
         # Setup nodes for the test
         tester.setup_nodes_from_config_file(config_file)
