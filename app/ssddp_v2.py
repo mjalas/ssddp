@@ -193,13 +193,14 @@ class SSDDP(object):
         log_file = "measurement_data.log"
         self.measurer.log_all_data(log_file)
         self.stop()
+        time.sleep(2)
         exit(0)
 
     def handle_remote_command(self, end_node, peer_list):
         self.log_info("Incoming data from external input.")
         # command = os.read(self.command_input, 32)
         command = self.command_input_socket.recv(BUFFER_SIZE).decode('UTF-8')
-        if command == NodeCommand.SHUTDOWN:
+        if command == NodeCommand.SHUTDOWN or NodeCommand.SHUTDOWN in command:
             print("shutdown received")
             self.command_input_socket.sendall(bytes(NodeCommand.OK, 'UTF-8'))
             time.sleep(2)
@@ -239,7 +240,7 @@ class SSDDP(object):
 
         # Peer list
         self.log_debug("Initializing an empty Peer Node List")
-        self.peer_list = PeerNodeList(self.node)
+        self.peer_list = PeerNodeList(self.node, self.measurer)
 
         self.init_managers()
 
@@ -314,7 +315,6 @@ class SSDDP(object):
 
         self.setup_node()
 
-        # Continue here!!
         # wait for remote to send start command
         while True:
             c = self.command_input_socket.recv(BUFFER_SIZE).decode('UTF-8')
