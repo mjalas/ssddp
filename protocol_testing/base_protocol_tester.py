@@ -202,11 +202,20 @@ class BaseProtocolTesterV2(object):
 
     def shutdown_node(self, node_name):
         remote = self.remotes[node_name]
-        self.send_shutdown_to_socket(remote)
+        self.send_shutdown_to_socket(remote, node_name)
+        del self.remotes[node_name]
 
-    def send_shutdown_to_socket(self, node_socket):
-        node_socket.sendall(bytes(NodeCommand.SHUTDOWN, 'UTF-8'))
-        res = node_socket.recv(TEST_BUFFER_SIZE).decode('UTF-8')
+    def send_shutdown_to_socket(self, node_socket, node_name):
+        try:
+            node_socket.sendall(bytes(NodeCommand.SHUTDOWN, 'UTF-8'))
+            res = node_socket.recv(TEST_BUFFER_SIZE).decode('UTF-8')
+        except ConnectionResetError:
+            self.ui_printer.display("Could not receive shutdown response from '{0}'".format(node_name))
+            node_socket.close()
+            return
+        except BrokenPipeError:
+            self.ui_printer.display("Could not send shutdown to '{0}'".format(node_name))
+            return
         print("shutdown response: " + res)
         if res == NodeCommand.OK:
             self.ui_printer.shutdown_sent_success()
@@ -217,8 +226,9 @@ class BaseProtocolTesterV2(object):
     def send_shutdown_to_sockets(self):
         if not self.remotes:
             self.ui_printer.no_sockets()
-        for node_socket in self.remotes.values():
-            self.send_shutdown_to_socket(node_socket)
+        #for node_socket in self.remotes.values():
+        for node_name, node_socket in self.remotes.items():
+            self.send_shutdown_to_socket(node_socket, node_name)
 
     def end_test(self, no_prompt=False):
         self.ui_printer.ending_test()
