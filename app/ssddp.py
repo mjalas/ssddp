@@ -170,7 +170,7 @@ class SSDDP(object):
         self.log_info("Incoming data from UDP Socket.")
         data, address = self.listening_udp_socket.read()
         discovery_handler = DiscoveryListener(data, address, self.node_manager_queue, broadcast_manager,
-                                              self.node)
+                                              self.node, self.printer)
         discovery_handler.start()
 
     def handle_tcp_packet(self):
@@ -179,7 +179,7 @@ class SSDDP(object):
         self.log_info("Incoming data from TCP Socket.")
         connection, client_address = self.listening_tcp_socket.socket.accept()
         try:
-            description_handler = DescriptionListener(connection, client_address, self.node)
+            description_handler = DescriptionListener(connection, client_address, self.node, self.printer)
             description_handler.start()
         except IOError as e:
             self.log_error(e.args[0])
@@ -279,9 +279,9 @@ class SSDDP(object):
 
     def do_select_loop(self):
         # listen (select UDP, TCP, STDIN)
-        self.log_debug("Select waiting for input...")
+        # self.log_debug("Select waiting for input...")
         input_ready, output_ready, except_ready = select.select(self.input_list, [], [])
-        self.log_debug("... Select detected input")
+        # self.log_debug("... Select detected input")
         for x in input_ready:
             if self.end_node:
                 self.shutdown(self.end_node)
