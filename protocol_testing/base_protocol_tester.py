@@ -200,22 +200,29 @@ class BaseProtocolTesterV2(object):
         cleaner.kill_nodes(__name__)
         self.ui_printer.cleanup_complete()
 
-    def send_shut_down_to_sockets(self):
+    def shutdown_node(self, node_name):
+        remote = self.remotes[node_name]
+        self.send_shutdown_to_socket(remote)
+
+    def send_shutdown_to_socket(self, node_socket):
+        node_socket.sendall(bytes(NodeCommand.SHUTDOWN, 'UTF-8'))
+        res = node_socket.recv(TEST_BUFFER_SIZE).decode('UTF-8')
+        print("shutdown response: " + res)
+        if res == NodeCommand.OK:
+            self.ui_printer.shutdown_sent_success()
+        else:
+            self.ui_printer.shutdown_sent_failed()
+        node_socket.close()
+
+    def send_shutdown_to_sockets(self):
         if not self.remotes:
             self.ui_printer.no_sockets()
         for node_socket in self.remotes.values():
-            node_socket.sendall(bytes(NodeCommand.SHUTDOWN, 'UTF-8'))
-            res = node_socket.recv(TEST_BUFFER_SIZE).decode('UTF-8')
-            print("shutdown response: " + res)
-            if res == NodeCommand.OK:
-                self.ui_printer.shutdown_sent_success()
-            else:
-                self.ui_printer.shutdown_sent_failed()
-            node_socket.close()
+            self.send_shutdown_to_socket(node_socket)
 
     def end_test(self, no_prompt=False):
         self.ui_printer.ending_test()
-        self.send_shut_down_to_sockets()
+        self.send_shutdown_to_sockets()
         if no_prompt:
             self.cleanup_without_prompts()
         else:
