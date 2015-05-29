@@ -24,6 +24,7 @@ class Measurer(object):
         self.logger = logger
         self.nodes = {}
         self.discovery_started = self.time_getter.now()
+        self.discovery_duration = None
 
     nodes_to_find = 'nodes_to_find'
     nodes_found = 'nodes_found'
@@ -90,13 +91,16 @@ class Measurer(object):
         node_data = self.nodes[node_name]
         nodes_to_find = node_data[self.nodes_to_find]
         nodes_found = node_data[self.nodes_found] + 1
-        print("{0}: found {1}/{2} nodes".format(node_name, nodes_found, nodes_to_find))
+        #print("{0}: found {1}/{2} nodes".format(node_name, nodes_found, nodes_to_find))
         node_data[self.nodes_found] = nodes_found
 
         if nodes_to_find == nodes_found:
             discovery_duration = self.time_getter.now() - self.discovery_started
+            self.discovery_duration = discovery_duration
             message = "All nodes discovered."
             self.add_duration(node_name, message, discovery_duration)
+            return True
+        return False
 
     def description_duration(self, node_name, duration):
         message = "Description sent and received"

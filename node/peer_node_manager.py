@@ -55,10 +55,12 @@ class PeerNodeManager(threading.Thread):
             # Create new node to list
             # TODO: Increase new node counter for measurements here! - MJ
             node = PeerNode.create_node_from_message(message)
+            print("{0} new node found: ({1})".format(self.self_node.name, message.node_name))
             self.logger.debug("New node data: ({0})".format(node))
             self.node_list.add(node)
-            self.measurer.discovered_new_node(self.self_node.name, message.node_name)
-
+            found_all = self.measurer.discovered_new_node(self.self_node.name, message.node_name)
+            if found_all:
+                self.logger.info("Found all nodes! Duration: {0}\n\n\n\n\n".format(self.measurer.discovery_duration))
             added_new = True
 
             # Active response

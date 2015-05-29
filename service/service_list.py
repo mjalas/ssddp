@@ -18,7 +18,7 @@ class ServiceList(object):
         self.services.clear()
 
     def append(self, new_service):
-        if isinstance(new_service, service):  # TODO: need to be tested -> create unit test
+        if isinstance(new_service, Service):  # TODO: need to be tested -> create unit test
             self.services.append(new_service)
 
     def to_list(self):

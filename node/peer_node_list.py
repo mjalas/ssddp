@@ -96,6 +96,7 @@ class PeerNodeList(object):
             # print("Timeout duration: {0}".format(self.timeout_duration))
             if peer.is_timed_out(self.timeout_duration):
                 self.measurer.discovered_node_missing(self.self_node.name, peer.node.name)
+                print("{0}: Peer {1} timed out".format(self.self_node.name, peer.node.name))
                 self.logger.info("Peer {0} timed out".format(peer.node.name))
                 self.peers.remove(peer)
             # else:
