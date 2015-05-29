@@ -17,7 +17,7 @@ class CommandHandler(threading.Thread):
     """
     Handles commands given in the terminal
     """
-    def __init__(self, command, self_node, peer_list, end_parent, measurer, remote_socket=None):
+    def __init__(self, command, self_node, peer_list, end_parent, measurer, logger, remote_socket=None):
         threading.Thread.__init__(self)
         self._target = self.handle_command
         self.node = self_node
@@ -28,8 +28,8 @@ class CommandHandler(threading.Thread):
         self.received_command = command.split()
         self.output_socket = Socket("TCP", self.node.name)
         self.remote_socket = remote_socket
-        self.logger = logging.getLogger(self_node.name + ": " + __name__)
-        # self.logger.info("Discovery Listener initialized")
+        self.logger = logger
+        self.logger.debug("Discovery Listener initialized")
 
     def display_node_list(self):
         """
@@ -48,7 +48,7 @@ class CommandHandler(threading.Thread):
 
         """
         if len(self.received_command) != 2:
-            print("Wrong argument count! Expected \"describe node_name\".")
+            self.logger.error("Wrong argument count! Expected \"describe node_name\".")
             return
         node_name = self.received_command[1]
         address = self.peer_list.get_node_address(node_name)    # TODO: send description request to address in peer_list
@@ -66,9 +66,9 @@ class CommandHandler(threading.Thread):
         duration = self.measurer.get_last_duration()
         self.measurer.description_duration(self.node.name, duration)
 
-        print("Description request duration: {0}".format(duration))
+        self.logger.info("Description request duration: {0}".format(duration))
         response_str = response.decode('UTF-8')
-        print(self.node.name + " received description response:\n" + response_str)
+        self.logger.debug(self.node.name + " received description response:\n" + response_str)
         if self.remote_socket:
             self.remote_socket.sendall(response)
         else:

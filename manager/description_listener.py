@@ -18,7 +18,7 @@ class DescriptionListener(threading.Thread):
         Manages descriptions.
         Handles incoming
     """
-    def __init__(self, connection, client_address, node, printer=None):
+    def __init__(self, connection, client_address, node, logger):
         if not isinstance(connection, socket.socket):
             raise IOError("Given connection not of type socket!")
         if not isinstance(node, Node):
@@ -28,8 +28,7 @@ class DescriptionListener(threading.Thread):
         self.client_address = client_address
         self._target = self.respond_to_description_request
         self.filename = "description_" + self.node.name + ".log"
-        self.printer = printer
-        self.logger = logging.getLogger(node.name + ": " + __name__)
+        self.logger = logger
         self.logger.info("Description Listener initialized")
         threading.Thread.__init__(self)
 
@@ -41,10 +40,10 @@ class DescriptionListener(threading.Thread):
 
         self.logger.debug("Responding to description request")
         data = self.connection.recv(BUFFER_SIZE).decode('UTF-8')
-        print(self.node.name + " received a description request:\n" + data)
-        if self.printer:
-            log_message = "Description request received \n'" + data + "'"
-            self.printer.log(log_message)
+        # print(self.node.name + " received a description request:\n" + data)
+
+        log_message = "Description request received \n'" + data + "'"
+        self.logger.info(log_message)
 
         with open(self.filename, 'a') as f:
             log_message = str(datetime.now()) + ": " + "Description request received"
@@ -59,7 +58,7 @@ class DescriptionListener(threading.Thread):
             message = Message.to_object(data)
         except ValueError as e:
             self.logger.error(e.args[0])
-            print(e.args)
+            # print(e.args)
             return
         # TODO: fix message type checking (message.to_object always assigns "2"!)
         self.logger.debug("Skipping Description request message type check; Responding to request.")

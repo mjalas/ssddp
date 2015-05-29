@@ -11,15 +11,14 @@ class DiscoveryListener(threading.Thread):
         Listens to incoming discovery messages and handles them
     """
 
-    def __init__(self, data, address, message_queue, broadcast_manager, self_node, printer=None):
+    def __init__(self, data, address, message_queue, broadcast_manager, self_node, logger):
         self._target = self.handle_discovery
         self.data = data
         self.address = address
         self.message_queue = message_queue
         self.broadcast_manager = broadcast_manager
-        self.logger = logging.getLogger(self_node.name + ": " + __name__)
+        self.logger = logger
         self.logger.info("Discovery Listener initialized")
-        self.printer = printer
         threading.Thread.__init__(self)
 
     def handle_discovery(self):  # TODO: Implement method
@@ -33,7 +32,7 @@ class DiscoveryListener(threading.Thread):
         if self.address == HUB_ADDRESS_FROM:
             self.update_broadcast_timestamp()
         if message:
-            self.logger.debug("Message: %s", message)
+            self.logger.debug("Message: '{0}'".format(message))
             self.message_queue.put(message)
 
     def handle_data(self):
@@ -42,9 +41,8 @@ class DiscoveryListener(threading.Thread):
         if self.data:
             log_message = "Incoming discovery data from (" + str(self.address[0]) + ", " + str(
                 self.address[1]) + "):\n<<<START>>>\n" + self.data.decode() + "\n<<<END>>>"
-            self.logger.debug(log_message)
-            if self.printer:
-                self.printer.log(log_message)
+
+            self.logger.info(log_message)
             message = Message.to_object(self.data.decode())
         return message
 

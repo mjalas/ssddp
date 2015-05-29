@@ -16,7 +16,7 @@ class DiscoveryBroadcastLoop(threading.Thread):
     Broadcasts discovery messages to all peers via the hub.
     In the absence of hub, sends the messages to all available ports
     """
-    def __init__(self, discovery_message_handler, peer_list, self_node, message_queue, udp_socket, measurer):
+    def __init__(self, discovery_message_handler, peer_list, self_node, message_queue, udp_socket, measurer, logger):
         if not isinstance(discovery_message_handler, DiscoveryMessageHandler):
             raise RuntimeError
         threading.Thread.__init__(self)
@@ -29,8 +29,8 @@ class DiscoveryBroadcastLoop(threading.Thread):
         self.hub_timestamp = Timestamp.create_timestamp()
         self.message_queue = message_queue
         self.port_scan_delay = 1
-        self.logger = logging.getLogger(self.self_node.name + ": " + __name__)
-        self.logger.debug("Discovery Broadcast Loop initialized")
+        self.logger = logger
+        self.logger.info("Discovery Broadcast Loop initialized")
 
     def start_broadcast(self):
         """
@@ -54,10 +54,10 @@ class DiscoveryBroadcastLoop(threading.Thread):
             if not self.message_queue.empty():
                 try:
                     message = self.message_queue.get(timeout=2)
-                    print(message)
+                    # print(message)
                     if message == NodeCommand.SHUTDOWN:
                         self.logger.info("Received shutdown message, shutting down immediately.")
-                        print("{0}: broadcast received shutdown".format(self.self_node.name))
+                        # print("{0}: broadcast received shutdown".format(self.self_node.name))
                         exit(0)
                 except ValueError:
                     pass
