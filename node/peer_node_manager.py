@@ -20,7 +20,7 @@ class PeerNodeManager(threading.Thread):
     queue_error_string = "Given Message Queue is not of type Queue."
     node_list_error_string = "Given node list is not of type PeerNodeList."
 
-    def __init__(self, message_queue, node_list, self_node, discovery_listener, measurer, printer=None):
+    def __init__(self, message_queue, node_list, self_node, discovery_listener, measurer, logger):
         if not isinstance(message_queue, Queue):
             raise ValueError(PeerNodeManager.queue_error_string)
         if not isinstance(node_list, PeerNodeList):
@@ -32,9 +32,8 @@ class PeerNodeManager(threading.Thread):
         self.measurer = measurer
         self.keep_alive = True
         self.self_node = self_node
-        self.logger = logging.getLogger(self.self_node.name + ": " + __name__)
-        self.logger.debug("Discovery Broadcast Loop initialized")
-        self.printer = printer
+        self.logger = logger
+        self.logger.debug("PeerNodeManager initialized")
         self._target = self.handle_queue
         threading.Thread.__init__(self)
 
@@ -50,11 +49,13 @@ class PeerNodeManager(threading.Thread):
         added_new = False
         try:
             node = self.node_list.get(message.node_name)
+            self.logger.info("Updating information for peer '{0}'".format(message.node_name))
             node.update_node(message)
         except PeerNodeNotFoundException:
             # Create new node to list
             # TODO: Increase new node counter for measurements here! - MJ
             node = PeerNode.create_node_from_message(message)
+            self.logger.debug("New node data: ({0})".format(node))
             self.node_list.add(node)
             self.measurer.discovered_new_node(self.self_node.name, message.node_name)
 
@@ -62,7 +63,7 @@ class PeerNodeManager(threading.Thread):
 
             # Active response
             self.discovery_listener.message_address(node.node.address)
-            self.logger.debug("Sending active response message to (%s)", str(node.node.address))
+            self.logger.debug("Sending active response message to ({0})".format(node.node.address))
 
         if added_new:
             return UpdateResult.added_new_node
