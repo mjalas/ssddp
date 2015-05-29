@@ -1,11 +1,13 @@
 import time
 from os import path, utime
 
-from message.timestamp import Timestamp
-from protocol_testing.base_protocol_tester import BaseProtocolTester
+from protocol_testing.base_protocol_tester import BaseProtocolTesterV2
 from testing_scripts.log_file_handler import LogFileHandler
+from measurements.measurer import Measurer
+from printers_and_loggers.measurement_logger import MeasurementLogger
 
 # Test scenarios can be changed by changing file base name or config file directly.
+nodes_in_test = 3
 file_base = "three_nodes"
 base_log_file = "testing_scripts/test_logs/" + file_base + "_test"
 config_file = "testing_scripts/test_configurations/" + file_base + ".json"
@@ -14,8 +16,10 @@ measurement_log_file = "discovery_test_measurements.log"
 
 
 def main():
+    logger = MeasurementLogger(measurement_log_file)
+    measurer = Measurer(nodes_in_test, logger)
     log_file = LogFileHandler.create_log_file(base_log_file)
-    tester = BaseProtocolTester(log_file, __file__, node_log_file, measurement_log_file)
+    tester = BaseProtocolTesterV2(__file__, measurer, log_file)
     try:
         # Setup nodes for the test
         tester.setup_nodes_from_config_file(config_file)
