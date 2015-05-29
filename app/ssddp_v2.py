@@ -24,6 +24,8 @@ from app.globals import NodeCommand
 from measurements.measurement_data import MeasurementData
 from printers_and_loggers.node_printer import NodePrinter
 from measurements.measurer import Measurer
+from printers_and_loggers.logger import NodeLogger, NodePrinterLogger
+from app.globals import NODE_TIMEOUT
 
 
 def is_int(val):
@@ -36,8 +38,9 @@ class SSDDP(object):
     """
 
     # TODO: remove unnecessary parameters and think about refactoring with inheritance
-    def __init__(self, name,  measurer, external_command_input=None, external_output=None, remote_run=False,
-                 service_list_file=None, services=None, log_file=None, debug_mode=False, print_to_ui=False):
+    def __init__(self, name, measurer, external_command_input=None, external_output=None, remote_run=False,
+                 service_list_file=None, services=None, debug_mode=False, node_timeout=NODE_TIMEOUT, use_printer=False):
+
         self.name = name
 
         if isinstance(external_command_input, socket.socket) and external_command_input is not None:
@@ -68,35 +71,22 @@ class SSDDP(object):
 
         self.node = None
         self.end_node = False
-        if log_file:
-            self.printer = NodePrinter(name, log_file, print_to_ui)
-            self.logger = None
+        log_file = name + ".log"  # Change log file so that timestamp is present in file name
+        if use_printer:
+            self.logger = NodePrinterLogger(name, log_file, debug_mode=debug_mode)
         else:
-            self.printer = None
-            if not self.name:
-                self.logger = logging.getLogger("UnnamedNode: " + __name__)
-            else:
-                self.logger = logging.getLogger(self.name + ": " + __name__)
+            self.logger = NodeLogger(name, log_file, debug_mode=debug_mode)
         self.display_debug_message = debug_mode
+        self.node_timeout = node_timeout
 
     def log_debug(self, message):
-        if self.logger:
-            if self.display_debug_message:
-                self.logger.debug(message)
-        else:
-            self.printer.log(message)
+        self.logger.debug(message)
 
     def log_info(self, message):
-        if self.logger:
-            self.logger.info(message)
-        else:
-            self.printer.log(message)
+        self.logger.info(message)
 
     def log_error(self, message):
-        if self.logger:
-            self.logger.error(message)
-        else:
-            self.printer.log(message)
+        self.logger.info(message)
 
     def stop(self):
         self.broadcast_loop_queue.put(NodeCommand.SHUTDOWN)
@@ -168,7 +158,7 @@ class SSDDP(object):
         self.log_info("Incoming data from UDP Socket.")
         data, address = self.listening_udp_socket.read()
         discovery_handler = DiscoveryListener(data, address, self.node_manager_queue, broadcast_manager,
-                                              self.node, self.printer)
+                                              self.node, self.logger)
         discovery_handler.start()
 
     def handle_tcp_packet(self):
@@ -177,16 +167,14 @@ class SSDDP(object):
         self.log_info("Incoming data from TCP Socket.")
         connection, client_address = self.listening_tcp_socket.socket.accept()
         try:
-            description_handler = DescriptionListener(connection, client_address, self.node, self.printer)
+            description_handler = DescriptionListener(connection, client_address, self.node, self.logger)
             description_handler.start()
         except IOError as e:
             self.log_error(e.args[0])
 
-    def shutdown(self, end_node):
-        print("End Node: " + str(end_node))
+    def shutdown(self):
+        # print("End Node: " + str(self.end_node))
         self.log_info("Shutting down node!")
-        if self.remote_run:
-            print("Node is shutting down!")
         self.measurer.node_shutdown(self.name)
         # Write all measurement data to a file before exit!
         # log_file = self.name + "_measurement_data.txt" # Can be used instead if nodes should log to own files.
@@ -194,6 +182,7 @@ class SSDDP(object):
         self.measurer.log_all_data(log_file)
         self.stop()
         time.sleep(2)
+        self.log_info("Node stopped, exiting")
         exit(0)
 
     def handle_remote_command(self, end_node, peer_list):
@@ -201,13 +190,12 @@ class SSDDP(object):
         # command = os.read(self.command_input, 32)
         command = self.command_input_socket.recv(BUFFER_SIZE).decode('UTF-8')
         if command == NodeCommand.SHUTDOWN or NodeCommand.SHUTDOWN in command:
-            print("shutdown received")
+            self.log_info("Received shutdown command.")
             self.command_input_socket.sendall(bytes(NodeCommand.OK, 'UTF-8'))
             time.sleep(2)
-            self.shutdown(True)
+            self.shutdown()
             return False
         if self.remote_run:
-            print("Received command: " + command)
             self.log_debug("Read command [" + str(command) + "]")
             input_listener = CommandHandler(command, self.node, peer_list, end_node,
                                             self.command_input_socket)
@@ -223,11 +211,11 @@ class SSDDP(object):
                                                         peer_list=self.peer_list, self_node=self.node,
                                                         message_queue=self.broadcast_loop_queue,
                                                         udp_socket=self.listening_udp_socket,
-                                                        measurer=self.measurer)
+                                                        measurer=self.measurer, logger=self.logger)
         # Initialize manager that updates peer node data
         self.log_debug("Initializing Peer Node Manager")
         self.peer_node_manager = PeerNodeManager(self.node_manager_queue, self.peer_list, self.node,
-                                                 self.broadcast_manager, self.measurer, self.printer)
+                                                 self.broadcast_manager, self.measurer, self.logger)
 
     def setup_node(self):
         # Logging and logs
@@ -240,7 +228,7 @@ class SSDDP(object):
 
         # Peer list
         self.log_debug("Initializing an empty Peer Node List")
-        self.peer_list = PeerNodeList(self.node, self.measurer)
+        self.peer_list = PeerNodeList(self.node, self.measurer, self.logger, self.node_timeout)
 
         self.init_managers()
 
@@ -280,7 +268,7 @@ class SSDDP(object):
         # self.log_debug("... Select detected input")
         for x in input_ready:
             if self.end_node:
-                self.shutdown(self.end_node)
+                self.shutdown()
 
             if x == self.listening_udp_socket.socket:
                 self.handle_udp_packet(self.broadcast_manager)
@@ -302,7 +290,8 @@ class SSDDP(object):
             command = sys.stdin.readline()
 
             self.log_debug("Read command [" + command[:-1] + "]")
-            input_listener = CommandHandler(command, self.node, self.peer_list, self.end_node, self.measurer)
+            input_listener = CommandHandler(command, self.node, self.peer_list, self.end_node, self.measurer,
+                                            self.logger)
             input_listener.start()
             # TODO: output response to user inside thread!!
 
@@ -318,7 +307,7 @@ class SSDDP(object):
         # wait for remote to send start command
         while True:
             c = self.command_input_socket.recv(BUFFER_SIZE).decode('UTF-8')
-            print(c)
+            # print(c)
             parts = c.split(':')
             command = parts[0].strip()
             node_count = 0
@@ -327,7 +316,7 @@ class SSDDP(object):
 
             if command == NodeCommand.START:
                 count = self.measurer.get_nods_to_find(self.name)
-                print(count)
+                # print(count)
                 if count != node_count:
                     self.measurer.set_nodes_in_network_for_node(self.name, node_count)
                 self.measurer.start_discovery(self.name)
@@ -337,7 +326,7 @@ class SSDDP(object):
                 self.command_input_socket.sendall(bytes(NodeCommand.START_SUCCESS, 'UTF-8'))
                 break
             elif command == NodeCommand.SHUTDOWN:
-                self.shutdown(True)
+                self.shutdown()
 
         while True:
             self.do_select_loop()
