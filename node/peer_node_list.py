@@ -1,5 +1,6 @@
-import logging
+
 from node.exceptions.node_exceptions import PeerNodeNotFoundException
+from app.globals import NODE_TIMEOUT
 
 
 class PeerNodeList(object):
@@ -7,11 +8,12 @@ class PeerNodeList(object):
     List of discovered peers.
     """
 
-    def __init__(self, self_node, measurer):
+    def __init__(self, self_node, measurer, logger, timeout_duration=NODE_TIMEOUT):
         self.peers = []
         self.self_node = self_node
         self.measurer = measurer
-        self.logger = logging.getLogger(self.self_node.name + ": " + __name__)
+        self.logger = logger
+        self.timeout_duration = timeout_duration
 
     def count(self):
         return len(self.peers)
@@ -20,6 +22,8 @@ class PeerNodeList(object):
         self.peers.clear()
 
     def add(self, node):
+        message = "{0}: Added '{1}' to peers.".format(self.self_node.name, node.node.name)
+        self.logger.info(message)
         self.peers.append(node)
         self.clean_list()
 
@@ -89,10 +93,15 @@ class PeerNodeList(object):
         """
         self.logger.info("Cleaning timed out peers from peer list")
         for peer in self.peers:
-            if peer.is_timed_out():
+            # print("Timeout duration: {0}".format(self.timeout_duration))
+            if peer.is_timed_out(self.timeout_duration):
                 self.measurer.discovered_node_missing(self.self_node.name, peer.node.name)
-                self.logger.info("Peer %s timed out", peer.node.name)
+                self.logger.info("Peer {0} timed out".format(peer.node.name))
                 self.peers.remove(peer)
+            # else:
+                # message = "{0} received discovery message from {1}  '{2}' seconds ago".format(self.self_node.name,
+                #                                                                              peer.node.name, peer.diff)
+                # print(message)
 
     def message_list(self, udp_socket, message):
         """
