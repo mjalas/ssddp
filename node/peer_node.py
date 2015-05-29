@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from app.globals import NODE_TIMEOUT
 from message.message import Message
 from message.timestamp import Timestamp
@@ -14,6 +16,7 @@ class PeerNode(object):
     def __init__(self, node, timestamp,):
         self.node = node
         self.timestamp = timestamp
+        self.diff = timestamp - timestamp
 
     @staticmethod
     def create_node_from_message(message):
@@ -39,11 +42,21 @@ class PeerNode(object):
         new_service_list.from_dict(message.services)
         self.node.service_list.update_merge(new_service_list)
 
-    def is_timed_out(self):
+    def is_timed_out(self, timeout_boundary=NODE_TIMEOUT):
         """
         Checks whether the node has timed out
         """
-        now = Timestamp.create_timestamp()
-        if (now - self.timestamp) > NODE_TIMEOUT:
+        now = datetime.now()
+        timestamp = Timestamp.timestamp_to_datetime(self.timestamp)
+        diff = (now - timestamp)
+        seconds = diff.seconds
+        self.diff = seconds
+        # print("Diff: {0}, timeout: {1}>{2} -> {3}".format(self.diff, seconds, timeout_boundary, seconds > timeout_boundary))
+        if seconds > timeout_boundary:
             return True
         return False
+
+    def time_since_last_discovery(self):
+        now = Timestamp.create_timestamp()
+        diff = (now - self.timestamp)
+        return diff
