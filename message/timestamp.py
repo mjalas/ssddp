@@ -13,3 +13,7 @@ class Timestamp(object):
     @staticmethod
     def timestamp_to_string(timestamp):
         return datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S.%f')
+
+    @staticmethod
+    def timestamp_to_datetime(timestamp):
+        return datetime.fromtimestamp(timestamp)
