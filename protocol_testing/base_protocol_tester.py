@@ -17,6 +17,7 @@ from measurements.measurement_data import MeasurementData
 from protocol_testing.test_command_handler import TestCommandHandler
 from printers_and_loggers.node_printer import NodePrinter
 from printers_and_loggers.measurement_logger import MeasurementLogger
+from app.globals import NODE_TIMEOUT
 
 
 TEST_BUFFER_SIZE = 1024
@@ -40,6 +41,10 @@ class BaseProtocolTesterV2(object):
         self.previous_name = ""
         self.current_node_count = 0
         self.measurer = measurer
+        self.current_node_timeout = NODE_TIMEOUT
+
+    def set_node_timeout(self, timeout):
+        self.current_node_timeout = timeout
 
     def init_nodes_from_config_nodes(self, config_nodes):
         self.input_list = [sys.stdin]
@@ -102,7 +107,8 @@ class BaseProtocolTesterV2(object):
         try:
             self.measurer.add_node(node_name, self.current_node_count)
             ssddp_node = SSDDP(name=node_name, measurer=self.measurer, services=node_services,
-                               external_command_input=command_sock, remote_run=True)
+                               external_command_input=command_sock, remote_run=True,
+                               node_timeout=self.current_node_timeout)
             self.current_node_count += 1
             self.ui_printer.created_node(node_name)
             ssddp_node.remote_start()
@@ -226,7 +232,7 @@ class BaseProtocolTesterV2(object):
     def send_shutdown_to_sockets(self):
         if not self.remotes:
             self.ui_printer.no_sockets()
-        #for node_socket in self.remotes.values():
+        # for node_socket in self.remotes.values():
         for node_name, node_socket in self.remotes.items():
             self.send_shutdown_to_socket(node_socket, node_name)
 
