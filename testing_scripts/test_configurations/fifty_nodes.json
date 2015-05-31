@@ -187,8 +187,6 @@
       }
     },
     {
-  "nodes" : [
-    {
       "name" : "node21",
       "services": {
         "service1" : {
@@ -385,8 +383,6 @@
       }
     },
     {
-  "nodes" : [
-    {
       "name" : "node42",
       "services": {
         "service1" : {
@@ -469,7 +465,5 @@
         }
       }
     }
-  ]
-}
   ]
 }
