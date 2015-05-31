@@ -60,7 +60,7 @@ class PeerNodeManager(threading.Thread):
             self.node_list.add(node)
             found_all = self.measurer.discovered_new_node(self.self_node.name, message.node_name)
             if found_all:
-                self.logger.info("Found all nodes! Duration: {0}\n\n\n\n\n".format(self.measurer.discovery_duration))
+                self.logger.info("Found all nodes! Duration: {0}\n\n".format(self.measurer.discovery_duration))
             added_new = True
 
             # Active response
