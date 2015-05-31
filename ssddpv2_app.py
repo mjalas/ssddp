@@ -4,7 +4,7 @@ from measurements.measurer import Measurer
 from printers_and_loggers.measurement_logger import MeasurementLogger
 from service.service_list import ServiceList, Service
 
-nodes_in_network = 10
+nodes_in_network = 20
 node_name = "test_node"
 measurement_log = node_name + "_measurement.log"
 
