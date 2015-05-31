@@ -7,8 +7,9 @@ from measurements.measurer import Measurer
 from printers_and_loggers.measurement_logger import MeasurementLogger
 
 # Test scenarios can be changed by changing file base name or config file directly.
-nodes_in_test = 10
-file_base = "ten_nodes"
+node_timeout_limit = 20
+nodes_in_test = 20
+file_base = "twenty_nodes"
 base_log_file = "testing_scripts/test_logs/" + file_base + "_test"
 config_file = "testing_scripts/test_configurations/" + file_base + ".json"
 node_log_file = "node_discovery_test.log"
@@ -22,7 +23,7 @@ def main():
     tester = BaseProtocolTesterV2(__file__, measurer, log_file)
     try:
         # Setup nodes for the test
-        tester.set_node_timeout(9)
+        tester.set_node_timeout(node_timeout_limit)
         tester.setup_nodes_from_config_file(config_file)
         node_count = len(tester.node_names)
         node_range = range(0, node_count)
