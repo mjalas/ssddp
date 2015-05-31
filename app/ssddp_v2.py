@@ -88,13 +88,17 @@ class SSDDP(object):
     def log_error(self, message):
         self.logger.info(message)
 
-    def stop(self):
+    def stop_sockets(self):
         self.broadcast_loop_queue.put(NodeCommand.SHUTDOWN)
         self.node_manager_queue.put(NodeCommand.SHUTDOWN)
         if self.listening_tcp_socket:
             self.listening_tcp_socket.terminate()
         if self.listening_udp_socket:
             self.listening_udp_socket.terminate()
+
+    def stop(self):
+        self.shutdown()
+
 
     def init_sockets(self):
         port = -1
@@ -180,7 +184,7 @@ class SSDDP(object):
         # log_file = self.name + "_measurement_data.txt" # Can be used instead if nodes should log to own files.
         log_file = "measurement_data.log"
         self.measurer.log_all_data(log_file)
-        self.stop()
+        self.stop_sockets()
         time.sleep(2)
         self.log_info("Node stopped, exiting")
         exit(0)
