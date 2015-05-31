@@ -1,0 +1,349 @@
+spacy     5671  0.0  0.0   4444   692 ?        S    09:49   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     5673  0.0  0.0  14876  2308 ?        S    09:49   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     5962  0.0  0.0   4444   696 ?        S    09:54   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     5964  0.0  0.0  14876  2288 ?        S    09:54   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     6180  0.0  0.0   4444   696 ?        S    09:59   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     6182  0.0  0.0  14876  2372 ?        S    09:59   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     6204  0.0  0.0   4444   808 ?        S    10:00   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     6206  0.0  0.0  14876  2356 ?        S    10:00   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     6297  0.0  0.0   4444   800 ?        S    10:03   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     6299  0.0  0.0  14876  2372 ?        S    10:03   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     6328  0.0  0.0   4444   780 ?        S    10:03   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     6330  0.0  0.0  14876  2308 ?        S    10:03   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     3784  0.0  0.0   4444   768 ?        S    21:44   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     3786  0.0  0.0  14876  2308 ?        R    21:44   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4108  0.0  0.0   4444   692 ?        S    21:47   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4110  0.0  0.0  14876  2308 ?        S    21:47   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4209  0.0  0.0   4444   808 ?        S    21:51   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4211  0.0  0.0  14876  2432 ?        S    21:51   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4364  0.0  0.0   4444   680 ?        S    21:55   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4366  0.0  0.0  14876  2360 ?        S    21:55   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4639  0.0  0.0   4444   680 ?        S    22:00   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4641  0.0  0.0  14876  2308 ?        S    22:00   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     5032  0.0  0.0   4444   800 ?        S    22:14   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     5034  0.0  0.0  14876  2280 ?        S    22:14   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     5248  0.0  0.0   4444   764 ?        S    22:19   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     5250  0.0  0.0  14876  2436 ?        S    22:19   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     5531  0.0  0.0   4444   684 ?        S    22:28   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     5533  0.0  0.0  14876  2436 ?        S    22:28   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     5626  0.0  0.0   4444   780 ?        S    22:30   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     5628  0.0  0.0  14876  2436 ?        S    22:30   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     5902  0.0  0.0   4444   748 ?        S    22:36   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     5904  0.0  0.0  14876  2436 ?        S    22:36   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     5989  0.0  0.0   4444   772 ?        S    22:38   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     5991  0.0  0.0  14876  2308 ?        S    22:38   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     6099  0.0  0.0   4444   784 ?        S    22:41   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     6101  0.0  0.0  14876  2352 ?        S    22:41   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     6171  0.0  0.0   4444   768 ?        S    22:42   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     6173  0.0  0.0  14876  2304 ?        S    22:42   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     6226  0.0  0.0   4444   768 ?        S    22:43   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     6228  0.0  0.0  14876  2372 ?        S    22:43   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     7489  0.0  0.0   4444   776 ?        S    23:00   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     7491  0.0  0.0  14876  2432 ?        S    23:00   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     8143  0.0  0.0   4444   748 ?        S    23:03   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     8145  0.0  0.0  14876  2368 ?        S    23:03   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     8783  0.0  0.0   4444   688 ?        S    23:05   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     8785  0.0  0.0  14876  2368 ?        S    23:05   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     3830  0.0  0.0   4444   780 ?        S    10:43   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     3832  0.0  0.0  14876  2308 ?        S    10:43   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     3833  0.0  0.0   4444   688 ?        S    10:43   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     3833  0.0  0.0   4444   688 ?        S    10:43   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     3835  0.0  0.0  14876  2308 ?        S    10:43   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     3921  0.0  0.0   4444   808 ?        S    10:44   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     3922  0.0  0.0   4444   784 ?        S    10:44   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     3925  0.0  0.0  14876  2304 ?        S    10:44   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     3926  0.0  0.0  14876  2368 ?        S    10:44   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     3921  0.0  0.0   4444   808 ?        S    10:44   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     3922  0.0  0.0   4444   784 ?        S    10:44   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     3926  0.0  0.0  14876  2368 ?        S    10:44   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4091  0.0  0.0   4444   784 ?        S    10:47   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4093  0.0  0.0  14876  2360 ?        S    10:47   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4094  0.0  0.0   4444   852 ?        S    10:47   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4094  0.0  0.0   4444   852 ?        S    10:47   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4096  0.0  0.0  14876  2244 ?        S    10:47   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4259  0.0  0.0   4444   688 ?        S    10:48   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4261  0.0  0.0  14876  2300 ?        S    10:48   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4262  0.0  0.0   4444   848 ?        S    10:48   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4264  0.0  0.0  14876  2304 ?        S    10:48   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4259  0.0  0.0   4444   688 ?        S    10:48   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4261  0.0  0.0  14876  2300 ?        S    10:48   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4262  0.0  0.0   4444   848 ?        S    10:48   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4264  0.0  0.0  14876  2304 ?        S    10:48   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4342  0.0  0.0   4444   792 ?        S    10:49   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4343  0.0  0.0   4444   748 ?        S    10:49   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4345  0.0  0.0  14876  2372 ?        S    10:49   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4343  0.0  0.0   4444   748 ?        S    10:49   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4347  0.0  0.0  14876  2288 ?        S    10:49   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4583  0.0  0.0   4444   848 ?        S    10:53   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4584  0.0  0.0   4444   784 ?        S    10:53   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4587  0.0  0.0  14876  2436 ?        S    10:53   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4588  0.0  0.0  14876  2284 ?        S    10:53   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4583  0.0  0.0   4444   848 ?        S    10:53   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4584  0.0  0.0   4444   784 ?        S    10:53   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4587  0.0  0.0  14876  2436 ?        S    10:53   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4588  0.0  0.0  14876  2284 ?        S    10:53   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4722  0.0  0.0   4444   848 ?        S    10:56   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4724  0.0  0.0  14876  2360 ?        S    10:56   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4801  0.0  0.0   4444   784 ?        S    10:58   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4802  0.0  0.0   4444   852 ?        S    10:58   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4804  0.0  0.0  14876  2372 ?        S    10:58   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4806  0.0  0.0  14876  2368 ?        S    10:58   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4801  0.0  0.0   4444   784 ?        S    10:58   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4802  0.0  0.0   4444   852 ?        S    10:58   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4806  0.0  0.0  14876  2368 ?        S    10:58   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     5036  0.0  0.0   4444   796 ?        S    11:06   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     5038  0.0  0.0  14876  2372 ?        S    11:06   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     5121  0.0  0.0   4444   772 ?        S    11:07   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     5123  0.0  0.0  14876  2304 ?        S    11:07   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     5124  0.0  0.0   4444   796 ?        S    11:08   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     5126  0.0  0.0  14876  2308 ?        S    11:08   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     5199  0.0  0.0   4444   688 ?        S    11:10   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     5201  0.0  0.0  14876  2308 ?        S    11:10   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     5202  0.0  0.0   4444   780 ?        S    11:10   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     5204  0.0  0.0  14876  2308 ?        S    11:10   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     6348  0.0  0.0   4444   748 ?        S    11:40   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     6350  0.0  0.0  14876  2284 ?        S    11:40   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     6469  0.0  0.0   4444   792 ?        S    11:43   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     6471  0.0  0.0  14876  2212 ?        S    11:43   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     7436  0.0  0.0   4444   848 ?        S    11:49   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     7438  0.0  0.0  14876  2308 ?        S    11:49   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4760  0.0  0.0   4444   780 ?        S    10:54   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4762  0.0  0.0  14876  2308 ?        S    10:54   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     7586  0.0  0.0   4444   772 pts/28   S+   11:59   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     7588  0.0  0.0  14876  2304 pts/28   S+   11:59   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     7589  0.0  0.0   4444   688 pts/28   S    11:59   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     7591  0.0  0.0  14876  2244 pts/28   S    11:59   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    12905  0.0  0.0   4444   772 pts/28   S+   16:43   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    12907  0.0  0.0  14876  2372 pts/28   S+   16:43   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    12909  0.0  0.0   4444   768 pts/28   S    16:43   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    12911  0.0  0.0  14876  2304 pts/28   S    16:43   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    13298  0.0  0.0   4444   796 ?        S    16:56   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    13300  0.0  0.0  14876  2308 ?        S    16:56   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    13337  0.0  0.0   4444   748 ?        S    16:57   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    13339  0.0  0.0  14876  2436 ?        S    16:57   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    17294  0.0  0.0   4444   780 ?        S    22:13   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    17296  0.0  0.0  14876  2308 ?        S    22:13   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    17364  0.0  0.0   4444   688 ?        S    22:15   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    17366  0.0  0.0  14876  2308 ?        S    22:15   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    17506  0.0  0.0   4444   688 ?        S    22:20   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    17508  0.0  0.0  14876  2308 ?        S    22:20   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18626  0.0  0.0   4444   676 ?        S    08:58   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18628  0.0  0.0  14876  2436 ?        S    08:58   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18686  0.0  0.0   4444   684 ?        S    08:59   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18688  0.0  0.0  14876  2360 ?        S    08:59   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18906  0.0  0.0   4444   784 ?        S    09:07   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18908  0.0  0.0  14876  2288 ?        S    09:07   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4022  0.0  0.0   4444   804 ?        S    18:27   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4024  0.0  0.0  14876  2352 ?        S    18:27   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4309  0.0  0.0   4444   688 ?        S    18:38   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4311  0.0  0.0  14876  2304 ?        S    18:38   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     9216  0.0  0.0   4444   768 ?        S    21:30   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     9218  0.0  0.0  14876  2436 ?        S    21:30   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     9266  0.0  0.0   4444   696 ?        S    21:31   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     9268  0.0  0.0  14876  2296 ?        S    21:31   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     9392  0.0  0.0   4444   680 ?        S    21:32   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     9394  0.0  0.0  14876  2244 ?        S    21:32   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     9451  0.0  0.0   4444   772 ?        S    21:34   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     9453  0.0  0.0  14876  2372 ?        S    21:34   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     9524  0.0  0.0   4444   852 ?        S    21:36   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     9526  0.0  0.0  14876  2308 ?        S    21:36   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     9584  0.0  0.0   4444   808 ?        S    21:37   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     9586  0.0  0.0  14876  2372 ?        S    21:37   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    10805  0.0  0.0   4444   852 ?        S    21:53   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    10807  0.0  0.0  14876  2308 ?        S    21:53   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    10873  0.0  0.0   4444   772 ?        S    21:54   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    10875  0.0  0.0  14876  2372 ?        S    21:54   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    11046  0.0  0.0   4444   800 ?        S    22:00   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    11048  0.0  0.0  14876  2436 ?        S    22:00   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    11156  0.0  0.0   4444   776 ?        S    22:04   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    11158  0.0  0.0  14876  2280 ?        S    22:04   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    11363  0.0  0.0   4444   856 ?        S    22:12   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    11365  0.0  0.0  14876  2372 ?        S    22:12   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    12281  0.0  0.0   4444   804 ?        S    22:41   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    12283  0.0  0.0  14876  2432 ?        S    22:41   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    12918  0.0  0.0   4444   696 ?        S    22:56   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    12920  0.0  0.0  14876  2300 ?        S    22:56   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    12922  0.0  0.0   4444   784 ?        S    22:56   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    12924  0.0  0.0  14876  2308 ?        S    22:56   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    13607  0.0  0.0   4444   804 ?        S    23:03   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    13609  0.0  0.0  14876  2304 ?        S    23:03   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    13611  0.0  0.0   4444   780 ?        S    23:03   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    13613  0.0  0.0  14876  2432 ?        S    23:03   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    13615  0.0  0.0   4444   852 ?        S    23:03   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    13617  0.0  0.0  14876  2300 ?        S    23:03   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    13784  0.0  0.0   4444   776 ?        S    23:07   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    13786  0.0  0.0  14876  2280 ?        S    23:07   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    13787  0.0  0.0   4444   780 ?        S    23:07   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    13789  0.0  0.0  14876  2436 ?        S    23:07   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    13935  0.0  0.0   4444   776 ?        S    23:10   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    13937  0.0  0.0  14876  2364 ?        S    23:10   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    13939  0.0  0.0   4444   688 ?        S    23:10   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    13941  0.0  0.0  14876  2280 ?        S    23:10   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    13944  0.0  0.0   4444   804 ?        S    23:10   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    13946  0.0  0.0  14876  2368 ?        S    23:10   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    14057  0.0  0.0   4444   748 ?        S    23:11   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    14059  0.0  0.0  14876  2356 ?        S    23:11   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    14340  0.0  0.0   4444   796 ?        S    23:20   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    14342  0.0  0.0  14876  2436 ?        S    23:20   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     3595  0.0  0.0   4444   848 ?        S    10:50   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     3597  0.0  0.0  14876  2360 ?        S    10:50   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4516  0.0  0.0   4444   776 ?        S    11:21   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4518  0.0  0.0  14876  2308 ?        S    11:21   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     4802  0.0  0.0   4444   848 ?        S    11:24   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     4804  0.0  0.0  14876  2372 ?        S    11:24   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     5017  0.0  0.0   4444   772 ?        S    11:32   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     5019  0.0  0.0  14876  2304 ?        S    11:32   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     5354  0.0  0.0   4444   856 ?        S    11:42   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     5356  0.0  0.0  14876  2304 ?        S    11:42   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     5428  0.0  0.0   4444   768 ?        S    11:43   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     5430  0.0  0.0  14876  2436 ?        S    11:43   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     6387  0.0  0.0   4444   852 ?        S    12:40   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     6389  0.0  0.0  14876  2352 ?        S    12:40   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     6750  0.0  0.0   4444   848 ?        S    12:55   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     6752  0.0  0.0  14876  2436 ?        S    12:55   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     6755  0.0  0.0   4444   852 ?        S    12:55   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     6757  0.0  0.0  14876  2432 ?        S    12:55   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     6761  0.0  0.0   4444   776 ?        S    12:55   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     6763  0.0  0.0  14876  2304 ?        S    12:55   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     6765  0.0  0.0   4444   792 ?        S    12:55   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     6767  0.0  0.0  14876  2308 ?        S    12:55   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy     6770  0.0  0.0   4444   696 ?        S    12:55   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy     6772  0.0  0.0  14876  2352 ?        S    12:55   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    10786  0.0  0.0   4444   800 ?        S    12:56   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    10788  0.0  0.0  14876  2360 ?        S    12:56   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    10960  0.0  0.0   4444   780 ?        S    13:02   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    10962  0.0  0.0  14876  2188 ?        S    13:02   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    10964  0.0  0.0   4444   848 ?        S    13:02   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    10966  0.0  0.0  14876  2296 ?        S    13:02   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    10967  0.0  0.0   4444   696 ?        S    13:02   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    10969  0.0  0.0  14876  2280 ?        S    13:02   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    10970  0.0  0.0   4444   852 ?        S    13:02   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    10972  0.0  0.0  14876  2368 ?        S    13:02   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    10974  0.0  0.0   4444   796 ?        S    13:02   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    10976  0.0  0.0  14876  2436 ?        S    13:02   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    11108  0.0  0.0   4444   796 ?        S    13:05   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    11110  0.0  0.0  14876  2304 ?        S    13:05   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    13797  0.0  0.0   4444   796 ?        S    13:09   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    13799  0.0  0.0  14876  2300 ?        S    13:09   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    15077  0.0  0.0   4444   776 ?        S    13:12   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    15079  0.0  0.0  14876  2356 ?        S    13:12   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    17072  0.0  0.0   4444   772 ?        S    13:15   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    17074  0.0  0.0  14876  2436 ?        S    13:15   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    17665  0.0  0.0   4444   776 ?        S    13:18   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    17667  0.0  0.0  14876  2308 ?        S    13:18   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    17668  0.0  0.0   4444   852 ?        S    13:18   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    17670  0.0  0.0  14876  2432 ?        S    13:18   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    17672  0.0  0.0   4444   776 ?        S    13:18   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    17674  0.0  0.0  14876  2304 ?        S    13:18   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    17680  0.0  0.0   4444   852 ?        S    13:18   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    17682  0.0  0.0  14876  2372 ?        S    13:18   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    17687  0.0  0.0   4444   776 ?        S    13:18   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    17689  0.0  0.0  14876  2240 ?        S    13:18   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    17721  0.0  0.0   4444   852 ?        S    13:19   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    17723  0.0  0.0  14876  2352 ?        S    13:19   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    17724  0.0  0.0   4444   796 ?        S    13:19   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    17726  0.0  0.0  14876  2288 ?        S    13:19   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    17730  0.0  0.0   4444   780 ?        S    13:19   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    17732  0.0  0.0  14876  2308 ?        S    13:19   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    17733  0.0  0.0   4444   768 ?        S    13:19   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    17735  0.0  0.0  14876  2280 ?        S    13:19   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    17736  0.0  0.0   4444   804 ?        S    13:19   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    17738  0.0  0.0  14876  2436 ?        S    13:19   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18043  0.0  0.0   4444   692 ?        S    13:25   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18045  0.0  0.0  14876  2244 ?        S    13:25   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18127  0.0  0.0   4444   688 ?        S    13:27   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18129  0.0  0.0  14876  2288 ?        S    13:27   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18277  0.0  0.0   4444   776 ?        S    13:31   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18279  0.0  0.0  14876  2352 ?        S    13:31   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18355  0.0  0.0   4444   748 ?        S    13:32   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18357  0.0  0.0  14876  2304 ?        S    13:32   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18359  0.0  0.0   4444   748 ?        S    13:32   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18361  0.0  0.0  14876  2436 ?        S    13:32   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18377  0.0  0.0   4444   776 ?        S    13:32   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18379  0.0  0.0  14876  2360 ?        S    13:32   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18380  0.0  0.0   4444   680 ?        S    13:32   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18382  0.0  0.0  14876  2360 ?        S    13:32   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18384  0.0  0.0   4444   852 ?        S    13:32   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18386  0.0  0.0  14876  2304 ?        S    13:32   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18448  0.0  0.0   4444   780 ?        S    13:33   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18450  0.0  0.0  14876  2352 ?        S    13:33   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18451  0.0  0.0   4444   856 ?        S    13:33   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18453  0.0  0.0  14876  2288 ?        S    13:33   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18458  0.0  0.0   4444   676 ?        S    13:33   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18460  0.0  0.0  14876  2360 ?        S    13:33   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18463  0.0  0.0   4444   768 ?        S    13:33   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18465  0.0  0.0  14876  2304 ?        S    13:33   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18466  0.0  0.0   4444   852 ?        S    13:33   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18468  0.0  0.0  14876  2308 ?        S    13:33   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18564  0.0  0.0   4444   800 ?        S    13:34   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18566  0.0  0.0  14876  2308 ?        S    13:34   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18567  0.0  0.0   4444   688 ?        S    13:34   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18569  0.0  0.0  14876  2368 ?        S    13:34   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18571  0.0  0.0   4444   800 ?        S    13:34   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18573  0.0  0.0  14876  2308 ?        S    13:34   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18574  0.0  0.0   4444   680 ?        S    13:34   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18576  0.0  0.0  14876  2432 ?        S    13:34   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18578  0.0  0.0   4444   688 ?        S    13:34   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18580  0.0  0.0  14876  2360 ?        S    13:34   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    18747  0.0  0.0   4444   804 ?        S    13:38   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    18749  0.0  0.0  14880  2300 ?        S    13:38   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    20782  0.0  0.0   4444   692 ?        S    14:36   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    20784  0.0  0.0  14876  2308 ?        S    14:36   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    20926  0.0  0.0   4444   784 ?        S    14:40   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    20928  0.0  0.0  14876  2244 ?        S    14:40   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    21117  0.0  0.0   4444   768 ?        S    14:44   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    21119  0.0  0.0  14876  2304 ?        S    14:44   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    21216  0.0  0.0   4444   792 ?        S    14:45   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    21218  0.0  0.0  14876  2432 ?        S    14:45   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    21356  0.0  0.0   4444   796 ?        S    14:47   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    21358  0.0  0.0  14876  2304 ?        S    14:47   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    21499  0.0  0.0   4444   772 ?        S    14:49   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    21501  0.0  0.0  14876  2436 ?        S    14:49   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    22979  0.0  0.0   4444   804 ?        S    15:12   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    22981  0.0  0.0  14876  2304 ?        S    15:12   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    23484  0.0  0.0   4444   688 ?        S    15:24   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    23486  0.0  0.0  14876  2436 ?        S    15:24   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    29833  0.0  0.0   4444   800 pts/33   S+   15:53   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    29835  0.0  0.0  14880  2308 pts/33   S+   15:53   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    29845  0.0  0.0   4444   784 pts/33   S+   15:53   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    29847  0.0  0.0  14880  2436 pts/33   S+   15:53   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    29859  0.0  0.0   4444   784 pts/33   S+   15:53   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    29861  0.0  0.0  14880  2436 pts/33   R+   15:53   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    29872  0.0  0.0   4444   796 pts/33   S+   15:53   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    29874  0.0  0.0  14876  2436 pts/33   R+   15:53   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    29893  0.0  0.0   4444   748 pts/33   S+   15:53   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    29895  0.0  0.0  14876  2372 pts/33   R+   15:53   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    29904  0.0  0.0   4444   748 pts/33   S+   15:53   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    29906  0.0  0.0  14880  2272 pts/33   R+   15:53   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    29918  0.0  0.0   4444   768 pts/33   S+   15:54   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    29920  0.0  0.0  14876  2296 pts/33   S+   15:54   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    29936  0.0  0.0   4444   748 pts/33   S+   15:54   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    29938  0.0  0.0  14876  2308 pts/33   S+   15:54   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    29948  0.0  0.0   4444   804 pts/33   S+   15:54   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    29950  0.0  0.0  14876  2308 pts/33   S+   15:54   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    29961  0.0  0.0   4444   772 pts/33   S+   15:54   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    29963  0.0  0.0  14876  2368 pts/33   S+   15:54   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    10193  0.0  0.0   4444   748 pts/33   S+   17:36   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    10195  0.0  0.0  14876  2432 pts/33   S+   17:36   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    10207  0.0  0.0   4444   804 pts/33   S+   17:36   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    10209  0.0  0.0  14876  2244 pts/33   S+   17:36   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    10225  0.0  0.0   4444   776 pts/33   S+   17:36   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    10227  0.0  0.0  14876  2436 pts/33   S+   17:36   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    16050  0.0  0.0   4444   784 pts/30   S+   18:18   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    16052  0.0  0.0  14876  2244 pts/30   S+   18:18   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    16061  0.0  0.0   4444   808 pts/30   S+   18:18   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    16063  0.0  0.0  14876  2304 pts/30   S+   18:18   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    16080  0.0  0.0   4444   768 pts/30   S+   18:18   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    16082  0.0  0.0  14876  2308 pts/30   S+   18:18   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    16094  0.0  0.0   4444   688 pts/30   S+   18:19   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    16096  0.0  0.0  14876  2372 pts/30   S+   18:19   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    16106  0.0  0.0   4444   688 pts/30   S+   18:19   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    16108  0.0  0.0  14876  2352 pts/30   S+   18:19   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    16125  0.0  0.0   4444   856 pts/30   S+   18:19   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    16127  0.0  0.0  14876  2360 pts/30   S+   18:19   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    24496  0.0  0.0   4444   804 pts/30   S+   20:07   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    24498  0.0  0.0  14876  2304 pts/30   S+   20:07   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    30394  0.0  0.0   4444   776 pts/30   S+   20:41   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    30396  0.0  0.0  14876  2436 pts/30   S+   20:41   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing
+spacy    30405  0.0  0.0   4444   776 pts/30   S+   20:41   0:00 /bin/sh -c ps aux | grep "/home/spacy/aalto/protocol/2015-group1/protocol_testing" >> /home/spacy/aalto/protocol/2015-group1/protocol_testing/node_ps.txt
+spacy    30407  0.0  0.0  14876  2432 pts/30   S+   20:41   0:00 grep /home/spacy/aalto/protocol/2015-group1/protocol_testing

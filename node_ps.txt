@@ -1,0 +1,2 @@
+spacy     1933  0.0  0.0   4444   852 pts/30   S+   00:01   0:00 /bin/sh -c ps aux | grep "network_initializer.py" >> node_ps.txt
+spacy     1936  0.0  0.0  14876  2296 pts/30   S+   00:01   0:00 grep network_initializer.py
