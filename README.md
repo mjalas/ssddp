@@ -56,11 +56,30 @@ It turned out that we had been using an unbound socket for sending udp messages.
 After making the discovery broadcast loop use our listening udp socket also for 
 sending messages, we were able to get the udp hub working.
 
-xx.x.2015
-We implemented active discovery which allows the network to discover nodes faster. 
-This means that a node will immediately respond when it receives a discovery message 
-from a previously unknown node. Also, we optimized the port scanning function. Now,
-when the hub is not available, the node will only do a port scan every tenth time the 
-broadcast loop runs. Other times, the node will only message its known peers. This 
-improvement considerably reduces network flooding in the absence of a hub, while still
-maintaining connections between nodes.
+11.4.2015
+We implemented active discovery which allows the network to discover nodes faster.
+This means that a node will immediately respond when it receives a discovery message
+from a previously unknown node. 
+
+26.4.2015
+We optimized the port scanning function. Now, when the hub is not available, the node will only do a port scan every tenth time the broadcast loop runs. Other times, the node will only message its known peers. This improvement considerably reduces network flooding in the absence of a hub, while still maintaining connections between nodes.
+
+28.5.2015
+The program works now and we have managed to get some measurement data as well.
+However, there were several planned improvements which we did not have time to implement.
+The following improvements were dropped due to time constraints:
+
+Creating unit tests for all classes and methods
+We did create tests for some of the more important parts of the program but didn’t have time to do it for everything. This improvement would have made further development and debugging easier.
+Implementing message types
+We planned having message types included in the message payloads. The program works just fine without this feature as there’s only three message types which can be identified by the used transport protocol and contents. However, this feature would have been useful for further development and optimization.
+Improving message contents
+We had planned on leaving service information out of description request messages. This feature was done and almost implemented, but it had to be dropped as it would not work without the message types. As the program is currently, it does not distinguish between description and discovery messages. Therefore, leaving service list out of the message would have caused the program to misinterpret that the sender had lost all their services.
+Implementing security measures
+We had discussed implementing some kind of methods for verifying message integrity. This feature was dropped because it was not essential for the performance of the program.
+Adding/removing services to local node at runtime
+The program fully supports peer nodes adding, removing or updating their services. However, it does not currently have any mechanism for manipulating the node’s own services at runtime. This means that any changes to service list require the node to be shut down and restarted.
+Implementing a method for toggling output between stdout and logfile
+This feature would have allowed for cleaner testing of multiple nodes simultaneously. However, our testing framework mostly obsoleted this feature.
+Support description requests for single service
+Currently our program fully supports a description request, which is answered with descriptions of all services. We thought it might be good to also support requests that would ask for the description of only one service.This improvement would have slightly lowered network load in the case where nodes have huge amounts of services but are only interested in the descriptions of one or two services.
