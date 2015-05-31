@@ -20,7 +20,7 @@ class MeasurementLogger(object):
 
     def log(self, message, node_name):
         with open(self.log_file, 'a') as f:
-            tmp = str(self.get_time()) + ": '" + str(node_name) + "': " + str(message) + "\n"
+            tmp = str(self.get_time()) + ": " + str(node_name) + ": " + str(message) + "\n"
             f.write(tmp)
             f.flush()
 
