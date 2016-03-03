@@ -1,4 +1,4 @@
-# SSDDP - 2015-group1 #
+# SSDDP - Seriously Simple Discovery Description Protocol (2015-group1) #
 
 This is a school project, where the task was to design a simple discovery protocol and implement a prototype.
 The prototype should be able to simulate 10+ nodes that communicate with each other through the designed protocol.
